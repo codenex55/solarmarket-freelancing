@@ -161,7 +161,7 @@ class LoginView(View):
                         login(request, user)
                         print(additional_info.user_type)
                         if additional_info.user_type == "freelancer":
-                            return redirect("dashboard")  # Redirect to freelancer dashboard after login
+                            return redirect("dashboard:freelancer_dashboard_home_view")  # Redirect to freelancer dashboard after login
                         elif additional_info.user_type == "employer":
                             return redirect("dashboard:employer_dashboard_home_view")  # Redirect to employer dashboard after login
                         else:
