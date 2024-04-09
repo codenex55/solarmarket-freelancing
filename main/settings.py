@@ -26,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-nd^q3n#23aecj3%i!5o-13l31mvkd#*qrzgkp4u^p4ukl-pzc2'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production! 
 DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "medtrav-doc.onrender.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "solarmarket-freelancing.onrender.com"]
 
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "https://medtrav-doc.onrender.com"]
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "https://solarmarket-freelancing.onrender.com"]
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
