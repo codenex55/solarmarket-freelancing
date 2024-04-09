@@ -11,6 +11,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <!-- CSS
 ================================================== -->
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -46,14 +50,14 @@
 							<a href="{% url 'home:home_view' %}" class="current">Home</a>
 						</li>
 
-						<li><a href="index-2.html#">Find Work</a>
+						<li><a href="#">Find Work</a>
 							<ul class="dropdown-nav">
 								<li><a href="#">Browse Jobs</a></li>
 								<li><a href="{% url 'home:all_tasks_view' %}">Browse Tasks</a></li>
 							</ul>
 						</li>
 
-						<li><a href="index-2.html#">For Employers</a>
+						<li><a href="#">For Employers</a>
 							<ul class="dropdown-nav">
 								<li><a href="{% url 'home:all_freelancers_view' %}">Find a Freelancer</a></li>
 							</ul>
@@ -84,7 +88,7 @@
 
 						<!-- Trigger -->
 						<div class="header-notifications-trigger">
-							<a href="index-2.html#"><i class="icon-feather-bell"></i><span>4</span></a>
+							<a href="#"><i class="icon-feather-bell"></i><span>4</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -150,7 +154,7 @@
 					<!-- Messages -->
 					<div class="header-notifications">
 						<div class="header-notifications-trigger">
-							<a href="index-2.html#"><i class="icon-feather-mail"></i><span>3</span></a>
+							<a href="#"><i class="icon-feather-mail"></i><span>3</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -218,7 +222,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="index-2.html#"><div class="user-avatar status-online"><img src="images/user-avatar-small-01.jpg" alt=""></div></a>
+							<a href="#"><div class="user-avatar status-online"><img src="images/user-avatar-small-01.jpg" alt=""></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -353,16 +357,14 @@
 					<!-- Search Field -->
 					<div class="intro-search-field">
 						<select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
-							<option>Admin Support</option>
-							<option>Customer Service</option>
-							<option>Data Analytics</option>
-							<option>Design & Creative</option>
-							<option>Legal</option>
-							<option>Software Developing</option>
-							<option>IT & Networking</option>
-							<option>Writing</option>
-							<option>Translation</option>
-							<option>Sales & Marketing</option>
+							<option>Residential Solar Panels</option>
+							<option>Commercial Solar Solutions</option>
+							<option>Solar Installation Services</option>
+							<option>Solar Financing and Leasing</option>
+							<option>Solar Equipment and Components</option>
+							<option>Solar Monitoring and Maintenance</option>
+							<option>Solar Education and Training</option>
+							<option>Solar Energy Consulting and Advisory</option>
 						</select>
 					</div>
 
@@ -417,7 +419,7 @@
 				<!-- Photo Box -->
 				<a href="jobs-list-layout-1.html" class="photo-box small" data-background-image="images/job-category-01.jpg">
 					<div class="photo-box-content">
-						<h3>Web / Software Dev</h3>
+						<h3>Residential Solar Panels</h3>
 						<span>612</span>
 					</div>
 				</a>
@@ -427,7 +429,7 @@
 				<!-- Photo Box -->
 				<a href="jobs-list-layout-full-page-map.html" class="photo-box small" data-background-image="images/job-category-02.jpg">
 					<div class="photo-box-content">
-						<h3>Data Science / Analitycs</h3>
+						<h3>Commercial Solar Solutions</h3>
 						<span>113</span>
 					</div>
 				</a>
@@ -437,7 +439,7 @@
 				<!-- Photo Box -->
 				<a href="jobs-grid-layout-full-page.html" class="photo-box small" data-background-image="images/job-category-03.jpg">
 					<div class="photo-box-content">
-						<h3>Accounting / Consulting</h3>
+						<h3>Solar Installation Services</h3>
 						<span>186</span>
 					</div>
 				</a>
@@ -447,7 +449,7 @@
 				<!-- Photo Box -->
 				<a href="jobs-list-layout-2.html" class="photo-box small" data-background-image="images/job-category-04.jpg">
 					<div class="photo-box-content">
-						<h3>Writing & Translations</h3>
+						<h3>Solar Financing and Leasing</h3>
 						<span>298</span>
 					</div>
 				</a>
@@ -457,7 +459,7 @@
 				<!-- Photo Box -->
 				<a href="jobs-list-layout-1.html" class="photo-box small" data-background-image="images/job-category-05.jpg">
 					<div class="photo-box-content">
-						<h3>Sales & Marketing</h3>
+						<h3>Solar Equipment and Components</h3>
 						<span>549</span>
 					</div>
 				</a>
@@ -467,7 +469,7 @@
 				<!-- Photo Box -->
 				<a href="jobs-list-layout-full-page-map.html" class="photo-box small" data-background-image="images/job-category-06.jpg">
 					<div class="photo-box-content">
-						<h3>Graphics & Design</h3>
+						<h3>Solar Monitoring and Maintenance</h3>
 						<span>873</span>
 					</div>
 				</a>
@@ -477,7 +479,7 @@
 				<!-- Photo Box -->
 				<a href="jobs-grid-layout-full-page.html" class="photo-box small" data-background-image="images/job-category-07.jpg">
 					<div class="photo-box-content">
-						<h3>Digital Marketing</h3>
+						<h3>Solar Education and Training</h3>
 						<span>125</span>
 					</div>
 				</a>
@@ -487,7 +489,7 @@
 				<!-- Photo Box -->
 				<a href="jobs-list-layout-2.html" class="photo-box small" data-background-image="images/job-category-08.jpg">
 					<div class="photo-box-content">
-						<h3>Education & Training</h3>
+						<h3>Solar Energy Consulting and Advisory</h3>
 						<span>445</span>
 					</div>
 				</a>
@@ -593,12 +595,12 @@
 					<!-- Icon -->
 					<div class="icon-box-circle">
 						<div class="icon-box-circle-inner">
-							<i class="icon-line-awesome-lock"></i>
+							<i class="fa fa-user-plus"></i>
 							<div class="icon-box-check"><i class="icon-material-outline-check"></i></div>
 						</div>
 					</div>
 					<h3>Create an Account</h3>
-					<p>Bring to the table win-win survival strategies to ensure proactive domination going forward.</p>
+					<p>Registering an account is the first step towards accessing a multitude of solar solutions tailored to your needs.</p>
 				</div>
 			</div>
 
@@ -608,12 +610,12 @@
 					<!-- Icon -->
 					<div class="icon-box-circle">
 						<div class="icon-box-circle-inner">
-							<i class="icon-line-awesome-legal"></i>
+							<i class="fa fa-tasks"></i>
 							<div class="icon-box-check"><i class="icon-material-outline-check"></i></div>
 						</div>
 					</div>
 					<h3>Post a Task</h3>
-					<p>Efficiently unleash cross-media information without. Quickly maximize return on investment.</p>
+					<p>Need assistance with your solar project? Simply post your task and let our community of experts guide you through every step of the process.</p>
 				</div>
 			</div>
 
@@ -623,12 +625,12 @@
 					<!-- Icon -->
 					<div class="icon-box-circle">
 						<div class="icon-box-circle-inner">
-							<i class=" icon-line-awesome-trophy"></i>
+							<i class=" fa fa-user-secret"></i>
 							<div class="icon-box-check"><i class="icon-material-outline-check"></i></div>
 						</div>
 					</div>
 					<h3>Choose an Expert</h3>
-					<p>Nanotechnology immersion along the information highway will close the loop on focusing solely.</p>
+					<p>With a plethora of solar experts at your disposal, selecting the right one for your project has never been easier.</p>
 				</div>
 			</div>
 
@@ -816,22 +818,22 @@
 								<div class="footer-row-inner">
 									<ul class="footer-social-links">
 										<li>
-											<a href="index-2.html#" title="Facebook" data-tippy-placement="bottom" data-tippy-theme="light">
+											<a href="#" title="Facebook" data-tippy-placement="bottom" data-tippy-theme="light">
 												<i class="icon-brand-facebook-f"></i>
 											</a>
 										</li>
 										<li>
-											<a href="index-2.html#" title="Twitter" data-tippy-placement="bottom" data-tippy-theme="light">
+											<a href="#" title="Twitter" data-tippy-placement="bottom" data-tippy-theme="light">
 												<i class="icon-brand-twitter"></i>
 											</a>
 										</li>
 										<li>
-											<a href="index-2.html#" title="Google Plus" data-tippy-placement="bottom" data-tippy-theme="light">
+											<a href="#" title="Google Plus" data-tippy-placement="bottom" data-tippy-theme="light">
 												<i class="icon-brand-google-plus-g"></i>
 											</a>
 										</li>
 										<li>
-											<a href="index-2.html#" title="LinkedIn" data-tippy-placement="bottom" data-tippy-theme="light">
+											<a href="#" title="LinkedIn" data-tippy-placement="bottom" data-tippy-theme="light">
 												<i class="icon-brand-linkedin-in"></i>
 											</a>
 										</li>
@@ -871,10 +873,10 @@
 					<div class="footer-links">
 						<h3>For Candidates</h3>
 						<ul>
-							<li><a href="index-2.html#"><span>Browse Jobs</span></a></li>
-							<li><a href="index-2.html#"><span>Add Resume</span></a></li>
-							<li><a href="index-2.html#"><span>Job Alerts</span></a></li>
-							<li><a href="index-2.html#"><span>My Bookmarks</span></a></li>
+							<li><a href="#"><span>Browse Jobs</span></a></li>
+							<li><a href="#"><span>Add Resume</span></a></li>
+							<li><a href="#"><span>Job Alerts</span></a></li>
+							<li><a href="#"><span>My Bookmarks</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -884,10 +886,10 @@
 					<div class="footer-links">
 						<h3>For Employers</h3>
 						<ul>
-							<li><a href="index-2.html#"><span>Browse Candidates</span></a></li>
-							<li><a href="index-2.html#"><span>Post a Job</span></a></li>
-							<li><a href="index-2.html#"><span>Post a Task</span></a></li>
-							<li><a href="index-2.html#"><span>Plans & Pricing</span></a></li>
+							<li><a href="#"><span>Browse Candidates</span></a></li>
+							<li><a href="#"><span>Post a Job</span></a></li>
+							<li><a href="#"><span>Post a Task</span></a></li>
+							<li><a href="#"><span>Plans & Pricing</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -897,9 +899,9 @@
 					<div class="footer-links">
 						<h3>Helpful Links</h3>
 						<ul>
-							<li><a href="index-2.html#"><span>Contact</span></a></li>
-							<li><a href="index-2.html#"><span>Privacy Policy</span></a></li>
-							<li><a href="index-2.html#"><span>Terms of Use</span></a></li>
+							<li><a href="#"><span>Contact</span></a></li>
+							<li><a href="#"><span>Privacy Policy</span></a></li>
+							<li><a href="#"><span>Terms of Use</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -909,8 +911,8 @@
 					<div class="footer-links">
 						<h3>Account</h3>
 						<ul>
-							<li><a href="index-2.html#"><span>Log In</span></a></li>
-							<li><a href="index-2.html#"><span>My Account</span></a></li>
+							<li><a href="#"><span>Log In</span></a></li>
+							<li><a href="#"><span>My Account</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -919,7 +921,7 @@
 				<div class="col-xl-4 col-lg-4 col-md-12">
 					<h3><i class="icon-feather-mail"></i> Sign Up For a Newsletter</h3>
 					<p>Weekly breaking news, analysis and cutting edge advices on job searching.</p>
-					<form action="index-2.html#" method="get" class="newsletter">
+					<form action="#" method="get" class="newsletter">
 						<input type="text" name="fname" placeholder="Enter your email address">
 						<button type="submit"><i class="icon-feather-arrow-right"></i></button>
 					</form>
@@ -1046,6 +1048,16 @@
 					<div class="input-with-icon-left">
 						<i class="icon-material-outline-lock"></i>
 						<input type="password" class="input-text with-border" name="password2" id="password-repeat-register" placeholder="Repeat Password" required/>
+					</div>
+
+					<div>
+						<ul class="mt-2" style="font-size:13px;">
+							<li>Password must contain 1 uppercase</li>
+							<li>Password must contain 1 lowercase</li>
+							<li>Password must contain 1 digit</li>
+							<li>Password must contain 1 special character</li>
+							<li>Password must be 8 characters long</li>
+						</ul>
 					</div>
 				</form>
 				
