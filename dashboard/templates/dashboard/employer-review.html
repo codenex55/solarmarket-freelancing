@@ -44,22 +44,19 @@
 					<ul id="responsive">
 
 						<li>
-							<a href="{% url 'home:home_view' %}" class="current">Home</a>
+							<a href="{% url 'home:home_view' %}">Home</a>
 						</li>
 
-						<li><a href="index-2.html#">Find Work</a>
+						<li><a href="#">Find Work</a>
 							<ul class="dropdown-nav">
-								<li><a href="browse-companies.html">Browse Companies</a></li>
-								<li><a href="single-job-page.html">Browse Jobs</a></li>
-								<li><a href="single-task-page.html">Browse Tasks</a></li>
+								<li><a href="#">Browse Jobs</a></li>
+								<li><a href="{% url 'home:all_tasks_view' %}">Browse Tasks</a></li>
 							</ul>
 						</li>
 
-						<li><a href="index-2.html#">For Employers</a>
+						<li><a href="#">For Employers</a>
 							<ul class="dropdown-nav">
-								<li><a href="single-freelancer-profile.html">Freelancer Profile</a></li>
-								<li><a href="dashboard-post-a-job.html">Post a Job</a></li>
-								<li><a href="dashboard-post-a-task.html">Post a Task</a></li>
+								<li><a href="{% url 'home:all_freelancers_view' %}">Find a Freelancer</a></li>
 							</ul>
 						</li>
 
@@ -87,7 +84,7 @@
 
 						<!-- Trigger -->
 						<div class="header-notifications-trigger">
-							<a href="dashboard-reviews.html#"><i class="icon-feather-bell"></i><span>4</span></a>
+							<a href="#"><i class="icon-feather-bell"></i><span>4</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -153,7 +150,7 @@
 					<!-- Messages -->
 					<div class="header-notifications">
 						<div class="header-notifications-trigger">
-							<a href="dashboard-reviews.html#"><i class="icon-feather-mail"></i><span>3</span></a>
+							<a href="#"><i class="icon-feather-mail"></i><span>3</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -221,7 +218,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="dashboard-reviews.html#"><div class="user-avatar status-online"><img src="images/user-avatar-small-01.jpg" alt=""></div></a>
+							<a href="#"><div class="user-avatar status-online"><img src="images/user-avatar-small-01.jpg" alt=""></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -249,8 +246,8 @@
 						
 						<ul class="user-menu-small-nav">
 							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="dashboard-settings.html"><i class="icon-material-outline-settings"></i> Settings</a></li>
-							<li><a href="index-logged-out.html"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
+							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
 						</ul>
 
 						</div>
@@ -290,7 +287,7 @@
 			<div class="dashboard-nav-container">
 
 				<!-- Responsive Navigation Trigger -->
-				<a href="dashboard-reviews.html#" class="dashboard-responsive-nav-trigger">
+				<a href="#" class="dashboard-responsive-nav-trigger">
 					<span class="hamburger hamburger--collapse" >
 						<span class="hamburger-box">
 							<span class="hamburger-inner"></span>
@@ -311,14 +308,14 @@
 						</ul>
 						
 						<ul data-submenu-title="Organize and Manage">
-							<li><a href="dashboard-reviews.html#"><i class="icon-material-outline-business-center"></i> Jobs</a>
+							<li><a href="#"><i class="icon-material-outline-business-center"></i> Jobs</a>
 								<ul>
 									<li><a href="dashboard-manage-jobs.html">Manage Jobs <span class="nav-tag">3</span></a></li>
 									<!-- <li><a href="dashboard-manage-candidates.html">Manage Candidates</a></li> -->
 									<li><a href="dashboard-post-a-job.html">Post a Job</a></li>
 								</ul>	
 							</li>
-							<li><a href="dashboard-reviews.html#"><i class="icon-material-outline-assignment"></i> Tasks</a>
+							<li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
 								<ul>
 									<li><a href="{% url 'dashboard:employer_manage_task_view' %}">Manage Tasks <span class="nav-tag">2</span></a></li>
 									<!-- <li><a href="dashboard-manage-bidders.html">Manage Bidders</a></li>
@@ -330,7 +327,7 @@
 
 						<ul data-submenu-title="Account">
 							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
-							<li><a href="index-logged-out.html"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
 						</ul>
 						
 					</div>
@@ -355,8 +352,8 @@
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
-						<li><a href="dashboard-reviews.html#">Home</a></li>
-						<li><a href="dashboard-reviews.html#">Dashboard</a></li>
+						<li><a href="#">Home</a></li>
+						<li><a href="#">Dashboard</a></li>
 						<li>Reviews</li>
 					</ul>
 				</nav>
@@ -420,22 +417,22 @@
 				</div>
 				<ul class="footer-social-links">
 					<li>
-						<a href="dashboard-reviews.html#" title="Facebook" data-tippy-placement="top">
+						<a href="#" title="Facebook" data-tippy-placement="top">
 							<i class="icon-brand-facebook-f"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-reviews.html#" title="Twitter" data-tippy-placement="top">
+						<a href="#" title="Twitter" data-tippy-placement="top">
 							<i class="icon-brand-twitter"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-reviews.html#" title="Google Plus" data-tippy-placement="top">
+						<a href="#" title="Google Plus" data-tippy-placement="top">
 							<i class="icon-brand-google-plus-g"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-reviews.html#" title="LinkedIn" data-tippy-placement="top">
+						<a href="#" title="LinkedIn" data-tippy-placement="top">
 							<i class="icon-brand-linkedin-in"></i>
 						</a>
 					</li>
@@ -474,7 +471,7 @@
 				<!-- Welcome Text -->
 				<div class="welcome-text">
 					<h3>Change Review</h3>
-					<span>Rate <a href="dashboard-reviews.html#">Herman Ewout</a> for the project <a href="dashboard-reviews.html#">WordPress Theme Installation</a> </span>
+					<span>Rate <a href="#">Herman Ewout</a> for the project <a href="#">WordPress Theme Installation</a> </span>
 				</div>
 					
 				<!-- Form -->
@@ -555,7 +552,7 @@
 				<!-- Welcome Text -->
 				<div class="welcome-text">
 					<h3>Leave a Review</h3>
-					<span>Rate <a href="dashboard-reviews.html#">Peter Valentín</a> for the project <a href="dashboard-reviews.html#">Simple Chrome Extension</a> </span>
+					<span>Rate <a href="#">Peter Valentín</a> for the project <a href="#">Simple Chrome Extension</a> </span>
 				</div>
 					
 				<!-- Form -->

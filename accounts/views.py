@@ -178,3 +178,9 @@ class LoginView(View):
         else:
             messages.error(request, "Invalid email or password.")
             return redirect("accounts:login_view")
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        #logout(request)
+        return render(request, "accounts/logout.html")

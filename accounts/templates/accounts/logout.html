@@ -6,11 +6,11 @@
 
 <!-- Basic Page Needs
 ================================================== -->
-<title>Employer Dashboard - Manage task</title>
+<title>SolarMarketHub | Email Verification</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- CSS
 ================================================== -->
@@ -18,14 +18,14 @@
 <link rel="stylesheet" href="{% static 'css/colors/blue.css' %}">
 
 </head>
-<body class="gray">
+<body>
 
 <!-- Wrapper -->
 <div id="wrapper">
 
 <!-- Header Container
 ================================================== -->
-<header id="header-container" class="fullwidth dashboard-header not-sticky">
+<header id="header-container" class="fullwidth">
 
 	<!-- Header -->
 	<div id="header">
@@ -44,7 +44,7 @@
 					<ul id="responsive">
 
 						<li>
-							<a href="{% url 'home:home_view' %}">Home</a>
+							<a href="{% url 'home:home_view' %}" class="current">Home</a>
 						</li>
 
 						<li><a href="#">Find Work</a>
@@ -74,6 +74,7 @@
 
 
 			<!-- Right Side Content / End -->
+			{% if user.is_authenticated %}
 			<div class="right-side">
 
 				<!--  User Notifications -->
@@ -231,7 +232,12 @@
 								<div class="user-details">
 									<div class="user-avatar status-online"><img src="images/user-avatar-small-01.jpg" alt=""></div>
 									<div class="user-name">
-										{{ request.user.first_name }} {{ request.user.first_name }} <span>Employer</span>
+										{{ request.user.first_name }} {{ request.user.last_name }} 
+										{% if request.user.useradditionalinformation.user_type == "freelancer" %}
+										<span>Freelancer</span>
+										{% else %}
+										<span>Employer</span>
+										{% endif %}
 									</div>
 								</div>
 								
@@ -245,9 +251,9 @@
 						</div>
 						
 						<ul class="user-menu-small-nav">
-							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
-							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+							<li><a href="dashboard.html"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
+							<li><a href="dashboard-settings.html"><i class="icon-material-outline-settings"></i> Settings</a></li>
+							<li><a href="index-logged-out.html"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
 						</ul>
 
 						</div>
@@ -266,6 +272,27 @@
 				</span>
 
 			</div>
+
+			{% else %}
+
+			<div class="right-side">
+
+				<div class="header-widget">
+					<a href="#sign-in-dialog" class="popup-with-zoom-anim log-in-button"><i class="fa fa-sign-in"></i> <span>Log In / Register</span></a>
+				</div>
+
+				<!-- Mobile Navigation Button -->
+				<span class="mmenu-trigger">
+					<button class="hamburger hamburger--collapse" type="button">
+						<span class="hamburger-box">
+							<span class="hamburger-inner"></span>
+						</span>
+					</button>
+				</span>
+
+			</div>
+
+			{% endif %}
 			<!-- Right Side Content / End -->
 
 		</div>
@@ -276,194 +303,214 @@
 <div class="clearfix"></div>
 <!-- Header Container / End -->
 
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
 
-<!-- Dashboard Container -->
-<div class="dashboard-container">
-
-	<!-- Dashboard Sidebar
-	================================================== -->
-	<div class="dashboard-sidebar">
-		<div class="dashboard-sidebar-inner" data-simplebar>
-			<div class="dashboard-nav-container">
-
-				<!-- Responsive Navigation Trigger -->
-				<a href="#" class="dashboard-responsive-nav-trigger">
-					<span class="hamburger hamburger--collapse" >
-						<span class="hamburger-box">
-							<span class="hamburger-inner"></span>
-						</span>
-					</span>
-					<span class="trigger-title">Dashboard Navigation</span>
-				</a>
-				
-				<!-- Navigation -->
-				<div class="dashboard-nav">
-					<div class="dashboard-nav-inner">
-
-						<ul data-submenu-title="Start">
-							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="#"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
-							<li><a href="{% url 'dashboard:employer_bookmarks_view' %}"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
-							<li><a href="{% url 'dashboard:employer_reviews_view' %}"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
-						</ul>
-						
-						<ul data-submenu-title="Organize and Manage">
-							<li><a href="#"><i class="icon-material-outline-business-center"></i> Jobs</a>
-								<ul>
-									<li><a href="#">Manage Jobs <span class="nav-tag">3</span></a></li>
-									<!-- <li><a href="dashboard-manage-candidates.html">Manage Candidates</a></li> -->
-									<li><a href="#">Post a Job</a></li>
-								</ul>	
-							</li>
-							<li class="active-submenu"><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
-								<ul>
-									<li><a href="{% url 'dashboard:employer_manage_task_view' %}">Manage Tasks <span class="nav-tag">2</span></a></li>
-									<!-- <li><a href="dashboard-manage-bidders.html">Manage Bidders</a></li>
-									<li><a href="dashboard-my-active-bids.html">My Active Bids <span class="nav-tag">4</span></a></li> -->
-									<li><a href="{% url 'dashboard:employer_post_task_view' %}">Post a Task</a></li>
-								</ul>	
-							</li>
-						</ul>
-
-						<ul data-submenu-title="Account">
-							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
-							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
-						</ul>
-						
-					</div>
-				</div>
-				<!-- Navigation / End -->
-
-			</div>
-		</div>
-	</div>
-	<!-- Dashboard Sidebar / End -->
-
-
-	<!-- Dashboard Content
-	================================================== -->
-	<div class="dashboard-content-container" data-simplebar>
-		<div class="dashboard-content-inner" >
-			
-			<!-- Dashboard Headline -->
-			<div class="dashboard-headline">
-				<h3>Manage Tasks</h3>
+				<h2>Log Out</h2>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
 						<li><a href="#">Home</a></li>
-						<li><a href="#">Dashboard</a></li>
-						<li>Manage Tasks</li>
+						<li>Log Out</li>
 					</ul>
 				</nav>
-			</div>
-	
-			<!-- Row -->
-			<div class="row">
-
-				<!-- Dashboard Box -->
-				<div class="col-xl-12">
-					<div class="dashboard-box margin-top-0">
-
-						<!-- Headline -->
-						<div class="headline">
-							<h3><i class="icon-material-outline-assignment"></i> My Tasks</h3>
-						</div>
-
-						<div class="content">
-							<ul class="dashboard-box-list">
-                                {% if all_task %}
-                                {% for task in all_task %}
-								<li>
-									<!-- Job Listing -->
-									<div class="job-listing width-adjustment">
-
-										<!-- Job Listing Details -->
-										<div class="job-listing-details">
-
-											<!-- Details -->
-											<div class="job-listing-description">
-												<!-- <h3 class="job-listing-title"><a href="#">{{ task.task_name }}</a> <span class="dashboard-status-button yellow">Expiring</span></h3> -->
-												<h3 class="job-listing-title"><a href="#">{{ task.task_name }}</a></h3>
-
-												<!-- Job Listing Footer -->
-												<div class="job-listing-footer">
-													<ul>
-														<li><i class="icon-material-outline-access-time"></i> 23 hours left</li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<!-- Task Details -->
-									<ul class="dashboard-task-info">
-										<li><strong>3</strong><span>Bids</span></li>
-										<li><strong>$22</strong><span>Avg. Bid</span></li>
-										<li><strong>$15 - $30</strong><span>Hourly Rate</span></li>
-									</ul>
-
-									<!-- Buttons -->
-									<div class="buttons-to-right always-visible">
-										<a href="dashboard-manage-bidders.html" class="button ripple-effect"><i class="icon-material-outline-supervisor-account"></i> Manage Bidders <span class="button-info">3</span></a>
-										<a href="#" class="button gray ripple-effect ico" title="Edit" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-										<a href="#" class="button gray ripple-effect ico" title="Remove" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
-									</div>
-								</li>
-                                {% endfor %}
-                                {% endif %}
-
-							</ul>
-						</div>
-					</div>
-				</div>
 
 			</div>
-			<!-- Row / End -->
+		</div>
+	</div>
+</div>
 
-			<!-- Footer -->
-			<div class="dashboard-footer-spacer"></div>
-			<div class="small-footer margin-top-15">
-				<div class="small-footer-copyrights">
-					© 2024 <strong>SolarMarketHub</strong>. All Rights Reserved.
-				</div>
-				<ul class="footer-social-links">
-					<li>
-						<a href="#" title="Facebook" data-tippy-placement="top">
-							<i class="icon-brand-facebook-f"></i>
-						</a>
-					</li>
-					<li>
-						<a href="#" title="Twitter" data-tippy-placement="top">
-							<i class="icon-brand-twitter"></i>
-						</a>
-					</li>
-					<li>
-						<a href="#" title="Google Plus" data-tippy-placement="top">
-							<i class="icon-brand-google-plus-g"></i>
-						</a>
-					</li>
-					<li>
-						<a href="#" title="LinkedIn" data-tippy-placement="top">
-							<i class="icon-brand-linkedin-in"></i>
-						</a>
-					</li>
-				</ul>
-				<div class="clearfix"></div>
-			</div>
-			<!-- Footer / End -->
+<!-- Page Content
+================================================== -->
+<!-- Container -->
+<div class="container">
+
+	<div class="row">
+		<div class="col-xl-12">
+
+			<section id="not-found" class="center margin-top-50 margin-bottom-25">
+				<h2 style="font-size: 7rem;">Log Out <i class="icon-line-awesome-question-circle"></i></h2>
+				<p>You have logout your SolarMarketHub account, click below to get back in!!!</p>
+                <a href="{% url 'home:home_view' %}" class="button ripple-effect" style="color: white;">Go Home</a>
+                <a href="{% url 'accounts:login_view' %}" class="button ripple-effect" style="color: white;">Sign In</a>
+			</section>
 
 		</div>
 	</div>
-	<!-- Dashboard Content / End -->
 
 </div>
-<!-- Dashboard Container / End -->
+<!-- Container / End -->
+
+
+<!-- Spacer -->
+<div class="margin-top-70"></div>
+<!-- Spacer / End-->
+
+<!-- Footer
+================================================== -->
+<div id="footer">
+	
+	<!-- Footer Top Section -->
+	<div class="footer-top-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-12">
+
+					<!-- Footer Rows Container -->
+					<div class="footer-rows-container">
+						
+						<!-- Left Side -->
+						<div class="footer-rows-left">
+							<div class="footer-row">
+								<div class="footer-row-inner footer-logo">
+									<img src="{% static 'images/newlogo2.png' %}" alt="">
+								</div>
+							</div>
+						</div>
+						
+						<!-- Right Side -->
+						<div class="footer-rows-right">
+
+							<!-- Social Icons -->
+							<div class="footer-row">
+								<div class="footer-row-inner">
+									<ul class="footer-social-links">
+										<li>
+											<a href="#" title="Facebook" data-tippy-placement="bottom" data-tippy-theme="light">
+												<i class="icon-brand-facebook-f"></i>
+											</a>
+										</li>
+										<li>
+											<a href="#" title="Twitter" data-tippy-placement="bottom" data-tippy-theme="light">
+												<i class="icon-brand-twitter"></i>
+											</a>
+										</li>
+										<li>
+											<a href="#" title="Google Plus" data-tippy-placement="bottom" data-tippy-theme="light">
+												<i class="icon-brand-google-plus-g"></i>
+											</a>
+										</li>
+										<li>
+											<a href="#" title="LinkedIn" data-tippy-placement="bottom" data-tippy-theme="light">
+												<i class="icon-brand-linkedin-in"></i>
+											</a>
+										</li>
+									</ul>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							
+							<!-- Language Switcher -->
+							<div class="footer-row">
+								<div class="footer-row-inner">
+									<select class="selectpicker language-switcher" data-selected-text-format="count" data-size="5">
+										<option selected>English</option>
+										<option>Français</option>
+										<option>Español</option>
+										<option>Deutsch</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<!-- Footer Rows Container / End -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer Top Section / End -->
+
+	<!-- Footer Middle Section -->
+	<div class="footer-middle-section">
+		<div class="container">
+			<div class="row">
+
+				<!-- Links -->
+				<div class="col-xl-2 col-lg-2 col-md-3">
+					<div class="footer-links">
+						<h3>For Candidates</h3>
+						<ul>
+							<li><a href="#"><span>Browse Jobs</span></a></li>
+							<li><a href="#"><span>Add Resume</span></a></li>
+							<li><a href="#"><span>Job Alerts</span></a></li>
+							<li><a href="#"><span>My Bookmarks</span></a></li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Links -->
+				<div class="col-xl-2 col-lg-2 col-md-3">
+					<div class="footer-links">
+						<h3>For Employers</h3>
+						<ul>
+							<li><a href="#"><span>Browse Candidates</span></a></li>
+							<li><a href="#"><span>Post a Job</span></a></li>
+							<li><a href="#"><span>Post a Task</span></a></li>
+							<li><a href="#"><span>Plans & Pricing</span></a></li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Links -->
+				<div class="col-xl-2 col-lg-2 col-md-3">
+					<div class="footer-links">
+						<h3>Helpful Links</h3>
+						<ul>
+							<li><a href="#"><span>Contact</span></a></li>
+							<li><a href="#"><span>Privacy Policy</span></a></li>
+							<li><a href="#"><span>Terms of Use</span></a></li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Links -->
+				<div class="col-xl-2 col-lg-2 col-md-3">
+					<div class="footer-links">
+						<h3>Account</h3>
+						<ul>
+							<li><a href="#"><span>Log In</span></a></li>
+							<li><a href="#"><span>My Account</span></a></li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Newsletter -->
+				<div class="col-xl-4 col-lg-4 col-md-12">
+					<h3><i class="icon-feather-mail"></i> Sign Up For a Newsletter</h3>
+					<p>Weekly breaking news, analysis and cutting edge advices on job searching.</p>
+					<form action="#" method="get" class="newsletter">
+						<input type="text" name="fname" placeholder="Enter your email address">
+						<button type="submit"><i class="icon-feather-arrow-right"></i></button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer Middle Section / End -->
+	
+	<!-- Footer Copyrights -->
+	<div class="footer-bottom-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-12">
+					© 2019 <strong>Hireo</strong>. All Rights Reserved.
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer Copyrights / End -->
+
+</div>
+<!-- Footer / End -->
 
 </div>
 <!-- Wrapper / End -->
-
 
 <!-- Scripts
 ================================================== -->

@@ -44,22 +44,19 @@
 					<ul id="responsive">
 
 						<li>
-							<a href="{% url 'home:home_view' %}" class="current">Home</a>
+							<a href="{% url 'home:home_view' %}">Home</a>
 						</li>
 
 						<li><a href="#">Find Work</a>
 							<ul class="dropdown-nav">
-								<li><a href="browse-companies.html">Browse Companies</a></li>
-								<li><a href="single-job-page.html">Browse Jobs</a></li>
-								<li><a href="single-task-page.html">Browse Tasks</a></li>
+								<li><a href="#">Browse Jobs</a></li>
+								<li><a href="{% url 'home:all_tasks_view' %}">Browse Tasks</a></li>
 							</ul>
 						</li>
 
 						<li><a href="#">For Employers</a>
 							<ul class="dropdown-nav">
-								<li><a href="single-freelancer-profile.html">Freelancer Profile</a></li>
-								<li><a href="dashboard-post-a-job.html">Post a Job</a></li>
-								<li><a href="dashboard-post-a-task.html">Post a Task</a></li>
+								<li><a href="{% url 'home:all_freelancers_view' %}">Find a Freelancer</a></li>
 							</ul>
 						</li>
 
@@ -249,8 +246,8 @@
 						
 						<ul class="user-menu-small-nav">
 							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="dashboard-settings.html"><i class="icon-material-outline-settings"></i> Settings</a></li>
-							<li><a href="index-logged-out.html"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
+							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
 						</ul>
 
 						</div>
