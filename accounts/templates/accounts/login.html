@@ -12,6 +12,9 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 <!-- CSS
 ================================================== -->
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -678,19 +681,23 @@
 
 <!-- Scripts
 ================================================== -->
-<script src="js/jquery-3.4.1.min.js"></script>
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="https://www.vasterad.com/themes/hireo_21/js/jquery-migrate-3.1.0.min.js"></script>
-<script src="js/mmenu.min.js"></script>
-<script src="js/tippy.all.min.js"></script>
-<script src="js/simplebar.min.js"></script>
-<script src="js/bootstrap-slider.min.js"></script>
-<script src="js/bootstrap-select.min.js"></script>
-<script src="js/snackbar.js"></script>
-<script src="js/clipboard.min.js"></script>
-<script src="js/counterup.min.js"></script>
-<script src="js/magnific-popup.min.js"></script>
-<script src="js/slick.min.js"></script>
-<script src="js/custom.js"></script>
+<script src="{% static 'js/mmenu.min.js' %}"></script>
+<script src="{% static 'js/tippy.all.min.js' %}"></script>
+<script src="{% static 'js/simplebar.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-slider.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'js/snackbar.js' %}"></script>
+<script src="{% static 'js/clipboard.min.js' %}"></script>
+<script src="{% static 'js/counterup.min.js' %}"></script>
+<script src="{% static 'js/magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/slick.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
 
 <!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
 <script>
@@ -706,6 +713,16 @@ $('#snackbar-user-status label').click(function() {
 		backgroundColor: '#383838'
 	}); 
 }); 
+</script>
+
+<script>
+	function switchUserTypeFunction(a) {
+		if (a == "freelancer") {
+			document.getElementById("userType").value = "freelancer";
+		} else {
+			document.getElementById("userType").value = "employer";
+		}
+	}
 </script>
 
 </body>

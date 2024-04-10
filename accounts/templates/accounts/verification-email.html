@@ -334,7 +334,7 @@
 		<div class="col-xl-12">
 
 			<section id="not-found" class="center margin-top-50 margin-bottom-25">
-				<h2 style="font-size: 7rem;">Email Sent <i class="icon-line-awesome-question-circle"></i></h2>
+				<h2 style="font-size: 4rem;">Email Sent <i class="icon-line-awesome-question-circle"></i></h2>
 				<p>To activate your SolarMarketHub account, we first need to verify your email address. Check your inbox and verify your email!</p>
 			</section>
 
@@ -542,6 +542,16 @@ $('#snackbar-user-status label').click(function() {
 		backgroundColor: '#383838'
 	}); 
 }); 
+</script>
+
+<script>
+	function switchUserTypeFunction(a) {
+		if (a == "freelancer") {
+			document.getElementById("userType").value = "freelancer";
+		} else {
+			document.getElementById("userType").value = "employer";
+		}
+	}
 </script>
 
 </body>

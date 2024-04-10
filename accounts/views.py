@@ -182,5 +182,5 @@ class LoginView(View):
 
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
-        #logout(request)
+        logout(request)
         return render(request, "accounts/logout.html")

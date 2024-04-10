@@ -334,7 +334,7 @@
 		<div class="col-xl-12">
 
 			<section id="not-found" class="center margin-top-50 margin-bottom-25">
-				<h2 style="font-size: 7rem;">Log Out <i class="icon-line-awesome-question-circle"></i></h2>
+				<h2 style="font-size: 4rem;">Log Out <i class="icon-line-awesome-question-circle"></i></h2>
 				<p>You have logout your SolarMarketHub account, click below to get back in!!!</p>
                 <a href="{% url 'home:home_view' %}" class="button ripple-effect" style="color: white;">Go Home</a>
                 <a href="{% url 'accounts:login_view' %}" class="button ripple-effect" style="color: white;">Sign In</a>
@@ -542,6 +542,16 @@ $('#snackbar-user-status label').click(function() {
 		backgroundColor: '#383838'
 	}); 
 }); 
+</script>
+
+<script>
+	function switchUserTypeFunction(a) {
+		if (a == "freelancer") {
+			document.getElementById("userType").value = "freelancer";
+		} else {
+			document.getElementById("userType").value = "employer";
+		}
+	}
 </script>
 
 </body>

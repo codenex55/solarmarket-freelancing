@@ -855,5 +855,15 @@ $('#snackbar-user-status label').click(function() {
 <!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaoOT9ioUE4SA8h-anaFyU4K63a7H-7bc&libraries=places"></script>
 
+<script>
+	function switchUserTypeFunction(a) {
+		if (a == "freelancer") {
+			document.getElementById("userType").value = "freelancer";
+		} else {
+			document.getElementById("userType").value = "employer";
+		}
+	}
+</script>
+
 </body>
 </html>
