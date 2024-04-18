@@ -142,7 +142,7 @@ select {
 	opacity: 1;
 	border-radius: 4px;
 	border: none;
-	box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.12);
+	/* box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.12); */
 }
 
 select {
