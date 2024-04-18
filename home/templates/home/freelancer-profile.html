@@ -6,11 +6,9 @@
 
 <!-- Basic Page Needs
 ================================================== -->
-<title>SolarMarketHub | All Freelancers</title>
+<title>SolarMarketHub</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- CSS
 ================================================== -->
@@ -18,7 +16,7 @@
 <link rel="stylesheet" href="{% static 'css/colors/blue.css' %}">
 
 </head>
-<body class="gray">
+<body>
 
 <!-- Wrapper -->
 <div id="wrapper">
@@ -85,7 +83,7 @@
 
 						<!-- Trigger -->
 						<div class="header-notifications-trigger">
-							<a href="#"><i class="icon-feather-bell"></i><span>4</span></a>
+							<a href="single-freelancer-profile.html#"><i class="icon-feather-bell"></i><span>4</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -151,7 +149,7 @@
 					<!-- Messages -->
 					<div class="header-notifications">
 						<div class="header-notifications-trigger">
-							<a href="#"><i class="icon-feather-mail"></i><span>3</span></a>
+							<a href="single-freelancer-profile.html#"><i class="icon-feather-mail"></i><span>3</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -194,7 +192,7 @@
 										<!-- Notification -->
 										<li class="notifications-not-read">
 											<a href="dashboard-messages.html">
-												<span class="notification-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></span>
+												<span class="notification-avatar status-online"><img src="images/user-avatar-placeholder.png" alt=""></span>
 												<div class="notification-text">
 													<strong>Marcin Kowalski</strong>
 													<p class="notification-msg-text">I received payment. Thanks for cooperation!</p>
@@ -219,7 +217,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
+							<a href="single-freelancer-profile.html#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -308,213 +306,261 @@
 <div class="clearfix"></div>
 <!-- Header Container / End -->
 
-<!-- Spacer -->
-<div class="margin-top-90"></div>
-<!-- Spacer / End-->
+
+
+<!-- Titlebar
+================================================== -->
+<div class="single-page-header freelancer-header" data-background-image="images/single-freelancer.jpg">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="single-page-header-inner">
+					<div class="left-side">
+						<div class="header-image freelancer-avatar"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></div>
+						<div class="header-details">
+							<h3>{{ freelancer.user_additional_info.user.first_name }} {{ freelancer.user_additional_info.user.last_name }} <span>{{ freelancer.tagline }}</span></h3>
+							<ul>
+								<li><div class="star-rating" data-rating="5.0"></div></li>
+								<li><img class="flag" src="images/flags/de.svg" alt=""> {{ freelancer.lga }}, {{ freelancer.state }}</li>
+								<li><div class="verified-badge-with-title">Verified</div></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 <!-- Page Content
 ================================================== -->
 <div class="container">
 	<div class="row">
-		<div class="col-xl-3 col-lg-4">
-			<div class="sidebar-container">
-				
-				<!-- Location -->
-				<div class="sidebar-widget">
-					<h3>Location</h3>
-					<div class="input-with-icon">
-						<div id="autocomplete-container">
-							<input id="autocomplete-input" type="text" placeholder="Location">
-						</div>
-						<i class="icon-material-outline-location-on"></i>
-					</div>
-				</div>
-
-				<!-- Category -->
-				<div class="sidebar-widget">
-					<h3>Category</h3>
-					<select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
-						<option>Admin Support</option>
-						<option>Customer Service</option>
-						<option>Data Analytics</option>
-						<option>Design & Creative</option>
-						<option>Legal</option>
-						<option>Software Developing</option>
-						<option>IT & Networking</option>
-						<option>Writing</option>
-						<option>Translation</option>
-						<option>Sales & Marketing</option>
-					</select>
-				</div>
-
-				<!-- Keywords -->
-				<div class="sidebar-widget">
-					<h3>Keywords</h3>
-					<div class="keywords-container">
-						<div class="keyword-input-container">
-							<input type="text" class="keyword-input" placeholder="e.g. task title"/>
-							<button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
-						</div>
-						<div class="keywords-list"><!-- keywords go here --></div>
-						<div class="clearfix"></div>
-					</div>
-				</div>
-
-				<!-- Hourly Rate -->
-				<div class="sidebar-widget">
-					<h3>Hourly Rate</h3>
-					<div class="margin-top-55"></div>
-
-					<!-- Range Slider -->
-					<input class="range-slider" type="text" value="" data-slider-currency="$" data-slider-min="10" data-slider-max="250" data-slider-step="5" data-slider-value="[10,250]"/>
-				</div>
-
-				<!-- Tags -->
-				<div class="sidebar-widget">
-					<h3>Skills</h3>
-
-					<div class="tags-container">
-						<div class="tag">
-							<input type="checkbox" id="tag1"/>
-							<label for="tag1">front-end dev</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag2"/>
-							<label for="tag2">angular</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag3"/>
-							<label for="tag3">react</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag4"/>
-							<label for="tag4">vue js</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag5"/>
-							<label for="tag5">web apps</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag6"/>
-							<label for="tag6">design</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag7"/>
-							<label for="tag7">wordpress</label>
-						</div>
-					</div>
-					<div class="clearfix"></div>
-
-					<!-- More Skills -->
-					<div class="keywords-container margin-top-20">
-						<div class="keyword-input-container">
-							<input type="text" class="keyword-input" placeholder="add more skills"/>
-							<button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
-						</div>
-						<div class="keywords-list"><!-- keywords go here --></div>
-						<div class="clearfix"></div>
-					</div>
-				</div>
-				<div class="clearfix"></div>
+		
+		<!-- Content -->
+		<div class="col-xl-8 col-lg-8 content-right-offset">
+			
+			<!-- Page Content -->
+			<div class="single-page-section">
+				<h3 class="margin-bottom-25">About Me</h3>
+				<p>{{ freelancer.self_introduction }}</p>
 
 			</div>
-		</div>
-		<div class="col-xl-9 col-lg-8 content-left-offset">
 
-			<!-- <h3 class="page-title">Search Results</h3>
-
-			<div class="notify-box margin-top-15">
-				<div class="switch-container">
-					<label class="switch"><input type="checkbox"><span class="switch-button"></span><span class="switch-text">Turn on email alerts for this search</span></label>
+			<!-- Boxed List -->
+			<div class="boxed-list margin-bottom-60">
+				<div class="boxed-list-headline">
+					<h3><i class="icon-material-outline-thumb-up"></i> Work History and Feedback</h3>
 				</div>
-
-				<div class="sort-by">
-					<span>Sort by:</span>
-					<select class="selectpicker hide-tick">
-						<option>Relevance</option>
-						<option>Newest</option>
-						<option>Oldest</option>
-						<option>Random</option>
-					</select>
-				</div>
-			</div> -->
-			
-			<!-- Freelancers List Container -->
-			<div class="freelancers-container freelancers-list-layout compact-list margin-top-35">
-				
-                {% if all_freelancers %}
-				<!--Freelancer -->
-                {% for freelancer in all_freelancers %}
-				<div class="freelancer">
-
-					<!-- Overview -->
-					<div class="freelancer-overview">
-						<div class="freelancer-overview-inner">
-							
-							<!-- Bookmark Icon -->
-							<span class="bookmark-icon"></span>
-							
-							<!-- Avatar -->
-							<div class="freelancer-avatar">
-								<div class="verified-badge"></div>
-								<a href="#"><img src="images/user-avatar-big-01.jpg" alt=""></a>
-							</div>
-
-							<!-- Name -->
-							<div class="freelancer-name">
-								<h4><a href="#">{{ freelancer.user.first_name }} {{ freelancer.user.last_name }} <img class="flag" src="images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"></a></h4>
-								<span>panel installer</span>
-								<!-- Rating -->
-								<div class="freelancer-rating">
-									<div class="star-rating" data-rating="4.9"></div>
+				<ul class="boxed-list-ul">
+					<li>
+						<div class="boxed-list-item">
+							<!-- Content -->
+							<div class="item-content">
+								<h4>Web, Database and API Developer <span>Rated as Freelancer</span></h4>
+								<div class="item-details margin-top-10">
+									<div class="star-rating" data-rating="5.0"></div>
+									<div class="detail-item"><i class="icon-material-outline-date-range"></i> August 2019</div>
+								</div>
+								<div class="item-description">
+									<p>Excellent programmer - fully carried out my project in a very professional manner. </p>
 								</div>
 							</div>
 						</div>
+					</li>
+					<li>
+						<div class="boxed-list-item">
+							<!-- Content -->
+							<div class="item-content">
+								<h4>WordPress Theme Installation <span>Rated as Freelancer</span></h4>
+								<div class="item-details margin-top-10">
+									<div class="star-rating" data-rating="5.0"></div>
+									<div class="detail-item"><i class="icon-material-outline-date-range"></i> June 2019</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="boxed-list-item">
+							<!-- Content -->
+							<div class="item-content">
+								<h4>Fix Python Selenium Code <span>Rated as Employer</span></h4>
+								<div class="item-details margin-top-10">
+									<div class="star-rating" data-rating="5.0"></div>
+									<div class="detail-item"><i class="icon-material-outline-date-range"></i> May 2019</div>
+								</div>
+								<div class="item-description">
+									<p>I was extremely impressed with the quality of work AND how quickly he got it done. He then offered to help with another side part of the project that we didn't even think about originally.</p>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="boxed-list-item">
+							<!-- Content -->
+							<div class="item-content">
+								<h4>PHP Core Website Fixes <span>Rated as Freelancer</span></h4>
+								<div class="item-details margin-top-10">
+									<div class="star-rating" data-rating="5.0"></div>
+									<div class="detail-item"><i class="icon-material-outline-date-range"></i> May 2019</div>
+								</div>
+								<div class="item-description">
+									<p>Awesome work, definitely will rehire. Poject was completed not only with the requirements, but on time, within our small budget.</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+
+				<!-- Pagination -->
+				<div class="clearfix"></div>
+				<div class="pagination-container margin-top-40 margin-bottom-10">
+					<nav class="pagination">
+						<ul>
+							<li><a href="single-freelancer-profile.html#" class="ripple-effect current-page">1</a></li>
+							<li><a href="single-freelancer-profile.html#" class="ripple-effect">2</a></li>
+							<li class="pagination-arrow"><a href="single-freelancer-profile.html#" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-right"></i></a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="clearfix"></div>
+				<!-- Pagination / End -->
+
+			</div>
+			<!-- Boxed List / End -->
+		</div>
+		
+
+		<!-- Sidebar -->
+		<div class="col-xl-4 col-lg-4">
+			<div class="sidebar-container">
+				
+				<!-- Profile Overview -->
+				<div class="profile-overview">
+					<div class="overview-item"><strong>&#8358;{{ freelancer.minimum_pay }}</strong><span>Minimum Pay</span></div>
+					<div class="overview-item"><strong>53</strong><span>Jobs Done</span></div>
+					<div class="overview-item"><strong>22</strong><span>Rehired</span></div>
+				</div>
+
+				<!-- Button -->
+				<!-- <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim margin-bottom-50">Make an Offer <i class="icon-material-outline-arrow-right-alt"></i></a> -->
+				<a href="{% url 'dashboard:initiate_chat_view' RECIPIENT_ID=freelancer.user_additional_info.user.id %}" class="button button-sliding-icon ripple-effect margin-bottom-50">Message {{ freelancer.user_additional_info.user.first_name }} <i class="icon-material-outline-arrow-right-alt"></i></a>
+
+				<!-- Freelancer Indicators -->
+				<div class="sidebar-widget">
+					<div class="freelancer-indicators">
+
+						<!-- Indicator -->
+						<div class="indicator">
+							<strong>88%</strong>
+							<div class="indicator-bar" data-indicator-percentage="88"><span></span></div>
+							<span>Job Success</span>
+						</div>
+
+						<!-- Indicator -->
+						<div class="indicator">
+							<strong>100%</strong>
+							<div class="indicator-bar" data-indicator-percentage="100"><span></span></div>
+							<span>Recommendation</span>
+						</div>
+						
+						<!-- Indicator -->
+						<div class="indicator">
+							<strong>90%</strong>
+							<div class="indicator-bar" data-indicator-percentage="90"><span></span></div>
+							<span>On Time</span>
+						</div>	
+											
+						<!-- Indicator -->
+						<div class="indicator">
+							<strong>80%</strong>
+							<div class="indicator-bar" data-indicator-percentage="80"><span></span></div>
+							<span>On Budget</span>
+						</div>
 					</div>
-					
-					<!-- Details -->
-					<div class="freelancer-details">
-						<div class="freelancer-details-list">
-							<ul>
-								<li>Location <strong><i class="icon-material-outline-location-on"></i> Nigeria</strong></li>
-								<li>Rate <strong>&#8358;60 / hr</strong></li>
-								<li>Job Success <strong>95%</strong></li>
+				</div>
+				
+				<!-- Widget -->
+				<div class="sidebar-widget">
+					<h3>Social Profiles</h3>
+					<div class="freelancer-socials margin-top-25">
+						<ul>
+							<li><a href="single-freelancer-profile.html#" title="Dribbble" data-tippy-placement="top"><i class="icon-brand-dribbble"></i></a></li>
+							<li><a href="single-freelancer-profile.html#" title="Twitter" data-tippy-placement="top"><i class="icon-brand-twitter"></i></a></li>
+							<li><a href="single-freelancer-profile.html#" title="Behance" data-tippy-placement="top"><i class="icon-brand-behance"></i></a></li>
+							<li><a href="single-freelancer-profile.html#" title="GitHub" data-tippy-placement="top"><i class="icon-brand-github"></i></a></li>
+						
+						</ul>
+					</div>
+				</div>
+
+				<!-- Widget -->
+				<div class="sidebar-widget">
+					<h3>Skills</h3>
+					<div class="task-tags">
+						<span>iOS</span>
+						<span>Android</span>
+						<span>mobile apps</span>
+						<span>design</span>
+						<span>Python</span>
+						<span>Flask</span>
+						<span>PHP</span>
+						<span>WordPress</span>
+					</div>
+				</div>
+
+				<!-- Widget -->
+				<div class="sidebar-widget">
+					<h3>Attachments</h3>
+					<div class="attachments-container">
+						<a href="single-freelancer-profile.html#" class="attachment-box ripple-effect"><span>Cover Letter</span><i>PDF</i></a>
+						<a href="single-freelancer-profile.html#" class="attachment-box ripple-effect"><span>Contract</span><i>DOCX</i></a>
+					</div>
+				</div>
+
+				<!-- Sidebar Widget -->
+				<div class="sidebar-widget">
+					<h3>Bookmark or Share</h3>
+
+					<!-- Bookmark Button -->
+					<button class="bookmark-button margin-bottom-25">
+						<span class="bookmark-icon"></span>
+						<span class="bookmark-text">Bookmark</span>
+						<span class="bookmarked-text">Bookmarked</span>
+					</button>
+
+					<!-- Copy URL -->
+					<div class="copy-url">
+						<input id="copy-url" type="text" value="" class="with-border">
+						<button class="copy-url-button ripple-effect" data-clipboard-target="#copy-url" title="Copy to Clipboard" data-tippy-placement="top"><i class="icon-material-outline-file-copy"></i></button>
+					</div>
+
+					<!-- Share Buttons -->
+					<div class="share-buttons margin-top-25">
+						<div class="share-buttons-trigger"><i class="icon-feather-share-2"></i></div>
+						<div class="share-buttons-content">
+							<span>Interesting? <strong>Share It!</strong></span>
+							<ul class="share-buttons-icons">
+								<li><a href="single-freelancer-profile.html#" data-button-color="#3b5998" title="Share on Facebook" data-tippy-placement="top"><i class="icon-brand-facebook-f"></i></a></li>
+								<li><a href="single-freelancer-profile.html#" data-button-color="#1da1f2" title="Share on Twitter" data-tippy-placement="top"><i class="icon-brand-twitter"></i></a></li>
+								<li><a href="single-freelancer-profile.html#" data-button-color="#dd4b39" title="Share on Google Plus" data-tippy-placement="top"><i class="icon-brand-google-plus-g"></i></a></li>
+								<li><a href="single-freelancer-profile.html#" data-button-color="#0077b5" title="Share on LinkedIn" data-tippy-placement="top"><i class="icon-brand-linkedin-in"></i></a></li>
 							</ul>
 						</div>
-						<a href="#" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
 					</div>
 				</div>
-                {% endfor %}
-				<!-- Freelancer / End -->
-                {% else %}
-                {% endif %}
 
-
-			<!-- Pagination -->
-			<div class="clearfix"></div>
-			<div class="row">
-				<div class="col-md-12">
-					<!-- Pagination -->
-					<!-- <div class="pagination-container margin-top-40 margin-bottom-60">
-						<nav class="pagination">
-							<ul>
-								<li class="pagination-arrow"><a href="#" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-left"></i></a></li>
-								<li><a href="#" class="ripple-effect">1</a></li>
-								<li><a href="#" class="current-page ripple-effect">2</a></li>
-								<li><a href="#" class="ripple-effect">3</a></li>
-								<li><a href="#" class="ripple-effect">4</a></li>
-								<li class="pagination-arrow"><a href="#" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-right"></i></a></li>
-							</ul>
-						</nav>
-					</div> -->
-				</div>
 			</div>
-			<!-- Pagination / End -->
-
 		</div>
+
 	</div>
 </div>
 
+
+<!-- Spacer -->
+<div class="margin-top-15"></div>
+<!-- Spacer / End-->
 
 <!-- Footer
 ================================================== -->
@@ -546,22 +592,22 @@
 								<div class="footer-row-inner">
 									<ul class="footer-social-links">
 										<li>
-											<a href="#" title="Facebook" data-tippy-placement="bottom" data-tippy-theme="light">
+											<a href="single-freelancer-profile.html#" title="Facebook" data-tippy-placement="bottom" data-tippy-theme="light">
 												<i class="icon-brand-facebook-f"></i>
 											</a>
 										</li>
 										<li>
-											<a href="#" title="Twitter" data-tippy-placement="bottom" data-tippy-theme="light">
+											<a href="single-freelancer-profile.html#" title="Twitter" data-tippy-placement="bottom" data-tippy-theme="light">
 												<i class="icon-brand-twitter"></i>
 											</a>
 										</li>
 										<li>
-											<a href="#" title="Google Plus" data-tippy-placement="bottom" data-tippy-theme="light">
+											<a href="single-freelancer-profile.html#" title="Google Plus" data-tippy-placement="bottom" data-tippy-theme="light">
 												<i class="icon-brand-google-plus-g"></i>
 											</a>
 										</li>
 										<li>
-											<a href="#" title="LinkedIn" data-tippy-placement="bottom" data-tippy-theme="light">
+											<a href="single-freelancer-profile.html#" title="LinkedIn" data-tippy-placement="bottom" data-tippy-theme="light">
 												<i class="icon-brand-linkedin-in"></i>
 											</a>
 										</li>
@@ -601,10 +647,10 @@
 					<div class="footer-links">
 						<h3>For Candidates</h3>
 						<ul>
-							<li><a href="#"><span>Browse Jobs</span></a></li>
-							<li><a href="#"><span>Add Resume</span></a></li>
-							<li><a href="#"><span>Job Alerts</span></a></li>
-							<li><a href="#"><span>My Bookmarks</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Browse Jobs</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Add Resume</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Job Alerts</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>My Bookmarks</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -614,10 +660,10 @@
 					<div class="footer-links">
 						<h3>For Employers</h3>
 						<ul>
-							<li><a href="#"><span>Browse Candidates</span></a></li>
-							<li><a href="#"><span>Post a Job</span></a></li>
-							<li><a href="#"><span>Post a Task</span></a></li>
-							<li><a href="#"><span>Plans & Pricing</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Browse Candidates</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Post a Job</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Post a Task</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Plans & Pricing</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -627,9 +673,9 @@
 					<div class="footer-links">
 						<h3>Helpful Links</h3>
 						<ul>
-							<li><a href="#"><span>Contact</span></a></li>
-							<li><a href="#"><span>Privacy Policy</span></a></li>
-							<li><a href="#"><span>Terms of Use</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Contact</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Privacy Policy</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Terms of Use</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -639,8 +685,8 @@
 					<div class="footer-links">
 						<h3>Account</h3>
 						<ul>
-							<li><a href="#"><span>Log In</span></a></li>
-							<li><a href="#"><span>My Account</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>Log In</span></a></li>
+							<li><a href="single-freelancer-profile.html#"><span>My Account</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -649,7 +695,7 @@
 				<div class="col-xl-4 col-lg-4 col-md-12">
 					<h3><i class="icon-feather-mail"></i> Sign Up For a Newsletter</h3>
 					<p>Weekly breaking news, analysis and cutting edge advices on job searching.</p>
-					<form action="#" method="get" class="newsletter">
+					<form action="single-freelancer-profile.html#" method="get" class="newsletter">
 						<input type="text" name="fname" placeholder="Enter your email address">
 						<button type="submit"><i class="icon-feather-arrow-right"></i></button>
 					</form>
@@ -677,134 +723,97 @@
 </div>
 <!-- Wrapper / End -->
 
-<!-- Sign In Popup
+
+<!-- Make an Offer Popup
 ================================================== -->
-<div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
+<div id="small-dialog" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
 
 	<!--Tabs -->
 	<div class="sign-in-form">
 
 		<ul class="popup-tabs-nav">
-			<li><a href="#login">Log In</a></li>
-			<li><a href="#register">Register</a></li>
+			<li><a href="single-freelancer-profile.html#tab">Make an Offer</a></li>
 		</ul>
 
 		<div class="popup-tabs-container">
 
-			<!-- Login -->
-			<div class="popup-tab-content" id="login">
+			<!-- Tab -->
+			<div class="popup-tab-content" id="tab">
 				
 				<!-- Welcome Text -->
 				<div class="welcome-text">
-					<h3>We're glad to see you again!</h3>
-					<span>Don't have an account? <a href="#" class="register-tab">Sign Up!</a></span>
+					<h3>Discuss your project with David</h3>
 				</div>
 					
 				<!-- Form -->
-				<form method="post" id="login-form" action="{% url 'accounts:login_view' %}">
-					{% csrf_token %}
+				<form method="post">
+
 					<div class="input-with-icon-left">
-						<i class="icon-material-baseline-mail-outline"></i>
-						<input type="text" class="input-text with-border" name="emailaddress" id="emailaddress" placeholder="Email Address" required/>
+						<i class="icon-material-outline-account-circle"></i>
+						<input type="text" class="input-text with-border" name="name" id="name" placeholder="First and Last Name"/>
 					</div>
 
 					<div class="input-with-icon-left">
-						<i class="icon-material-outline-lock"></i>
-						<input type="password" class="input-text with-border" name="password" id="password" placeholder="Password" required/>
+						<i class="icon-material-baseline-mail-outline"></i>
+						<input type="text" class="input-text with-border" name="emailaddress" id="emailaddress" placeholder="Email Address"/>
 					</div>
-					<a href="#" class="forgot-password">Forgot Password?</a>
+
+					<textarea name="textarea" cols="10" placeholder="Message" class="with-border"></textarea>
+
+					<div class="uploadButton margin-top-25">
+						<input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload" multiple/>
+						<label class="uploadButton-button ripple-effect" for="upload">Add Attachments</label>
+						<span class="uploadButton-file-name">Allowed file types: zip, pdf, png, jpg <br> Max. files size: 50 MB.</span>
+					</div>
+
 				</form>
 				
 				<!-- Button -->
-				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="login-form">Log In <i class="icon-material-outline-arrow-right-alt"></i></button>
-				
-				<!-- Social Login -->
-				<!-- <div class="social-login-separator"><span>or</span></div>
-				<div class="social-login-buttons">
-					<button class="facebook-login ripple-effect"><i class="icon-brand-facebook-f"></i> Log In via Facebook</button>
-					<button class="google-login ripple-effect"><i class="icon-brand-google-plus-g"></i> Log In via Google+</button>
-				</div> -->
+				<button class="button margin-top-35 full-width button-sliding-icon ripple-effect" type="submit">Make an Offer <i class="icon-material-outline-arrow-right-alt"></i></button>
 
 			</div>
-
-			<!-- Register -->
-			<div class="popup-tab-content" id="register">
+			<!-- Login -->
+			<div class="popup-tab-content" id="loginn">
 				
 				<!-- Welcome Text -->
 				<div class="welcome-text">
-					<h3>Let's create your account!</h3>
-				</div>
-
-				<!-- Account Type -->
-				<div class="account-type">
-					<div onclick="switchUserTypeFunction('freelancer')">
-						<input type="radio" name="account-type-radio" id="freelancer-radio" class="account-type-radio" checked/>
-						<label for="freelancer-radio" class="ripple-effect-dark"><i class="icon-material-outline-account-circle"></i> Freelancer</label>
-					</div>
-
-					<div onclick="switchUserTypeFunction('employer')">
-						<input type="radio" name="account-type-radio" id="employer-radio" class="account-type-radio"/>
-						<label for="employer-radio" class="ripple-effect-dark"><i class="icon-material-outline-business-center"></i> Employer</label>
-					</div>
+					<h3>Discuss Your Project With Tom</h3>
 				</div>
 					
 				<!-- Form -->
-				<form method="post" id="register-account-form" action="{% url 'accounts:signup_view' %}">
-					{% csrf_token %}
-					<input type="hidden" name="user_type" id="userType" value="freelancer">
+				<form method="post" id="make-an-offer-form">
+
+					<div class="input-with-icon-left">
+						<i class="icon-material-outline-account-circle"></i>
+						<input type="text" class="input-text with-border" name="name2" id="name2" placeholder="First and Last Name" required/>
+					</div>
 
 					<div class="input-with-icon-left">
 						<i class="icon-material-baseline-mail-outline"></i>
-						<input type="text" class="input-text with-border" name="first_name" id="emailaddress-register" placeholder="First Name" required/>
+						<input type="text" class="input-text with-border" name="emailaddress2" id="emailaddress2" placeholder="Email Address" required/>
 					</div>
 
-					<div class="input-with-icon-left">
-						<i class="icon-material-baseline-mail-outline"></i>
-						<input type="text" class="input-text with-border" name="last_name" id="emailaddress-register" placeholder="Last Name" required/>
-					</div>
-					
-					<div class="input-with-icon-left">
-						<i class="icon-material-baseline-mail-outline"></i>
-						<input type="email" class="input-text with-border" name="email" id="emailaddress-register" placeholder="Email Address" required/>
+					<textarea name="textarea" cols="10" placeholder="Message" class="with-border"></textarea>
+
+					<div class="uploadButton margin-top-25">
+						<input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload-cv" multiple/>
+						<label class="uploadButton-button" for="upload-cv">Add Attachments</label>
+						<span class="uploadButton-file-name">Allowed file types: zip, pdf, png, jpg <br> Max. files size: 50 MB.</span>
 					</div>
 
-					<div class="input-with-icon-left" title="Should be at least 8 characters long" data-tippy-placement="bottom">
-						<i class="icon-material-outline-lock"></i>
-						<input type="password" class="input-text with-border" name="password1" id="password-register" placeholder="Password" required/>
-					</div>
-
-					<div class="input-with-icon-left">
-						<i class="icon-material-outline-lock"></i>
-						<input type="password" class="input-text with-border" name="password2" id="password-repeat-register" placeholder="Repeat Password" required/>
-					</div>
-
-					<div>
-						<ul class="mt-2" style="font-size:13px;">
-							<li>Password must contain 1 uppercase</li>
-							<li>Password must contain 1 lowercase</li>
-							<li>Password must contain 1 digit</li>
-							<li>Password must contain 1 special character</li>
-							<li>Password must be 8 characters long</li>
-						</ul>
-					</div>
 				</form>
 				
 				<!-- Button -->
-				<button class="margin-top-10 button full-width button-sliding-icon ripple-effect" type="submit" form="register-account-form">Register <i class="icon-material-outline-arrow-right-alt"></i></button>
-				
-				<!-- Social Login -->
-				<!-- <div class="social-login-separator"><span>or</span></div>
-				<div class="social-login-buttons">
-					<button class="facebook-login ripple-effect"><i class="icon-brand-facebook-f"></i> Register via Facebook</button>
-					<button class="google-login ripple-effect"><i class="icon-brand-google-plus-g"></i> Register via Google+</button>
-				</div> -->
+				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="make-an-offer-form">Make an Offer <i class="icon-material-outline-arrow-right-alt"></i></button>
 
 			</div>
 
 		</div>
 	</div>
 </div>
-<!-- Sign In Popup / End -->
+<!-- Make an Offer Popup / End -->
+
+
 
 <!-- Scripts
 ================================================== -->
@@ -836,33 +845,21 @@ $('#snackbar-user-status label').click(function() {
 		backgroundColor: '#383838'
 	}); 
 }); 
-</script>
 
-<!-- Google Autocomplete -->
-<script>
-	function initAutocomplete() {
-		 var options = {
-		  types: ['(cities)'],
-		  // componentRestrictions: {country: "us"}
-		 };
+// Snackbar for "place a bid" button
+$('#snackbar-place-bid').click(function() { 
+	Snackbar.show({
+		text: 'Your bid has been placed!',
+	}); 
+}); 
 
-		 var input = document.getElementById('autocomplete-input');
-		 var autocomplete = new google.maps.places.Autocomplete(input, options);
-	}
-</script>
 
-<!-- Google API & Maps -->
-<!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaoOT9ioUE4SA8h-anaFyU4K63a7H-7bc&libraries=places"></script>
-
-<script>
-	function switchUserTypeFunction(a) {
-		if (a == "freelancer") {
-			document.getElementById("userType").value = "freelancer";
-		} else {
-			document.getElementById("userType").value = "employer";
-		}
-	}
+// Snackbar for copy to clipboard button
+$('.copy-url-button').click(function() { 
+	Snackbar.show({
+		text: 'Copied to clipboard!',
+	}); 
+}); 
 </script>
 
 </body>

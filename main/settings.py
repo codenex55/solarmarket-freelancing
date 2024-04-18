@@ -167,3 +167,12 @@ EMAIL_HOST = 'smtp.elasticemail.com'
 EMAIL_PORT = 2525
 EMAIL_HOST_USER = 'noreply@solarmarkethub.com'
 EMAIL_HOST_PASSWORD = '936350768C38A057971035F436A3326AA13B'
+
+
+import cloudinary
+          
+cloudinary.config( 
+  cloud_name = "dqiarxxhj", 
+  api_key = "749325535483866", 
+  api_secret = "wB7xLd1YggE4dgV-cFB8aR0B6lk" 
+)

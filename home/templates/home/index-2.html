@@ -1,5 +1,6 @@
 {% load static %}
 {% load humanize %}
+{% csrf_token %}
 
 <!doctype html>
 <html lang="en">
@@ -10,8 +11,6 @@
 <title>SolarMarketHub</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -88,7 +87,7 @@
 
 						<!-- Trigger -->
 						<div class="header-notifications-trigger">
-							<a href="#"><i class="icon-feather-bell"></i><span>4</span></a>
+							<a href="#"><i class="fa fa-bell"></i><span>4</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -154,7 +153,7 @@
 					<!-- Messages -->
 					<div class="header-notifications">
 						<div class="header-notifications-trigger">
-							<a href="#"><i class="icon-feather-mail"></i><span>3</span></a>
+							<a href="#"><i class="fa fa-envelope"></i><span>3</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -197,7 +196,7 @@
 										<!-- Notification -->
 										<li class="notifications-not-read">
 											<a href="dashboard-messages.html">
-												<span class="notification-avatar status-online"><img src="images/user-avatar-placeholder.png" alt=""></span>
+												<span class="notification-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></span>
 												<div class="notification-text">
 													<strong>Marcin Kowalski</strong>
 													<p class="notification-msg-text">I received payment. Thanks for cooperation!</p>
@@ -222,7 +221,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="#"><div class="user-avatar status-online"><img src="images/user-avatar-small-01.jpg" alt=""></div></a>
+							<a href="#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -233,7 +232,7 @@
 
 								<!-- User Name / Avatar -->
 								<div class="user-details">
-									<div class="user-avatar status-online"><img src="images/user-avatar-small-01.jpg" alt=""></div>
+									<div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div>
 									<div class="user-name">
 										{{ request.user.first_name }} {{ request.user.last_name }} 
 										{% if request.user.useradditionalinformation.user_type == "freelancer" %}
@@ -337,42 +336,42 @@
 		<!-- Search Bar -->
 		<div class="row">
 			<div class="col-md-12">
+				<form action="{% url 'home:freelancer_search_view' %}" method="post">
+					{% csrf_token %}
 				<div class="intro-banner-search-form margin-top-95">
 
-					<!-- Search Field -->
-					<div class="intro-search-field with-autocomplete">
-						<label for="autocomplete-input" class="field-title ripple-effect">Where?</label>
-						<div class="input-with-icon">
-							<input id="autocomplete-input" type="text" placeholder="Online Job">
-							<i class="fa fa-map-marker"></i>
-						</div>
+					<div class="intro-search-field">
+						<label for ="state" class="field-title ripple-effect">Which state?</label>
+						<select name="state" onchange="selectLGAFunction()" id="state" class="selectpicker default" data-selected-text-format="count" data-size="7" title="All State" >
+							{% for state in all_states %}
+							<option>{{ state }}</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="intro-search-field">
+						<label for ="allLGA" class="field-title ripple-effect">LGA</label>
+						<select name="lga" id="trial" data-selected-text-format="count" data-size="7" title="All LGA">
+						</select>
 					</div>
 
 					<!-- Search Field -->
 					<div class="intro-search-field">
-						<label for ="intro-keywords" class="field-title ripple-effect">What you need done?</label>
-						<input id="intro-keywords" type="text" placeholder="e.g. build me a website">
-					</div>
-
-					<!-- Search Field -->
-					<div class="intro-search-field">
-						<select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
-							<option>Residential Solar Panels</option>
-							<option>Commercial Solar Solutions</option>
-							<option>Solar Installation Services</option>
-							<option>Solar Financing and Leasing</option>
-							<option>Solar Equipment and Components</option>
-							<option>Solar Monitoring and Maintenance</option>
-							<option>Solar Education and Training</option>
-							<option>Solar Energy Consulting and Advisory</option>
+						<label for ="cat" class="field-title ripple-effect">Categories</label>
+						<select name="category" id="cat" class="selectpicker default" data-selected-text-format="count" data-size="7" title="All Categories" >
+							<option>Solar Installation</option>
+							<option>Solar Maintenance</option>
+							<option>CCTV Installation</option>
+							<option>CCTV Maintenance</option>
 						</select>
 					</div>
 
 					<!-- Button -->
 					<div class="intro-search-button">
-						<button class="button ripple-effect">Search</button>
+						<button class="button ripple-effect" type="submit">Search</button>
 					</div>
 				</div>
+				</form>
 			</div>
 		</div>
 
@@ -417,9 +416,9 @@
 
 			<div class="col-xl-3 col-md-6">
 				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="images/job-category-01.jpg">
+				<a href="#" class="photo-box small" data-background-image="{% static 'images/solar_installation.jpg' %}">
 					<div class="photo-box-content">
-						<h3>Residential Solar Panels</h3>
+						<h3>Solar Installation</h3>
 						<span>0</span>
 					</div>
 				</a>
@@ -427,9 +426,9 @@
 			
 			<div class="col-xl-3 col-md-6">
 				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="images/job-category-02.jpg">
+				<a href="#" class="photo-box small" data-background-image="{% static 'images/solar main.jpg' %}">
 					<div class="photo-box-content">
-						<h3>Commercial Solar Solutions</h3>
+						<h3>Solar Maintenance</h3>
 						<span>0</span>
 					</div>
 				</a>
@@ -437,9 +436,9 @@
 			
 			<div class="col-xl-3 col-md-6">
 				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="images/job-category-03.jpg">
+				<a href="#" class="photo-box small" data-background-image="{% static 'images/cctv installation.jpg' %}">
 					<div class="photo-box-content">
-						<h3>Solar Installation Services</h3>
+						<h3>CCTV Installation</h3>
 						<span>0</span>
 					</div>
 				</a>
@@ -447,49 +446,9 @@
 
 			<div class="col-xl-3 col-md-6">
 				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="images/job-category-04.jpg">
+				<a href="#" class="photo-box small" data-background-image="{% static 'images/cctv main.jpg' %}">
 					<div class="photo-box-content">
-						<h3>Solar Financing and Leasing</h3>
-						<span>0</span>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-xl-3 col-md-6">
-				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="images/job-category-05.jpg">
-					<div class="photo-box-content">
-						<h3>Solar Equipment and Components</h3>
-						<span>0</span>
-					</div>
-				</a>
-			</div>
-			
-			<div class="col-xl-3 col-md-6">
-				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="images/job-category-06.jpg">
-					<div class="photo-box-content">
-						<h3>Solar Monitoring and Maintenance</h3>
-						<span>0</span>
-					</div>
-				</a>
-			</div>
-			
-			<div class="col-xl-3 col-md-6">
-				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="images/job-category-07.jpg">
-					<div class="photo-box-content">
-						<h3>Solar Education and Training</h3>
-						<span>0</span>
-					</div>
-				</a>
-			</div>
-
-			<div class="col-xl-3 col-md-6">
-				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="images/job-category-08.jpg">
-					<div class="photo-box-content">
-						<h3>Solar Energy Consulting and Advisory</h3>
+						<h3>CCTV Maintenance</h3>
 						<span>0</span>
 					</div>
 				</a>
@@ -676,7 +635,7 @@
 			<div class="fw-carousel-review">
 				<div class="testimonial-box">
 					<div class="testimonial-avatar">
-						<img src="images/user-avatar-small-01.jpg" alt="">
+						<img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="">
 					</div>
 					<div class="testimonial-author">
 						<h4>Tom Smith</h4>
@@ -690,7 +649,7 @@
 			<div class="fw-carousel-review">
 				<div class="testimonial-box">
 					<div class="testimonial-avatar">
-						<img src="images/user-avatar-placeholder.png" alt="">
+						<img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="">
 					</div>
 					<div class="testimonial-author">
 						<h4>Sebastiano Piccio</h4>
@@ -718,7 +677,7 @@
 			<div class="fw-carousel-review">
 				<div class="testimonial-box">
 					<div class="testimonial-avatar">
-						<img src="images/user-avatar-placeholder.png" alt="">
+						<img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="">
 					</div>
 					<div class="testimonial-author">
 						<h4>Marcin Kowalski</h4>
@@ -1128,6 +1087,37 @@ $('#snackbar-user-status label').click(function() {
 	}
 </script>
 
+
+<script>
+	function selectLGAFunction() {
+		var state = document.getElementById("state").value;
+		$.ajax({
+            url: "{% url 'home:get_lga_view' %}",
+            method: "POST",
+            data: { 
+              'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+              state: state 
+            },
+            success: function (data) {
+                populateLGADropdown(data.all_lga);
+				
+            }
+        });
+	}
+
+	function populateLGADropdown(lgas) {
+        var lgaDropdown = document.getElementById("trial");
+        lgaDropdown.innerHTML = ""; // Clear existing options
+
+        lgas.forEach(function(lga) {
+            var option = document.createElement("option");
+            option.text = lga;
+            lgaDropdown.add(option);
+        });
+
+		console.log(lgaDropdown)
+	}
+</script>
+
 </body>
 </html>
-

@@ -194,7 +194,7 @@
 										<!-- Notification -->
 										<li class="notifications-not-read">
 											<a href="dashboard-messages.html">
-												<span class="notification-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></span>
+												<span class="notification-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture }}" alt=""></span>
 												<div class="notification-text">
 													<strong>Marcin Kowalski</strong>
 													<p class="notification-msg-text">I received payment. Thanks for cooperation!</p>
@@ -319,101 +319,64 @@
 		<div class="col-xl-3 col-lg-4">
 			<div class="sidebar-container">
 				
-				<!-- Location -->
+				<!-- State -->
 				<div class="sidebar-widget">
-					<h3>Location</h3>
-					<div class="input-with-icon">
-						<div id="autocomplete-container">
-							<input id="autocomplete-input" type="text" placeholder="Location">
-						</div>
-						<i class="icon-material-outline-location-on"></i>
-					</div>
+					<h3>State</h3>
+					<select name="state" onchange="selectLGAFunction()" id="state" class="selectpicker default" data-selected-text-format="count" data-size="7" title="All State" >
+                        {% for states in all_states %}
+                        <option value="{{ states }}" {% if state == states %}selected{% endif %}>{{ states }}</option>
+                        {% endfor %}
+                    </select>
+				</div>
+
+                <!-- LGA -->
+				<div class="sidebar-widget">
+					<h3>LGA</h3>
+					<select name="lga" id="trial" data-selected-text-format="count" data-size="7" title="All LGA">
+                        {% for lgas in all_lgas %}
+                            <option value="{{ lgas }}" {% if lga == lgas %}selected{% endif %}>{{ lgas }}</option>
+                        {% endfor %}
+                    </select>
 				</div>
 
 				<!-- Category -->
 				<div class="sidebar-widget">
 					<h3>Category</h3>
-					<select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
-						<option>Admin Support</option>
-						<option>Customer Service</option>
-						<option>Data Analytics</option>
-						<option>Design & Creative</option>
-						<option>Legal</option>
-						<option>Software Developing</option>
-						<option>IT & Networking</option>
-						<option>Writing</option>
-						<option>Translation</option>
-						<option>Sales & Marketing</option>
+					<select name="category" class="selectpicker default" data-selected-text-format="count" data-size="7" title="All Categories" >
+						{% if category == "Solar Installation" %}
+                        <option value="Solar Installation" selected>Solar Installation</option>
+                        {% else %}
+                        <option value="Solar Installation">Solar Installation</option>
+                        {% endif %}
+                        {% if category == "Solar Maintenance" %}
+                        <option value="Solar Maintenance" selected>Solar Maintenance</option>
+                        {% else %}
+                        <option value="Solar Maintenance">Solar Maintenance</option>
+                        {% endif %}
+                        {% if category == "CCTV Installation" %}
+                        <option value="CCTV Installation" selected>CCTV Installation</option>
+                        {% else%}
+                        <option value="CCTV Installation">CCTV Installation</option>
+                        {% endif %}
+                        {% if category == "CCTV Maintenance" %}
+                        <option value="CCTV Maintenance" selected>CCTV Maintenance</option>
+                        {% else %}
+                        <option value="CCTV Maintenance">CCTV Maintenance</option>
+                        {% endif %}
 					</select>
-				</div>
-
-				<!-- Keywords -->
-				<div class="sidebar-widget">
-					<h3>Keywords</h3>
-					<div class="keywords-container">
-						<div class="keyword-input-container">
-							<input type="text" class="keyword-input" placeholder="e.g. task title"/>
-							<button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
-						</div>
-						<div class="keywords-list"><!-- keywords go here --></div>
-						<div class="clearfix"></div>
-					</div>
 				</div>
 
 				<!-- Hourly Rate -->
 				<div class="sidebar-widget">
-					<h3>Hourly Rate</h3>
+					<h3>Maximum Pay</h3>
 					<div class="margin-top-55"></div>
 
 					<!-- Range Slider -->
-					<input class="range-slider" type="text" value="" data-slider-currency="$" data-slider-min="10" data-slider-max="250" data-slider-step="5" data-slider-value="[10,250]"/>
-				</div>
-
-				<!-- Tags -->
-				<div class="sidebar-widget">
-					<h3>Skills</h3>
-
-					<div class="tags-container">
-						<div class="tag">
-							<input type="checkbox" id="tag1"/>
-							<label for="tag1">front-end dev</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag2"/>
-							<label for="tag2">angular</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag3"/>
-							<label for="tag3">react</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag4"/>
-							<label for="tag4">vue js</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag5"/>
-							<label for="tag5">web apps</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag6"/>
-							<label for="tag6">design</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag7"/>
-							<label for="tag7">wordpress</label>
-						</div>
-					</div>
-					<div class="clearfix"></div>
-
-					<!-- More Skills -->
-					<div class="keywords-container margin-top-20">
-						<div class="keyword-input-container">
-							<input type="text" class="keyword-input" placeholder="add more skills"/>
-							<button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
-						</div>
-						<div class="keywords-list"><!-- keywords go here --></div>
-						<div class="clearfix"></div>
-					</div>
+                    {% if maximum_pay != None %}
+					<input name="maximum_pay" class="range-slider" type="text" value="{{ maximum_pay }}" data-slider-currency="&#8358;" data-slider-min="1000" data-slider-max="10000000" data-slider-step="1000" data-slider-value="{{ maximum_pay }}"/>
+                    {% else %}
+					<input name="maximum_pay" class="range-slider" type="text" value="1000" data-slider-currency="&#8358;" data-slider-min="1000" data-slider-max="10000000" data-slider-step="1000" data-slider-value="1000"/>
+                    {% endif %}
 				</div>
 				<div class="clearfix"></div>
 
@@ -421,7 +384,7 @@
 		</div>
 		<div class="col-xl-9 col-lg-8 content-left-offset">
 
-			<!-- <h3 class="page-title">Search Results</h3>
+			<h3 class="page-title">Search Results</h3>
 
 			<div class="notify-box margin-top-15">
 				<div class="switch-container">
@@ -437,14 +400,14 @@
 						<option>Random</option>
 					</select>
 				</div>
-			</div> -->
+			</div>
 			
 			<!-- Freelancers List Container -->
 			<div class="freelancers-container freelancers-list-layout compact-list margin-top-35">
 				
-                {% if all_freelancers %}
+                {% if results %}
 				<!--Freelancer -->
-                {% for freelancer in all_freelancers %}
+                {% for freelancer in results %}
 				<div class="freelancer">
 
 					<!-- Overview -->
@@ -457,13 +420,13 @@
 							<!-- Avatar -->
 							<div class="freelancer-avatar">
 								<div class="verified-badge"></div>
-								<a href="#"><img src="images/user-avatar-big-01.jpg" alt=""></a>
+								<a href="#"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></a>
 							</div>
 
 							<!-- Name -->
 							<div class="freelancer-name">
-								<h4><a href="#">{{ freelancer.user.first_name }} {{ freelancer.user.last_name }} <img class="flag" src="images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"></a></h4>
-								<span>panel installer</span>
+								<h4><a href="#">{{ freelancer.user_additional_info.user.first_name }} {{ freelancer.user_additional_info.user.last_name }} <img class="flag" src="images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"></a></h4>
+								<span>{{ freelancer.tagline }}</span>
 								<!-- Rating -->
 								<div class="freelancer-rating">
 									<div class="star-rating" data-rating="4.9"></div>
@@ -476,12 +439,12 @@
 					<div class="freelancer-details">
 						<div class="freelancer-details-list">
 							<ul>
-								<li>Location <strong><i class="icon-material-outline-location-on"></i> Nigeria</strong></li>
-								<li>Rate <strong>&#8358;60 / hr</strong></li>
+								<li>Location <strong><i class="icon-material-outline-location-on"></i> {{ freelancer.lga }}, {{ freelancer.state }}</strong></li>
+								<li>Minimum Pay <strong>&#8358;{{ freelancer.minimum_pay }}</strong></li>
 								<li>Job Success <strong>95%</strong></li>
 							</ul>
 						</div>
-						<a href="#" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
+						<a href="{% url 'home:freelancer_profile_view' ID=freelancer.id %}" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
 					</div>
 				</div>
                 {% endfor %}

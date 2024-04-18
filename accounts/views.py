@@ -16,7 +16,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from .models import UserAdditionalInformation
+from .models import UserAdditionalInformation, Freelancer, Employer
 from django.db import transaction  # Import transaction module
 
 
@@ -69,6 +69,11 @@ class SignUpView(View):
                         user_info = UserAdditionalInformation.objects.get(user=user)
                         user_info.user_type = user_type
                         user_info.save()
+
+                        if user_type == "freelancer":
+                            Freelancer.objects.create(user_additional_info=user_info)
+                        elif user_type == "employer":
+                            Employer.objects.create(user_additional_info=user_info)
 
                         # print(user_info.user_type)
 

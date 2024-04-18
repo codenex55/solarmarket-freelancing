@@ -6,11 +6,9 @@
 
 <!-- Basic Page Needs
 ================================================== -->
-<title>SolarMarketHub | Employer Dashboard</title>
+<title>Hireo</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
 
 <!-- CSS
 ================================================== -->
@@ -84,7 +82,7 @@
 
 						<!-- Trigger -->
 						<div class="header-notifications-trigger">
-							<a href="#"><i class="icon-feather-bell"></i><span>4</span></a>
+							<a href="dashboard-messages.html#"><i class="icon-feather-bell"></i><span>4</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -150,7 +148,7 @@
 					<!-- Messages -->
 					<div class="header-notifications">
 						<div class="header-notifications-trigger">
-							<a href="#"><i class="icon-feather-mail"></i><span>3</span></a>
+							<a href="dashboard-messages.html#"><i class="icon-feather-mail"></i><span>3</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -193,7 +191,7 @@
 										<!-- Notification -->
 										<li class="notifications-not-read">
 											<a href="dashboard-messages.html">
-												<span class="notification-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></span>
+												<span class="notification-avatar status-online"><img src="images/user-avatar-placeholder.png" alt=""></span>
 												<div class="notification-text">
 													<strong>Marcin Kowalski</strong>
 													<p class="notification-msg-text">I received payment. Thanks for cooperation!</p>
@@ -218,7 +216,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
+							<a href="dashboard-messages.html#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -231,7 +229,7 @@
 								<div class="user-details">
 									<div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div>
 									<div class="user-name">
-										{{ request.user.first_name }} {{ request.user.first_name }} <span>Employer</span>
+										{{ request.user.first_name }} {{ request.user.first_name }} <span>Freelancer</span>
 									</div>
 								</div>
 								
@@ -287,7 +285,7 @@
 			<div class="dashboard-nav-container">
 
 				<!-- Responsive Navigation Trigger -->
-				<a href="#" class="dashboard-responsive-nav-trigger">
+				<a href="dashboard-messages.html#" class="dashboard-responsive-nav-trigger">
 					<span class="hamburger hamburger--collapse" >
 						<span class="hamburger-box">
 							<span class="hamburger-inner"></span>
@@ -301,33 +299,23 @@
 					<div class="dashboard-nav-inner">
 
 						<ul data-submenu-title="Start">
-							<li class="active"><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="{% url 'dashboard:messages_view' CHAT_ID=0 %}"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
-							<li><a href="{% url 'dashboard:employer_bookmarks_view' %}"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
+							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
+							<li><a href="{% url 'dashboard:employer_messages_view' CHAT_ID=0 %}"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
+							<li class="active"><a href="{% url 'dashboard:employer_bookmarks_view' %}"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
 							<li><a href="{% url 'dashboard:employer_reviews_view' %}"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
 						</ul>
 						
 						<ul data-submenu-title="Organize and Manage">
-							<li><a href="#"><i class="icon-material-outline-business-center"></i> Jobs</a>
-								<ul>
-									<li><a href="dashboard-manage-jobs.html">Manage Jobs <span class="nav-tag">3</span></a></li>
-									<!-- <li><a href="dashboard-manage-candidates.html">Manage Candidates</a></li> -->
-									<li><a href="dashboard-post-a-job.html">Post a Job</a></li>
-								</ul>	
-							</li>
 							<li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
 								<ul>
-									<li><a href="{% url 'dashboard:employer_manage_task_view' %}">Manage Tasks <span class="nav-tag">2</span></a></li>
-									<!-- <li><a href="dashboard-manage-bidders.html">Manage Bidders</a></li>
-									<li><a href="dashboard-my-active-bids.html">My Active Bids <span class="nav-tag">4</span></a></li> -->
-									<li><a href="{% url 'dashboard:employer_post_task_view' %}">Post a Task</a></li>
+									<li><a href="#">My active bids <span class="nav-tag">2</span></a></li>
 								</ul>	
 							</li>
 						</ul>
 
 						<ul data-submenu-title="Account">
 							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
-							<li><a href="index-logged-out.html"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
 						</ul>
 						
 					</div>
@@ -347,273 +335,169 @@
 			
 			<!-- Dashboard Headline -->
 			<div class="dashboard-headline">
-				<h3>{{ request.user.last_name }}, {{ request.user.first_name }}!</h3>
-				<span>We are glad to see you again!</span>
+				<h3>Messages</h3>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
-						<li><a href="#">Home</a></li>
-						<li>Dashboard</li>
+						<li><a href="dashboard-messages.html#">Home</a></li>
+						<li><a href="dashboard-messages.html#">Dashboard</a></li>
+						<li>Messages</li>
 					</ul>
 				</nav>
 			</div>
 	
-			<!-- Fun Facts Container -->
-			<div class="fun-facts-container">
-				<div class="fun-fact" data-fun-fact-color="#36bd78">
-					<div class="fun-fact-text">
-						<span>Task Posted</span>
-						<h4>22</h4>
-					</div>
-					<div class="fun-fact-icon"><i class="icon-material-outline-gavel"></i></div>
-				</div>
-				<div class="fun-fact" data-fun-fact-color="#b81b7f">
-					<div class="fun-fact-text">
-						<span>Freelancers Hired</span>
-						<h4>4</h4>
-					</div>
-					<div class="fun-fact-icon"><i class="icon-material-outline-business-center"></i></div>
-				</div>
-				<div class="fun-fact" data-fun-fact-color="#efa80f">
-					<div class="fun-fact-text">
-						<span>Reviews Given</span>
-						<h4>28</h4>
-					</div>
-					<div class="fun-fact-icon"><i class="icon-material-outline-rate-review"></i></div>
-				</div>
+				<div class="messages-container margin-top-0">
 
-				<!-- Last one has to be hidden below 1600px, sorry :( -->
-				<div class="fun-fact" data-fun-fact-color="#2a41e6">
-					<div class="fun-fact-text">
-						<span>This Month Views</span>
-						<h4>987</h4>
+					<div class="messages-container-inner">
+
+						<!-- Messages -->
+						<div class="messages-inbox">
+							<div class="messages-headline">
+								<div class="input-with-icon">
+										<input id="autocomplete-input" type="text" placeholder="Search">
+									<i class="icon-material-outline-search"></i>
+								</div>
+							</div>
+
+							<ul>
+								{% if chat_id == 0 %}
+								{% for chat in all_chats %} 
+								<li>
+									<a href="{% url 'dashboard:employer_messages_view' CHAT_ID=chat.id %}">
+										<div class="message-avatar"><i class="status-icon status-online"></i><img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+
+										<div class="message-by">
+											<div class="message-by-headline">
+												<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												<span>4 hours ago</span>
+											</div>
+											<p>last message...</p>
+										</div>
+									</a>
+								</li>
+								{% endfor %}
+
+								{% else %}
+
+								{% for chat in all_chats %} 
+								{% if chat.id == chat_id %}
+								<li class="active-message">
+									<a href="{% url 'dashboard:employer_messages_view' CHAT_ID=chat.id %}">
+										<div class="message-avatar"><i class="status-icon status-offline"></i><img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+
+										<div class="message-by">
+											<div class="message-by-headline">
+												<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												<span>Yesterday</span>
+											</div>
+											<p>last message...</p>
+										</div>
+									</a>
+								</li>
+								{% else %}
+								<li>
+									<a href="{% url 'dashboard:employer_messages_view' CHAT_ID=chat.id %}">
+										<div class="message-avatar"><i class="status-icon status-online"></i><img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+
+										<div class="message-by">
+											<div class="message-by-headline">
+												<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												<span>4 hours ago</span>
+											</div>
+											<p>last message...</p>
+										</div>
+									</a>
+								</li>
+								{% endif %}
+								{% endfor %}
+
+								{% endif %}				
+								
+
+							</ul>
+						</div>
+						<!-- Messages / End -->
+
+						<!-- Message Content -->
+						{% if chat_id == 0 %}
+						{% else %}
+
+						<div class="message-content">
+
+							<div class="messages-headline">
+								<h4>{{ chat_recipient.first_name }} {{ chat_recipient.last_name }}</h4>
+								<a href="#" class="message-action"><i class="icon-feather-trash-2"></i> proceed to payment</a>
+							</div>
+							
+							<!-- Message Content Inner -->
+							<div class="message-content-inner">
+									
+									<!-- Time Sign -->
+									<div class="message-time-sign">
+										<!-- <span>28 June, 2019</span> -->
+										<span>Today</span>
+									</div>
+
+									{% for message in messages %}
+
+									{% if message.chat.user1 == request.user %}
+									<div class="message-bubble me">
+										<div class="message-bubble-inner">
+											<div class="message-avatar"><img src="{{ message.sender.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+											<div class="message-text"><p>{{ message.content }}</p></div>
+										</div>
+										<div class="clearfix"></div>
+									</div>
+									{% else %}
+									<div class="message-bubble">
+										<div class="message-bubble-inner">
+											<div class="message-avatar"><img src="{{ message.sender.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+											<div class="message-text"><p>{{ message.content }}</p></div>
+										</div>
+										<div class="clearfix"></div>
+									</div>
+									{% endif %}
+
+									{% endfor %}
+
+									<!-- <div class="message-bubble">
+										<div class="message-bubble-inner">
+											<div class="message-avatar"><img src="images/user-avatar-small-02.jpg" alt="" /></div>
+											<div class="message-text">
+											
+												<div class="typing-indicator">
+													<span></span>
+													<span></span>
+													<span></span>
+												</div>
+											</div>
+										</div>
+										<div class="clearfix"></div>
+									</div> -->
+							</div>
+							<!-- Message Content Inner / End -->
+							
+							<!-- Reply Area -->
+							<form action="{% url 'dashboard:send_message_view' CHAT_ID=chat_id %}" method="post">
+								{% csrf_token %}
+							<div class="message-reply">
+								<textarea cols="1" rows="1" placeholder="Your Message" data-autoresize name="content"></textarea>
+								<button class="button ripple-effect" type="submit">Send</button>
+							</div>
+							</form>
+
+						</div>
+						{% endif %}
+						<!-- Message Content -->
+
 					</div>
-					<div class="fun-fact-icon"><i class="icon-feather-trending-up"></i></div>
-				</div>
 			</div>
+			<!-- Messages Container / End -->
+
+
+
 			
-			<!-- Row -->
-			<div class="row">
-
-				<div class="col-xl-8">
-					<!-- Dashboard Box -->
-					<div class="dashboard-box main-box-in-row">
-						<div class="headline">
-							<h3><i class="icon-feather-bar-chart-2"></i> Your Profile Views</h3>
-							<div class="sort-by">
-								<select class="selectpicker hide-tick">
-									<option>Last 6 Months</option>
-									<option>This Year</option>
-									<option>This Month</option>
-								</select>
-							</div>
-						</div>
-						<div class="content">
-							<!-- Chart -->
-							<div class="chart">
-								<canvas id="chart" width="100" height="45"></canvas>
-							</div>
-						</div>
-					</div>
-					<!-- Dashboard Box / End -->
-				</div>
-				<div class="col-xl-4">
-
-					<!-- Dashboard Box -->
-					<!-- If you want adjust height of two boxes 
-						 add to the lower box 'main-box-in-row' 
-						 and 'child-box-in-row' to the higher box -->
-					<div class="dashboard-box child-box-in-row"> 
-						<div class="headline">
-							<h3><i class="icon-material-outline-note-add"></i> Notes</h3>
-						</div>	
-
-						<div class="content with-padding">
-							<!-- Note -->
-							<div class="dashboard-note">
-								<p>Meeting with candidate at 3pm who applied for Bilingual Event Support Specialist</p>
-								<div class="note-footer">
-									<span class="note-priority high">High Priority</span>
-									<div class="note-buttons">
-										<a href="#" title="Edit" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-										<a href="#" title="Remove" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
-									</div>
-								</div>
-							</div>
-							<!-- Note -->
-							<div class="dashboard-note">
-								<p>Extend premium plan for next month</p>
-								<div class="note-footer">
-									<span class="note-priority low">Low Priority</span>
-									<div class="note-buttons">
-										<a href="#" title="Edit" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-										<a href="#" title="Remove" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
-									</div>
-								</div>
-							</div>
-							<!-- Note -->
-							<div class="dashboard-note">
-								<p>Send payment to David Peterson</p>
-								<div class="note-footer">
-									<span class="note-priority medium">Medium Priority</span>
-									<div class="note-buttons">
-										<a href="#" title="Edit" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-										<a href="#" title="Remove" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
-									</div>
-								</div>
-							</div>
-						</div>
-							<div class="add-note-button">
-								<a href="#small-dialog" class="popup-with-zoom-anim button full-width button-sliding-icon">Add Note <i class="icon-material-outline-arrow-right-alt"></i></a>
-							</div>
-					</div>
-					<!-- Dashboard Box / End -->
-				</div>
-			</div>
-			<!-- Row / End -->
-
-			<!-- Row -->
-			<div class="row">
-
-				<!-- Dashboard Box -->
-				<div class="col-xl-6">
-					<div class="dashboard-box">
-						<div class="headline">
-							<h3><i class="icon-material-baseline-notifications-none"></i> Notifications</h3>
-							<button class="mark-as-read ripple-effect-dark" data-tippy-placement="left" title="Mark all as read">
-									<i class="icon-feather-check-square"></i>
-							</button>
-						</div>
-						<div class="content">
-							<ul class="dashboard-box-list">
-								<li>
-									<span class="notification-icon"><i class="icon-material-outline-group"></i></span>
-									<span class="notification-text">
-										<strong>Michael Shannah</strong> applied for a job <a href="#">Full Stack Software Engineer</a>
-									</span>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
-									</div>
-								</li>
-								<li>
-									<span class="notification-icon"><i class=" icon-material-outline-gavel"></i></span>
-									<span class="notification-text">
-										<strong>Gilber Allanis</strong> placed a bid on your <a href="#">iOS App Development</a> project
-									</span>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
-									</div>
-								</li>
-								<li>
-									<span class="notification-icon"><i class="icon-material-outline-autorenew"></i></span>
-									<span class="notification-text">
-										Your job listing <a href="#">Full Stack Software Engineer</a> is expiring
-									</span>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
-									</div>
-								</li>
-								<li>
-									<span class="notification-icon"><i class="icon-material-outline-group"></i></span>
-									<span class="notification-text">
-										<strong>Sindy Forrest</strong> applied for a job <a href="#">Full Stack Software Engineer</a>
-									</span>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
-									</div>
-								</li>
-								<li>
-									<span class="notification-icon"><i class="icon-material-outline-rate-review"></i></span>
-									<span class="notification-text">
-										<strong>David Peterson</strong> left you a <span class="star-rating no-stars" data-rating="5.0"></span> rating after finishing <a href="#">Logo Design</a> task
-									</span>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-
-				<!-- Dashboard Box -->
-				<div class="col-xl-6">
-					<div class="dashboard-box">
-						<div class="headline">
-							<h3><i class="icon-material-outline-assignment"></i> Orders</h3>
-						</div>
-						<div class="content">
-							<ul class="dashboard-box-list">
-								<li>
-									<div class="invoice-list-item">
-									<strong>Professional Plan</strong>
-										<ul>
-											<li><span class="unpaid">Unpaid</span></li>
-											<li>Order: #326</li>
-											<li>Date: 12/08/2019</li>
-										</ul>
-									</div>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="pages-checkout-page.html" class="button">Finish Payment</a>
-									</div>
-								</li>
-								<li>
-									<div class="invoice-list-item">
-									<strong>Professional Plan</strong>
-										<ul>
-											<li><span class="paid">Paid</span></li>
-											<li>Order: #264</li>
-											<li>Date: 10/07/2019</li>
-										</ul>
-									</div>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="pages-invoice-template.html" class="button gray">View Invoice</a>
-									</div>
-								</li>
-								<li>
-									<div class="invoice-list-item">
-									<strong>Professional Plan</strong>
-										<ul>
-											<li><span class="paid">Paid</span></li>
-											<li>Order: #211</li>
-											<li>Date: 12/06/2019</li>
-										</ul>
-									</div>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="pages-invoice-template.html" class="button gray">View Invoice</a>
-									</div>
-								</li>
-								<li>
-									<div class="invoice-list-item">
-									<strong>Professional Plan</strong>
-										<ul>
-											<li><span class="paid">Paid</span></li>
-											<li>Order: #179</li>
-											<li>Date: 06/05/2019</li>
-										</ul>
-									</div>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="pages-invoice-template.html" class="button gray">View Invoice</a>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-
-			</div>
-			<!-- Row / End -->
-
 			<!-- Footer -->
 			<div class="dashboard-footer-spacer"></div>
 			<div class="small-footer margin-top-15">
@@ -622,22 +506,22 @@
 				</div>
 				<ul class="footer-social-links">
 					<li>
-						<a href="#" title="Facebook" data-tippy-placement="top">
+						<a href="dashboard-messages.html#" title="Facebook" data-tippy-placement="top">
 							<i class="icon-brand-facebook-f"></i>
 						</a>
 					</li>
 					<li>
-						<a href="#" title="Twitter" data-tippy-placement="top">
+						<a href="dashboard-messages.html#" title="Twitter" data-tippy-placement="top">
 							<i class="icon-brand-twitter"></i>
 						</a>
 					</li>
 					<li>
-						<a href="#" title="Google Plus" data-tippy-placement="top">
+						<a href="dashboard-messages.html#" title="Google Plus" data-tippy-placement="top">
 							<i class="icon-brand-google-plus-g"></i>
 						</a>
 					</li>
 					<li>
-						<a href="#" title="LinkedIn" data-tippy-placement="top">
+						<a href="dashboard-messages.html#" title="LinkedIn" data-tippy-placement="top">
 							<i class="icon-brand-linkedin-in"></i>
 						</a>
 					</li>
@@ -665,7 +549,7 @@
 	<div class="sign-in-form">
 
 		<ul class="popup-tabs-nav">
-			<li><a href="#tab">Add Note</a></li>
+			<li><a href="dashboard-messages.html#tab">Add Note</a></li>
 		</ul>
 
 		<div class="popup-tabs-container">
@@ -734,81 +618,6 @@ $('#snackbar-user-status label').click(function() {
 }); 
 </script>
 
-<!-- Chart.js // documentation: http://www.chartjs.org/docs/latest/ -->
-<script src="{% static 'js/chart.min.js' %}"></script>
-<script>
-	Chart.defaults.global.defaultFontFamily = "Nunito";
-	Chart.defaults.global.defaultFontColor = '#888';
-	Chart.defaults.global.defaultFontSize = '14';
-
-	var ctx = document.getElementById('chart').getContext('2d');
-
-	var chart = new Chart(ctx, {
-		type: 'line',
-
-		// The data for our dataset
-		data: {
-			labels: ["January", "February", "March", "April", "May", "June"],
-			// Information about the dataset
-	   		datasets: [{
-				label: "Views",
-				backgroundColor: 'rgba(42,65,232,0.08)',
-				borderColor: '#2a41e8',
-				borderWidth: "3",
-				data: [196,132,215,362,210,252],
-				pointRadius: 5,
-				pointHoverRadius:5,
-				pointHitRadius: 10,
-				pointBackgroundColor: "#fff",
-				pointHoverBackgroundColor: "#fff",
-				pointBorderWidth: "2",
-			}]
-		},
-
-		// Configuration options
-		options: {
-
-		    layout: {
-		      padding: 10,
-		  	},
-
-			legend: { display: false },
-			title:  { display: false },
-
-			scales: {
-				yAxes: [{
-					scaleLabel: {
-						display: false
-					},
-					gridLines: {
-						 borderDash: [6, 10],
-						 color: "#d8d8d8",
-						 lineWidth: 1,
-	            	},
-				}],
-				xAxes: [{
-					scaleLabel: { display: false },  
-					gridLines:  { display: false },
-				}],
-			},
-
-		    tooltips: {
-		      backgroundColor: '#333',
-		      titleFontSize: 13,
-		      titleFontColor: '#fff',
-		      bodyFontColor: '#fff',
-		      bodyFontSize: 13,
-		      displayColors: false,
-		      xPadding: 10,
-		      yPadding: 10,
-		      intersect: false
-		    }
-		},
-
-
-});
-
-</script>
 
 </body>
 </html>

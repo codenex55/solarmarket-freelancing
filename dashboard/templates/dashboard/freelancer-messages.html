@@ -6,11 +6,9 @@
 
 <!-- Basic Page Needs
 ================================================== -->
-<title>Employer Dashboard - Reviews</title>
+<title>Hireo</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
 
 <!-- CSS
 ================================================== -->
@@ -84,7 +82,7 @@
 
 						<!-- Trigger -->
 						<div class="header-notifications-trigger">
-							<a href="#"><i class="icon-feather-bell"></i><span>4</span></a>
+							<a href="dashboard-messages.html#"><i class="icon-feather-bell"></i><span>4</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -150,7 +148,7 @@
 					<!-- Messages -->
 					<div class="header-notifications">
 						<div class="header-notifications-trigger">
-							<a href="#"><i class="icon-feather-mail"></i><span>3</span></a>
+							<a href="dashboard-messages.html#"><i class="icon-feather-mail"></i><span>3</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -193,7 +191,7 @@
 										<!-- Notification -->
 										<li class="notifications-not-read">
 											<a href="dashboard-messages.html">
-												<span class="notification-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></span>
+												<span class="notification-avatar status-online"><img src="images/user-avatar-placeholder.png" alt=""></span>
 												<div class="notification-text">
 													<strong>Marcin Kowalski</strong>
 													<p class="notification-msg-text">I received payment. Thanks for cooperation!</p>
@@ -218,7 +216,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
+							<a href="dashboard-messages.html#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -231,7 +229,7 @@
 								<div class="user-details">
 									<div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div>
 									<div class="user-name">
-										{{ request.user.first_name }} {{ request.user.first_name }} <span>Employer</span>
+										{{ request.user.first_name }} {{ request.user.first_name }} <span>Freelancer</span>
 									</div>
 								</div>
 								
@@ -245,8 +243,8 @@
 						</div>
 						
 						<ul class="user-menu-small-nav">
-							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
+							<li><a href="{% url 'dashboard:freelancer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
+							<li><a href="{% url 'dashboard:freelancer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
 							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
 						</ul>
 
@@ -287,7 +285,7 @@
 			<div class="dashboard-nav-container">
 
 				<!-- Responsive Navigation Trigger -->
-				<a href="#" class="dashboard-responsive-nav-trigger">
+				<a href="dashboard-messages.html#" class="dashboard-responsive-nav-trigger">
 					<span class="hamburger hamburger--collapse" >
 						<span class="hamburger-box">
 							<span class="hamburger-inner"></span>
@@ -301,32 +299,22 @@
 					<div class="dashboard-nav-inner">
 
 						<ul data-submenu-title="Start">
-							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="{% url 'dashboard:messages_view' CHAT_ID=0 %}"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
-							<li><a href="{% url 'dashboard:employer_bookmarks_view' %}"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
-							<li class="active"><a href="{% url 'dashboard:employer_reviews_view' %}"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
+							<li><a href="{% url 'dashboard:freelancer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
+							<li><a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=0 %}"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
+							<li class="active"><a href="{% url 'dashboard:freelancer_bookmarks_view' %}"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
+							<li><a href="{% url 'dashboard:freelancer_reviews_view' %}"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
 						</ul>
 						
 						<ul data-submenu-title="Organize and Manage">
-							<li><a href="#"><i class="icon-material-outline-business-center"></i> Jobs</a>
-								<ul>
-									<li><a href="dashboard-manage-jobs.html">Manage Jobs <span class="nav-tag">3</span></a></li>
-									<!-- <li><a href="dashboard-manage-candidates.html">Manage Candidates</a></li> -->
-									<li><a href="dashboard-post-a-job.html">Post a Job</a></li>
-								</ul>	
-							</li>
 							<li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
 								<ul>
-									<li><a href="{% url 'dashboard:employer_manage_task_view' %}">Manage Tasks <span class="nav-tag">2</span></a></li>
-									<!-- <li><a href="dashboard-manage-bidders.html">Manage Bidders</a></li>
-									<li><a href="dashboard-my-active-bids.html">My Active Bids <span class="nav-tag">4</span></a></li> -->
-									<li><a href="{% url 'dashboard:employer_post_task_view' %}">Post a Task</a></li>
+									<li><a href="#">My active bids <span class="nav-tag">2</span></a></li>
 								</ul>	
 							</li>
 						</ul>
 
 						<ul data-submenu-title="Account">
-							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
+							<li><a href="{% url 'dashboard:freelancer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
 							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
 						</ul>
 						
@@ -347,68 +335,169 @@
 			
 			<!-- Dashboard Headline -->
 			<div class="dashboard-headline">
-				<h3>Reviews</h3>
+				<h3>Messages</h3>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
-						<li><a href="#">Home</a></li>
-						<li><a href="#">Dashboard</a></li>
-						<li>Reviews</li>
+						<li><a href="dashboard-messages.html#">Home</a></li>
+						<li><a href="dashboard-messages.html#">Dashboard</a></li>
+						<li>Messages</li>
 					</ul>
 				</nav>
 			</div>
 	
-			<!-- Row -->
-			<div class="row">
+				<div class="messages-container margin-top-0">
 
-				<!-- Dashboard Box -->
-				<div class="col-xl-12">
-					<div class="dashboard-box margin-top-0">
+					<div class="messages-container-inner">
 
-						<!-- Headline -->
-						<div class="headline">
-							<h3><i class="icon-material-outline-face"></i> Rate Freelancers</h3>
-						</div>
+						<!-- Messages -->
+						<div class="messages-inbox">
+							<div class="messages-headline">
+								<div class="input-with-icon">
+										<input id="autocomplete-input" type="text" placeholder="Search">
+									<i class="icon-material-outline-search"></i>
+								</div>
+							</div>
 
-						<div class="content">
-							<ul class="dashboard-box-list">
+							<ul>
+								{% if chat_id == 0 %}
+								{% for chat in all_chats %} 
 								<li>
-									<div class="boxed-list-item">
-										<!-- Content -->
-										<div class="item-content">
-											<h4>Simple Chrome Extension</h4>
-											<span class="company-not-rated margin-bottom-5">Not Rated</span>
-										</div>
-									</div>
+									<a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=chat.id %}">
+										<div class="message-avatar"><i class="status-icon status-online"></i><img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" /></div>
 
-									<a href="#small-dialog-2" class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"><i class="icon-material-outline-thumb-up"></i> Leave a Review</a>
-								</li>
-								<li>
-									<div class="boxed-list-item">
-										<!-- Content -->
-										<div class="item-content">
-											<h4>Help Fix Laravel PHP issue</h4>
-											<div class="item-details margin-top-10">
-												<div class="star-rating" data-rating="5.0"></div>
-												<div class="detail-item"><i class="icon-material-outline-date-range"></i> August 2019</div>
+										<div class="message-by">
+											<div class="message-by-headline">
+												<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												<span>4 hours ago</span>
 											</div>
-											<div class="item-description">
-												<p>Excellent programmer - helped me fixing small issue.</p>
-											</div>
+											<p>last message...</p>
 										</div>
-									</div>
-									<a href="#small-dialog-1" class="popup-with-zoom-anim button gray ripple-effect margin-top-5 margin-bottom-10"><i class="icon-feather-edit"></i> Edit Review</a>
+									</a>
 								</li>
+								{% endfor %}
+
+								{% else %}
+
+								{% for chat in all_chats %} 
+								{% if chat.id == chat_id %}
+								<li class="active-message">
+									<a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=chat.id %}">
+										<div class="message-avatar"><i class="status-icon status-offline"></i><img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+
+										<div class="message-by">
+											<div class="message-by-headline">
+												<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												<span>Yesterday</span>
+											</div>
+											<p>last message...</p>
+										</div>
+									</a>
+								</li>
+								{% else %}
+								<li>
+									<a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=chat.id %}">
+										<div class="message-avatar"><i class="status-icon status-online"></i><img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+
+										<div class="message-by">
+											<div class="message-by-headline">
+												<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												<span>4 hours ago</span>
+											</div>
+											<p>last message...</p>
+										</div>
+									</a>
+								</li>
+								{% endif %}
+								{% endfor %}
+
+								{% endif %}				
+								
+
 							</ul>
 						</div>
+						<!-- Messages / End -->
+
+						<!-- Message Content -->
+						{% if chat_id == 0 %}
+						{% else %}
+
+						<div class="message-content">
+
+							<div class="messages-headline">
+								<h4>{{ chat_recipient.first_name }} {{ chat_recipient.last_name }}</h4>
+								<a href="#" class="message-action"><i class="icon-feather-trash-2"></i> proceed to payment</a>
+							</div>
+							
+							<!-- Message Content Inner -->
+							<div class="message-content-inner">
+									
+									<!-- Time Sign -->
+									<div class="message-time-sign">
+										<!-- <span>28 June, 2019</span> -->
+										<span>Today</span>
+									</div>
+
+									{% for message in messages %}
+
+									{% if message.chat.user1 == request.user %}
+									<div class="message-bubble me">
+										<div class="message-bubble-inner">
+											<div class="message-avatar"><img src="{{ message.sender.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+											<div class="message-text"><p>{{ message.content }}</p></div>
+										</div>
+										<div class="clearfix"></div>
+									</div>
+									{% else %}
+									<div class="message-bubble">
+										<div class="message-bubble-inner">
+											<div class="message-avatar"><img src="{{ message.sender.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+											<div class="message-text"><p>{{ message.content }}</p></div>
+										</div>
+										<div class="clearfix"></div>
+									</div>
+									{% endif %}
+
+									{% endfor %}
+
+									<!-- <div class="message-bubble">
+										<div class="message-bubble-inner">
+											<div class="message-avatar"><img src="images/user-avatar-small-02.jpg" alt="" /></div>
+											<div class="message-text">
+											
+												<div class="typing-indicator">
+													<span></span>
+													<span></span>
+													<span></span>
+												</div>
+											</div>
+										</div>
+										<div class="clearfix"></div>
+									</div> -->
+							</div>
+							<!-- Message Content Inner / End -->
+							
+							<!-- Reply Area -->
+							<form action="{% url 'dashboard:send_message_view' CHAT_ID=chat_id %}" method="post">
+								{% csrf_token %}
+							<div class="message-reply">
+								<textarea cols="1" rows="1" placeholder="Your Message" data-autoresize name="content"></textarea>
+								<button class="button ripple-effect" type="submit">Send</button>
+							</div>
+							</form>
+
+						</div>
+						{% endif %}
+						<!-- Message Content -->
+
 					</div>
-				</div>
-
-
 			</div>
-			<!-- Row / End -->
+			<!-- Messages Container / End -->
 
+
+
+			
 			<!-- Footer -->
 			<div class="dashboard-footer-spacer"></div>
 			<div class="small-footer margin-top-15">
@@ -417,22 +506,22 @@
 				</div>
 				<ul class="footer-social-links">
 					<li>
-						<a href="#" title="Facebook" data-tippy-placement="top">
+						<a href="dashboard-messages.html#" title="Facebook" data-tippy-placement="top">
 							<i class="icon-brand-facebook-f"></i>
 						</a>
 					</li>
 					<li>
-						<a href="#" title="Twitter" data-tippy-placement="top">
+						<a href="dashboard-messages.html#" title="Twitter" data-tippy-placement="top">
 							<i class="icon-brand-twitter"></i>
 						</a>
 					</li>
 					<li>
-						<a href="#" title="Google Plus" data-tippy-placement="top">
+						<a href="dashboard-messages.html#" title="Google Plus" data-tippy-placement="top">
 							<i class="icon-brand-google-plus-g"></i>
 						</a>
 					</li>
 					<li>
-						<a href="#" title="LinkedIn" data-tippy-placement="top">
+						<a href="dashboard-messages.html#" title="LinkedIn" data-tippy-placement="top">
 							<i class="icon-brand-linkedin-in"></i>
 						</a>
 					</li>
@@ -452,168 +541,49 @@
 <!-- Wrapper / End -->
 
 
-
-<!-- Edit Review Popup
+<!-- Apply for a job popup
 ================================================== -->
-<div id="small-dialog-1" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
+<div id="small-dialog" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
 
 	<!--Tabs -->
 	<div class="sign-in-form">
 
 		<ul class="popup-tabs-nav">
+			<li><a href="dashboard-messages.html#tab">Add Note</a></li>
 		</ul>
 
 		<div class="popup-tabs-container">
 
 			<!-- Tab -->
-			<div class="popup-tab-content" id="tab1">
+			<div class="popup-tab-content" id="tab">
 				
 				<!-- Welcome Text -->
 				<div class="welcome-text">
-					<h3>Change Review</h3>
-					<span>Rate <a href="#">Herman Ewout</a> for the project <a href="#">WordPress Theme Installation</a> </span>
+					<h3>Do Not Forget 😎</h3>
 				</div>
 					
 				<!-- Form -->
-				<form method="post" id="change-review-form">
+				<form method="post" id="add-note">
 
-					<div class="feedback-yes-no">
-						<strong>Was this delivered on budget?</strong>
-						<div class="radio">
-							<input id="radio-rating-1" name="radio" type="radio" checked>
-							<label for="radio-rating-1"><span class="radio-label"></span> Yes</label>
-						</div>
+					<select class="selectpicker with-border default margin-bottom-20" data-size="7" title="Priority">
+						<option>Low Priority</option>
+						<option>Medium Priority</option>
+						<option>High Priority</option>
+					</select>
 
-						<div class="radio">
-							<input id="radio-rating-2" name="radio" type="radio">
-							<label for="radio-rating-2"><span class="radio-label"></span> No</label>
-						</div>
-					</div>
-
-					<div class="feedback-yes-no">
-						<strong>Was this delivered on time?</strong>
-						<div class="radio">
-							<input id="radio-rating-3" name="radio2" type="radio" checked>
-							<label for="radio-rating-3"><span class="radio-label"></span> Yes</label>
-						</div>
-
-						<div class="radio">
-							<input id="radio-rating-4" name="radio2" type="radio">
-							<label for="radio-rating-4"><span class="radio-label"></span> No</label>
-						</div>
-					</div>
-
-					<div class="feedback-yes-no">
-						<strong>Your Rating</strong>
-						<div class="leave-rating">
-							<input type="radio" name="rating" id="rating-1" value="1" checked/>
-							<label for="rating-1" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-2" value="2"/>
-							<label for="rating-2" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-3" value="3"/>
-							<label for="rating-3" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-4" value="4"/>
-							<label for="rating-4" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-5" value="5"/>
-							<label for="rating-5" class="icon-material-outline-star"></label>
-						</div><div class="clearfix"></div>
-					</div>
-
-					<textarea class="with-border" placeholder="Comment" name="message" id="message" cols="7" required>Excellent programmer - helped me fixing small issue.</textarea>
+					<textarea name="textarea" cols="10" placeholder="Note" class="with-border"></textarea>
 
 				</form>
 				
 				<!-- Button -->
-				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="change-review-form">Save Changes <i class="icon-material-outline-arrow-right-alt"></i></button>
+				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="add-note">Add Note <i class="icon-material-outline-arrow-right-alt"></i></button>
 
 			</div>
 
 		</div>
 	</div>
 </div>
-<!-- Edit Review Popup / End -->
-
-
-<!-- Leave a Review for Freelancer Popup
-================================================== -->
-<div id="small-dialog-2" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
-
-	<!--Tabs -->
-	<div class="sign-in-form">
-
-		<ul class="popup-tabs-nav">
-		</ul>
-
-		<div class="popup-tabs-container">
-
-			<!-- Tab -->
-			<div class="popup-tab-content" id="tab2">
-				
-				<!-- Welcome Text -->
-				<div class="welcome-text">
-					<h3>Leave a Review</h3>
-					<span>Rate <a href="#">Peter Valentín</a> for the project <a href="#">Simple Chrome Extension</a> </span>
-				</div>
-					
-				<!-- Form -->
-				<form method="post" id="leave-review-form">
-
-					<div class="feedback-yes-no">
-						<strong>Was this delivered on budget?</strong>
-						<div class="radio">
-							<input id="radio-1" name="radio" type="radio" required>
-							<label for="radio-1"><span class="radio-label"></span> Yes</label>
-						</div>
-
-						<div class="radio">
-							<input id="radio-2" name="radio" type="radio" required>
-							<label for="radio-2"><span class="radio-label"></span> No</label>
-						</div>
-					</div>
-
-					<div class="feedback-yes-no">
-						<strong>Was this delivered on time?</strong>
-						<div class="radio">
-							<input id="radio-3" name="radio2" type="radio" required>
-							<label for="radio-3"><span class="radio-label"></span> Yes</label>
-						</div>
-
-						<div class="radio">
-							<input id="radio-4" name="radio2" type="radio" required>
-							<label for="radio-4"><span class="radio-label"></span> No</label>
-						</div>
-					</div>
-
-					<div class="feedback-yes-no">
-						<strong>Your Rating</strong>
-						<div class="leave-rating">
-							<input type="radio" name="rating" id="rating-radio-1" value="1" required>
-							<label for="rating-radio-1" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-radio-2" value="2" required>
-							<label for="rating-radio-2" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-radio-3" value="3" required>
-							<label for="rating-radio-3" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-radio-4" value="4" required>
-							<label for="rating-radio-4" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-radio-5" value="5" required>
-							<label for="rating-radio-5" class="icon-material-outline-star"></label>
-						</div><div class="clearfix"></div>
-					</div>
-
-					<textarea class="with-border" placeholder="Comment" name="message2" id="message2" cols="7" required></textarea>
-
-				</form>
-				
-				<!-- Button -->
-				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="leave-review-form">Leave a Review <i class="icon-material-outline-arrow-right-alt"></i></button>
-
-			</div>
-
-		</div>
-	</div>
-</div>
-<!-- Leave a Review Popup / End -->
-
+<!-- Apply for a job popup / End -->
 
 
 <!-- Scripts
@@ -648,81 +618,6 @@ $('#snackbar-user-status label').click(function() {
 }); 
 </script>
 
-<!-- Chart.js // documentation: http://www.chartjs.org/docs/latest/ -->
-<script src="{% static 'js/chart.min.js' %}"></script>
-<script>
-	Chart.defaults.global.defaultFontFamily = "Nunito";
-	Chart.defaults.global.defaultFontColor = '#888';
-	Chart.defaults.global.defaultFontSize = '14';
-
-	var ctx = document.getElementById('chart').getContext('2d');
-
-	var chart = new Chart(ctx, {
-		type: 'line',
-
-		// The data for our dataset
-		data: {
-			labels: ["January", "February", "March", "April", "May", "June"],
-			// Information about the dataset
-	   		datasets: [{
-				label: "Views",
-				backgroundColor: 'rgba(42,65,232,0.08)',
-				borderColor: '#2a41e8',
-				borderWidth: "3",
-				data: [196,132,215,362,210,252],
-				pointRadius: 5,
-				pointHoverRadius:5,
-				pointHitRadius: 10,
-				pointBackgroundColor: "#fff",
-				pointHoverBackgroundColor: "#fff",
-				pointBorderWidth: "2",
-			}]
-		},
-
-		// Configuration options
-		options: {
-
-		    layout: {
-		      padding: 10,
-		  	},
-
-			legend: { display: false },
-			title:  { display: false },
-
-			scales: {
-				yAxes: [{
-					scaleLabel: {
-						display: false
-					},
-					gridLines: {
-						 borderDash: [6, 10],
-						 color: "#d8d8d8",
-						 lineWidth: 1,
-	            	},
-				}],
-				xAxes: [{
-					scaleLabel: { display: false },  
-					gridLines:  { display: false },
-				}],
-			},
-
-		    tooltips: {
-		      backgroundColor: '#333',
-		      titleFontSize: 13,
-		      titleFontColor: '#fff',
-		      bodyFontColor: '#fff',
-		      bodyFontSize: 13,
-		      displayColors: false,
-		      xPadding: 10,
-		      yPadding: 10,
-		      intersect: false
-		    }
-		},
-
-
-});
-
-</script>
 
 </body>
 </html>

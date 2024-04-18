@@ -193,7 +193,7 @@
 										<!-- Notification -->
 										<li class="notifications-not-read">
 											<a href="dashboard-messages.html">
-												<span class="notification-avatar status-online"><img src="images/user-avatar-placeholder.png" alt=""></span>
+												<span class="notification-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></span>
 												<div class="notification-text">
 													<strong>Marcin Kowalski</strong>
 													<p class="notification-msg-text">I received payment. Thanks for cooperation!</p>
@@ -218,7 +218,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="#"><div class="user-avatar status-online"><img src="images/user-avatar-small-01.jpg" alt=""></div></a>
+							<a href="#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -229,7 +229,7 @@
 
 								<!-- User Name / Avatar -->
 								<div class="user-details">
-									<div class="user-avatar status-online"><img src="images/user-avatar-small-01.jpg" alt=""></div>
+									<div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div>
 									<div class="user-name">
 										{{ request.user.first_name }} {{ request.user.first_name }} <span>Employer</span>
 									</div>
@@ -302,7 +302,7 @@
 
 						<ul data-submenu-title="Start">
 							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="#"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
+							<li><a href="{% url 'dashboard:messages_view' CHAT_ID=0 %}"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
 							<li><a href="{% url 'dashboard:employer_bookmarks_view' %}"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
 							<li><a href="{% url 'dashboard:employer_reviews_view' %}"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
 						</ul>
@@ -387,7 +387,7 @@
 
 								<div class="col-auto">
 									<div class="avatar-wrapper" data-tippy-placement="bottom" title="Change Avatar">
-										<img class="profile-pic" src="images/user-avatar-placeholder.png" alt="" />
+										<img class="profile-pic" src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" />
 										<div class="upload-button"></div>
 										<input class="file-upload" type="file" accept="image/*" name="profile_picture"/>
 									</div>

@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import TaskCategory, Task
+from .models import Task
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from accounts.models import UserAdditionalInformation
+from accounts.models import Freelancer, Employer, UserAdditionalInformation
 from django.contrib import messages
+import requests
+from .models import PrivateChat, PrivateMessage
 
 # Create your views here.
 
@@ -34,9 +36,7 @@ class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
 
 class EmployerPostTask(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        all_categories = TaskCategory.objects.all().order_by("category")
         context = {
-            "all_categories":all_categories
         }
         return render(request, "dashboard/employer-post-task.html", context)
     
@@ -174,13 +174,30 @@ class FreelancerReview(LoginRequiredMixin, FreelancerRequiredMixin, View):
     
 class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "dashboard/freelancer-settings.html")
+        all_states = requests.get("https://nga-states-lga.onrender.com/fetch").json()
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        context = {
+            "all_states":all_states,
+            "freelancer":freelancer
+        }
+        if freelancer.state:
+            all_lgas = requests.get(f"https://nga-states-lga.onrender.com/?state={freelancer.state}").json()
+            context["all_lgas"] = all_lgas
+
+        return render(request, "dashboard/freelancer-settings.html", context)
     
     def post(self, request, *args, **kwargs):
         # to save changes
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
+        state = request.POST.get('state')
+        lga = request.POST.get('lga')
+        tagline = request.POST.get('tagline')
+        speciality = request.POST.get('speciality')
+        description = request.POST.get('description')
+        minimum_pay = float(request.POST.get("minimum_pay"))
         current_password = request.POST.get('current_password')
+        profile_picture = request.FILES.get("profile_picture")
 
         current_user = request.user.username
         user = User.objects.get(username=current_user)
@@ -188,9 +205,121 @@ class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
         user.last_name = last_name
         user.save()
 
+        if profile_picture:
+            user_info = UserAdditionalInformation.objects.get(user=request.user)
+            user_info.profile_picture = profile_picture
+            user_info.save()
+
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        freelancer.state = state
+        freelancer.lga = lga
+        freelancer.tagline = tagline
+        freelancer.self_introduction = description
+        freelancer.speciality = speciality
+        freelancer.minimum_pay = minimum_pay
+        freelancer.save()
+
         if current_password:
             new_password = request.POST.get('new_password')
             confirm_new_password = request.POST.get('confirm_new_password')
         
         messages.success(request, "Accounts information updated successfully!")
-        return redirect("dashboard:employer_settings_view")
+        return redirect("dashboard:freelancer_settings_view")
+    
+
+
+# CHAT SYSTEM
+
+class FreelancerMessages(LoginRequiredMixin, View):
+    def get(self, request, CHAT_ID, *args, **kwargs):
+        all_chats = PrivateChat.objects.filter(user1=request.user)
+
+        if CHAT_ID == 0:
+            context = {
+                "all_chats":all_chats,
+                "chat_id":CHAT_ID
+            }
+            return render(request, 'dashboard/freelancer-messages.html', context)
+        else:
+            chat = PrivateChat.objects.get(id=CHAT_ID)
+
+            # Ensure the current user is a participant in the chat
+            if request.user not in [chat.user1, chat.user2]:
+                 return redirect('dashboard:freelancer_messages_view', CHAT_ID=0)
+            
+            messages = PrivateMessage.objects.filter(chat=chat).order_by('timestamp')
+
+            context = {
+                "chat_id":CHAT_ID,
+                "all_chats":all_chats,
+                'messages': messages,
+                "chat_recipient":chat.user2
+            }
+            return render(request, 'dashboard/freelancer-messages.html', context)
+    
+
+class EmployerMessages(LoginRequiredMixin, View):
+    def get(self, request, CHAT_ID, *args, **kwargs):
+        all_chats = PrivateChat.objects.filter(user1=request.user)
+
+        if CHAT_ID == 0:
+            context = {
+                "all_chats":all_chats,
+                "chat_id":CHAT_ID
+            }
+            return render(request, 'dashboard/employer-messages.html', context)
+        else:
+            chat = PrivateChat.objects.get(id=CHAT_ID)
+
+            # Ensure the current user is a participant in the chat
+            if request.user not in [chat.user1, chat.user2]:
+                 return redirect('dashboard:employer_messages_view', CHAT_ID=0)
+            
+            messages = PrivateMessage.objects.filter(chat=chat).order_by('timestamp')
+
+            context = {
+                "chat_id":CHAT_ID,
+                "all_chats":all_chats,
+                'messages': messages,
+                "chat_recipient":chat.user2
+            }
+            return render(request, 'dashboard/employer-messages.html', context)
+
+
+class InitiateChatView(LoginRequiredMixin, View):
+    def get(self, request, RECIPIENT_ID, *args, **kwargs):
+        recipient = User.objects.get(id=RECIPIENT_ID)
+
+        # Check if a chat already exists between the current user and the recipient
+        existing_chat = PrivateChat.objects.filter(user1=request.user, user2=recipient)
+        if existing_chat.exists():
+            chat = existing_chat.first()
+        else:
+            # Create a new chat if one doesn't exist
+            chat = PrivateChat.objects.create(user1=request.user, user2=recipient)
+
+        if UserAdditionalInformation.objects.get(user=request.user).user_type == "freelancer":
+            return redirect('dashboard:freelancer_messages_view', CHAT_ID=chat.id)
+        else:
+            return redirect('dashboard:employer_messages_view', CHAT_ID=chat.id)
+
+
+class SendMessage(LoginRequiredMixin, View):
+    def post(self, request, CHAT_ID, *args, **kwargs):
+        chat = PrivateChat.objects.get(id=CHAT_ID)
+
+        # Ensure the current user is a participant in the chat
+        if request.user not in [chat.user1, chat.user2]:
+            if request.user.useradditionalinformation.user_type == "freelancer":
+                return redirect('dashboard:freelancer_messages_view', CHAT_ID=0)
+            else:
+                return redirect('dashboard:employer_messages_view', CHAT_ID=0)
+        
+        content = request.POST.get('content')
+        sender = request.user
+        PrivateMessage.objects.create(chat=chat, sender=sender, content=content)
+
+        if request.user.useradditionalinformation.user_type == "freelancer":
+            return redirect('dashboard:freelancer_messages_view', CHAT_ID=CHAT_ID)
+        else:
+            return redirect('dashboard:employer_messages_view', CHAT_ID=CHAT_ID)

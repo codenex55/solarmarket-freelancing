@@ -18,4 +18,11 @@ urlpatterns = [
     path("freelancer-bookmarks/", views.FreelancerBookmark.as_view(), name="freelancer_bookmarks_view"),
     path("freelancer-reviews/", views.FreelancerReview.as_view(), name="freelancer_reviews_view"),
     path("freelancer-settings/", views.FreelancerSettings.as_view(), name="freelancer_settings_view"),
+
+
+    # CHAT SYSTEM
+    path("freelancer-messages/<int:CHAT_ID>", views.FreelancerMessages.as_view(), name="freelancer_messages_view"),
+    path("employer-messages/<int:CHAT_ID>", views.EmployerMessages.as_view(), name="employer_messages_view"),
+    path("initiate-chat/<int:RECIPIENT_ID>/", views.InitiateChatView.as_view(), name="initiate_chat_view"),
+    path("send-message/<int:CHAT_ID>/", views.SendMessage.as_view(), name="send_message_view"),
 ]
