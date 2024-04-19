@@ -310,7 +310,7 @@
 
 <!-- Titlebar
 ================================================== -->
-<div class="single-page-header freelancer-header" data-background-image="images/single-freelancer.jpg">
+<div class="single-page-header freelancer-header" data-background-image="{% static 'images/single-freelancer-bg.jpg' %}">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -321,7 +321,7 @@
 							<h3>{{ freelancer.user_additional_info.user.first_name }} {{ freelancer.user_additional_info.user.last_name }} <span>{{ freelancer.tagline }}</span></h3>
 							<ul>
 								<li><div class="star-rating" data-rating="5.0"></div></li>
-								<li><img class="flag" src="images/flags/de.svg" alt=""> {{ freelancer.lga }}, {{ freelancer.state }}</li>
+								<li><img class="flag" src="{% static 'images/flags/ngn' %}" alt=""> {{ freelancer.lga }}, {{ freelancer.state }}</li>
 								<li><div class="verified-badge-with-title">Verified</div></li>
 							</ul>
 						</div>
@@ -445,7 +445,9 @@
 
 				<!-- Button -->
 				<!-- <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim margin-bottom-50">Make an Offer <i class="icon-material-outline-arrow-right-alt"></i></a> -->
+                {% if freelancer.user_additional_info.user != request.user %}
 				<a href="{% url 'dashboard:initiate_chat_view' RECIPIENT_ID=freelancer.user_additional_info.user.id %}" class="button button-sliding-icon ripple-effect margin-bottom-50">Message {{ freelancer.user_additional_info.user.first_name }} <i class="icon-material-outline-arrow-right-alt"></i></a>
+                {% endif %}
 
 				<!-- Freelancer Indicators -->
 				<div class="sidebar-widget">
@@ -497,16 +499,9 @@
 
 				<!-- Widget -->
 				<div class="sidebar-widget">
-					<h3>Skills</h3>
+					<h3>Speciality</h3>
 					<div class="task-tags">
-						<span>iOS</span>
-						<span>Android</span>
-						<span>mobile apps</span>
-						<span>design</span>
-						<span>Python</span>
-						<span>Flask</span>
-						<span>PHP</span>
-						<span>WordPress</span>
+						<span>{{ freelancer.speciality }}</span>
 					</div>
 				</div>
 

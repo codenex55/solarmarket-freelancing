@@ -425,7 +425,7 @@
 
 							<!-- Name -->
 							<div class="freelancer-name">
-								<h4><a href="#">{{ freelancer.user_additional_info.user.first_name }} {{ freelancer.user_additional_info.user.last_name }} <img class="flag" src="images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"></a></h4>
+								<h4><a href="#">{{ freelancer.user_additional_info.user.first_name }} {{ freelancer.user_additional_info.user.last_name }} <img class="flag" src="{% static 'images/flags/ngn.png' %}" alt="" title="Nigeria" data-tippy-placement="top"></a></h4>
 								<span>{{ freelancer.tagline }}</span>
 								<!-- Rating -->
 								<div class="freelancer-rating">
@@ -439,12 +439,12 @@
 					<div class="freelancer-details">
 						<div class="freelancer-details-list">
 							<ul>
-								<li>Location <strong><i class="icon-material-outline-location-on"></i> {{ freelancer.lga }}, {{ freelancer.state }}</strong></li>
-								<li>Minimum Pay <strong>&#8358;{{ freelancer.minimum_pay }}</strong></li>
+								<li>Location <strong><i class="fa fa-map-marker"></i>{{ freelancer.state }}</strong></li>
+								<li>Min. Pay <strong>&#8358;{{ freelancer.minimum_pay }}</strong></li>
 								<li>Job Success <strong>95%</strong></li>
 							</ul>
 						</div>
-						<a href="{% url 'home:freelancer_profile_view' ID=freelancer.id %}" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
+						<a href="{% url 'home:freelancer_profile_view' ID=freelancer.id %}" class="button button-sliding-icon ripple-effect">View Profile <i class="fa fa-arrow-right"></i></a>
 					</div>
 				</div>
                 {% endfor %}

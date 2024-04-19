@@ -6,7 +6,7 @@
 
 <!-- Basic Page Needs
 ================================================== -->
-<title>Hireo</title>
+<title>Employer Dashboard - Messages</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -365,11 +365,22 @@
 								{% for chat in all_chats %} 
 								<li>
 									<a href="{% url 'dashboard:employer_messages_view' CHAT_ID=chat.id %}">
-										<div class="message-avatar"><i class="status-icon status-online"></i><img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+										<div class="message-avatar">
+											<i class="status-icon status-online"></i>
+											{% if request.user == chat.user1 %}
+												<img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" />
+											{% else %}
+												<img src="{{ chat.user1.useradditionalinformation.profile_picture.url }}" alt="" />
+											{% endif %}
+										</div>
 
 										<div class="message-by">
 											<div class="message-by-headline">
-												<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												{% if request.user == chat.user1 %}
+													<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												{% else %}
+													<h5>{{ chat.user1.first_name }} {{ chat.user1.last_name }}</h5>
+												{% endif %}
 												<span>4 hours ago</span>
 											</div>
 											<p>last message...</p>
@@ -384,12 +395,23 @@
 								{% if chat.id == chat_id %}
 								<li class="active-message">
 									<a href="{% url 'dashboard:employer_messages_view' CHAT_ID=chat.id %}">
-										<div class="message-avatar"><i class="status-icon status-offline"></i><img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+										<div class="message-avatar">
+											<i class="status-icon status-online"></i>
+											{% if request.user == chat.user1 %}
+												<img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" />
+											{% else %}
+												<img src="{{ chat.user1.useradditionalinformation.profile_picture.url }}" alt="" />
+											{% endif %}
+										</div>
 
 										<div class="message-by">
 											<div class="message-by-headline">
-												<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
-												<span>Yesterday</span>
+												{% if request.user == chat.user1 %}
+													<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												{% else %}
+													<h5>{{ chat.user1.first_name }} {{ chat.user1.last_name }}</h5>
+												{% endif %}
+												<span>4 hours ago</span>
 											</div>
 											<p>last message...</p>
 										</div>
@@ -398,11 +420,22 @@
 								{% else %}
 								<li>
 									<a href="{% url 'dashboard:employer_messages_view' CHAT_ID=chat.id %}">
-										<div class="message-avatar"><i class="status-icon status-online"></i><img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" /></div>
+										<div class="message-avatar">
+											<i class="status-icon status-online"></i>
+											{% if request.user == chat.user1 %}
+												<img src="{{ chat.user2.useradditionalinformation.profile_picture.url }}" alt="" />
+											{% else %}
+												<img src="{{ chat.user1.useradditionalinformation.profile_picture.url }}" alt="" />
+											{% endif %}
+										</div>
 
 										<div class="message-by">
 											<div class="message-by-headline">
-												<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												{% if request.user == chat.user1 %}
+													<h5>{{ chat.user2.first_name }} {{ chat.user2.last_name }}</h5>
+												{% else %}
+													<h5>{{ chat.user1.first_name }} {{ chat.user1.last_name }}</h5>
+												{% endif %}
 												<span>4 hours ago</span>
 											</div>
 											<p>last message...</p>
@@ -426,8 +459,8 @@
 						<div class="message-content">
 
 							<div class="messages-headline">
-								<h4>{{ chat_recipient.first_name }} {{ chat_recipient.last_name }}</h4>
-								<a href="#" class="message-action"><i class="icon-feather-trash-2"></i> proceed to payment</a>
+                                <h4>{{ chat_recipient.first_name }} {{ chat_recipient.last_name }}</h4>
+								<a href="#" class="message-action"><i class="icon-feather-trash-2"></i> Hiire Freelancer</a>
 							</div>
 							
 							<!-- Message Content Inner -->
@@ -441,7 +474,7 @@
 
 									{% for message in messages %}
 
-									{% if message.chat.user1 == request.user %}
+									{% if message.sender == request.user %}
 									<div class="message-bubble me">
 										<div class="message-bubble-inner">
 											<div class="message-avatar"><img src="{{ message.sender.useradditionalinformation.profile_picture.url }}" alt="" /></div>

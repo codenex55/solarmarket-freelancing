@@ -8,6 +8,7 @@ from accounts.models import Freelancer, Employer, UserAdditionalInformation
 from django.contrib import messages
 import requests
 from .models import PrivateChat, PrivateMessage
+from django.db.models import Q
 
 # Create your views here.
 
@@ -232,7 +233,7 @@ class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
 
 class FreelancerMessages(LoginRequiredMixin, View):
     def get(self, request, CHAT_ID, *args, **kwargs):
-        all_chats = PrivateChat.objects.filter(user1=request.user)
+        all_chats = PrivateChat.objects.filter(Q(user1=request.user) | Q(user2=request.user))
 
         if CHAT_ID == 0:
             context = {
@@ -249,19 +250,23 @@ class FreelancerMessages(LoginRequiredMixin, View):
             
             messages = PrivateMessage.objects.filter(chat=chat).order_by('timestamp')
 
+            if request.user == chat.user1:
+                chat_recipient = chat.user2
+            else:
+                chat_recipient = chat.user1
+
             context = {
                 "chat_id":CHAT_ID,
                 "all_chats":all_chats,
                 'messages': messages,
-                "chat_recipient":chat.user2
+                "chat_recipient":chat_recipient
             }
             return render(request, 'dashboard/freelancer-messages.html', context)
     
 
 class EmployerMessages(LoginRequiredMixin, View):
     def get(self, request, CHAT_ID, *args, **kwargs):
-        all_chats = PrivateChat.objects.filter(user1=request.user)
-
+        all_chats = PrivateChat.objects.filter(Q(user1=request.user) | Q(user2=request.user))
         if CHAT_ID == 0:
             context = {
                 "all_chats":all_chats,
@@ -277,11 +282,16 @@ class EmployerMessages(LoginRequiredMixin, View):
             
             messages = PrivateMessage.objects.filter(chat=chat).order_by('timestamp')
 
+            if request.user == chat.user1:
+                chat_recipient = chat.user2
+            else:
+                chat_recipient = chat.user1
+
             context = {
                 "chat_id":CHAT_ID,
                 "all_chats":all_chats,
                 'messages': messages,
-                "chat_recipient":chat.user2
+                "chat_recipient":chat_recipient
             }
             return render(request, 'dashboard/employer-messages.html', context)
 
@@ -317,6 +327,7 @@ class SendMessage(LoginRequiredMixin, View):
         
         content = request.POST.get('content')
         sender = request.user
+        print(sender.first_name)
         PrivateMessage.objects.create(chat=chat, sender=sender, content=content)
 
         if request.user.useradditionalinformation.user_type == "freelancer":

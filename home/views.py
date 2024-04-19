@@ -64,7 +64,7 @@ class FreelancerProfileView(View):
 
 class AllFreelancersView(View):
     def get(self, request, *args, **kwargs):
-        all_freelancers = UserAdditionalInformation.objects.filter(user_type="freelancer")
+        all_freelancers = Freelancer.objects.all()
         context = {"all_freelancers":all_freelancers}
         return render(request, "home/all-freelancers.html", context)
     
