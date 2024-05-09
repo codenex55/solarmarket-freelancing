@@ -38,7 +38,7 @@
 				
 				<!-- Logo -->
 				<div id="logo">
-					<a href="{% url 'home:home_view' %}"><img src="{% static 'images/newlogo2.png' %}" data-sticky-logo="{% static 'images/newlogo.png' %}" data-transparent-logo="{% static 'images/newlogo2.png' %}" alt=""></a>
+					<a href="{% url 'home:home_view' %}"><img src="{% static 'images/newlogo.png' %}" data-sticky-logo="{% static 'images/newlogo.png' %}" data-transparent-logo="{% static 'images/newlogo2.png' %}" alt=""></a>
 				</div>
 
 				<!-- Main Navigation -->
@@ -63,7 +63,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -208,7 +208,7 @@
 								</div>
 							</div>
 
-							<a href="dashboard-messages.html" class="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i class="icon-material-outline-arrow-right-alt"></i></a>
+							<a href="dashboard-messages.html" class="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
 
@@ -381,7 +381,7 @@
 				<ul class="intro-stats margin-top-45 hide-under-992px">
 					<li>
 						<strong class="counter">1,586</strong>
-						<span>Jobs Posted</span>
+						<span>Total Payout</span>
 					</li>
 					<li>
 						<strong class="counter">3,543</strong>
@@ -416,40 +416,40 @@
 
 			<div class="col-xl-3 col-md-6">
 				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="{% static 'images/solar_installation.jpg' %}">
+				<a href="{% url 'home:task_search_view' %}?popular_category=Solar Installation" class="photo-box small" data-background-image="{% static 'images/solar_installation.jpg' %}">
 					<div class="photo-box-content">
 						<h3>Solar Installation</h3>
-						<span>0</span>
+						<span>{{ solar_installation_count }}</span>
 					</div>
 				</a>
 			</div>
 			
 			<div class="col-xl-3 col-md-6">
 				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="{% static 'images/solar main.jpg' %}">
+				<a href="{% url 'home:task_search_view' %}?popular_category=Solar Maintenance" class="photo-box small" data-background-image="{% static 'images/solar main.jpg' %}">
 					<div class="photo-box-content">
 						<h3>Solar Maintenance</h3>
-						<span>0</span>
+						<span>{{ solar_maintenance_count }}</span>
 					</div>
 				</a>
 			</div>
 			
 			<div class="col-xl-3 col-md-6">
 				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="{% static 'images/cctv installation.jpg' %}">
+				<a href="{% url 'home:task_search_view' %}?popular_category=CCTV Installation" class="photo-box small" data-background-image="{% static 'images/cctv installation.jpg' %}">
 					<div class="photo-box-content">
 						<h3>CCTV Installation</h3>
-						<span>0</span>
+						<span>{{ ctvv_installation_count }}</span>
 					</div>
 				</a>
 			</div>
 
 			<div class="col-xl-3 col-md-6">
 				<!-- Photo Box -->
-				<a href="#" class="photo-box small" data-background-image="{% static 'images/cctv main.jpg' %}">
+				<a href="{% url 'home:task_search_view' %}?popular_category=CCTV Maintenance" class="photo-box small" data-background-image="{% static 'images/cctv main.jpg' %}">
 					<div class="photo-box-content">
 						<h3>CCTV Maintenance</h3>
-						<span>0</span>
+						<span>{{ ctvv_maintenance_count }}</span>
 					</div>
 				</a>
 			</div>
@@ -470,7 +470,7 @@
 				<!-- Section Headline -->
 				<div class="section-headline margin-top-0 margin-bottom-35">
 					<h3>Recent Tasks</h3>
-					<a href="#" class="headline-link">Browse All Tasks</a>
+					<a href="{% url 'home:all_tasks_view' %}" class="headline-link">Browse All Tasks</a>
 				</div>
 				
 				<!-- Jobs Container -->
@@ -489,14 +489,11 @@
 							<div class="task-listing-description">
 								<h3 class="task-listing-title">{{ task.task_name }}</h3>
 								<ul class="task-icons">
-									<li><i class="icon-material-outline-location-on"></i> {{ task.task_location }}</li>
-									<li><i class="icon-material-outline-access-time"></i> {{ task.timestamp|timesince }}</li>
+									<li><i class="fa fa-map-marker"></i> {{ task.task_state }}</li>
+									<li><i class="fa fa-clock-o"></i> {{ task.timestamp|timesince }}</li>
 								</ul>
 								<div class="task-tags margin-top-15">
-									<span>iOS</span>
-									<span>Android</span>
-									<span>mobile apps</span>
-									<span>design</span>
+									<span>{{ task.task_category }}</span>
 								</div>
 							</div>
 
@@ -505,17 +502,17 @@
 						<div class="task-listing-bid">
 							<div class="task-listing-bid-inner">
 								<div class="task-offers">
-									<strong>&#x20A6;{{ task.task_min_pay }} - &#x20A6;{{ task.task_max_pay }}</strong>
+									<strong>&#x20A6;{{ task.task_min_pay|intcomma }} - &#x20A6;{{ task.task_max_pay|intcomma }}</strong>
 									<span>{{ task.task_type }}</span>
 								</div>
 								{% if user.is_authenticated %}
 								{% if request.user.useradditionalinformation.user_type == "freelancer" %}
-								<span class="button button-sliding-icon ripple-effect">Bid Now <i class="icon-material-outline-arrow-right-alt"></i></span>
+								<span class="button button-sliding-icon ripple-effect">Bid Now <i class="fa fa-arrow-circle-right"></i></span>
 								{% else %}
-								<span class="button button-sliding-icon ripple-effect">View Task <i class="icon-material-outline-arrow-right-alt"></i></span>
+								<span class="button button-sliding-icon ripple-effect">View Task <i class="fa fa-arrow-circle-right"></i></span>
 								{% endif %}
 								{% else %}
-								<span class="button button-sliding-icon ripple-effect">View Task <i class="icon-material-outline-arrow-right-alt"></i></span>
+								<span class="button button-sliding-icon ripple-effect">View Task <i class="fa fa-arrow-circle-right"></i></span>
 								{% endif %}
 							</div>
 						</div>
@@ -600,6 +597,7 @@
 
 
 <!-- Testimonials -->
+{% if testimonial %}
 <div class="section gray padding-top-65 padding-bottom-55">
 	
 	<div class="container">
@@ -692,6 +690,7 @@
 	<!-- Categories Carousel / End -->
 
 </div>
+{% endif %}
 <!-- Testimonials / End -->
 
 
@@ -705,16 +704,16 @@
 					
 					<!-- Counter -->
 					<div class="single-counter">
-						<i class="icon-line-awesome-suitcase"></i>
+						<i class="fa fa-money"></i>
 						<div class="counter-inner">
 							<h3><span class="counter">1,586</span></h3>
-							<span class="counter-title">Jobs Posted</span>
+							<span class="counter-title">Total Payout</span>
 						</div>
 					</div>
 
 					<!-- Counter -->
 					<div class="single-counter">
-						<i class="icon-line-awesome-legal"></i>
+						<i class="fa fa-balance-scale"></i>
 						<div class="counter-inner">
 							<h3><span class="counter">3,543</span></h3>
 							<span class="counter-title">Tasks Posted</span>
@@ -723,7 +722,7 @@
 
 					<!-- Counter -->
 					<div class="single-counter">
-						<i class="icon-line-awesome-user"></i>
+						<i class="fa fa-user"></i>
 						<div class="counter-inner">
 							<h3><span class="counter">2,413</span></h3>
 							<span class="counter-title">Active Members</span>
@@ -732,7 +731,7 @@
 
 					<!-- Counter -->
 					<div class="single-counter">
-						<i class="icon-line-awesome-trophy"></i>
+						<i class="fa fa-trophy"></i>
 						<div class="counter-inner">
 							<h3><span class="counter">99</span>%</h3>
 							<span class="counter-title">Satisfaction Rate</span>
@@ -778,7 +777,7 @@
 									<ul class="footer-social-links">
 										<li>
 											<a href="#" title="Facebook" data-tippy-placement="bottom" data-tippy-theme="light">
-												<i class="icon-brand-facebook-f"></i>
+												<i class="fa fa-facebook-f"></i>
 											</a>
 										</li>
 										<li>
@@ -947,7 +946,7 @@
 				</form>
 				
 				<!-- Button -->
-				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="login-form">Log In <i class="icon-material-outline-arrow-right-alt"></i></button>
+				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="login-form">Log In <i class="fa fa-arrow-circle-right"></i></button>
 				
 				<!-- Social Login -->
 				<!-- <div class="social-login-separator"><span>or</span></div>
@@ -1021,7 +1020,7 @@
 				</form>
 				
 				<!-- Button -->
-				<button class="margin-top-10 button full-width button-sliding-icon ripple-effect" type="submit" form="register-account-form">Register <i class="icon-material-outline-arrow-right-alt"></i></button>
+				<button class="margin-top-10 button full-width button-sliding-icon ripple-effect" type="submit" form="register-account-form">Register <i class="fa fa-arrow-circle-right"></i></button>
 				
 				<!-- Social Login -->
 				<!-- <div class="social-login-separator"><span>or</span></div>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Task
+from .models import Task, TaskFile, TaskBid
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from accounts.models import Freelancer, Employer, UserAdditionalInformation
@@ -9,6 +9,8 @@ from django.contrib import messages
 import requests
 from .models import PrivateChat, PrivateMessage
 from django.db.models import Q
+from django.db.models import Count, Avg
+from django.utils import timezone
 
 # Create your views here.
 
@@ -37,7 +39,9 @@ class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
 
 class EmployerPostTask(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
+        all_states = requests.get("https://nga-states-lga.onrender.com/fetch").json()
         context = {
+            "all_states":all_states
         }
         return render(request, "dashboard/employer-post-task.html", context)
     
@@ -45,46 +49,105 @@ class EmployerPostTask(LoginRequiredMixin, EmployerRequiredMixin, View):
         # Process form submission
         task_name = request.POST.get('task_name')
         task_category = request.POST.get('task_category')
-        task_location = request.POST.get('task_location')
+        task_state = request.POST.get('state')
+        task_lga = request.POST.get('lga')
         task_min_pay = request.POST.get('task_min_pay')
         task_max_pay = request.POST.get('task_max_pay')
         task_type = request.POST.get('task_type')
-        task_skills = request.POST.get('task_skills')
         task_deadline = request.POST.get('task_deadline')
         task_description = request.POST.get('task_description')
-        task_images = request.FILES.getlist('task_images')
-
-        print(request.user)
+        task_files = request.FILES.getlist('task_files')
 
         # Save form data to the database
-        # task = Task(
-        #     user = request.user,
-        #     task_name=task_name,
-        #     task_category=task_category,
-        #     task_location=task_location,
-        #     task_min_pay=task_min_pay,
-        #     task_max_pay=task_max_pay,
-        #     task_type=task_type,
-        #     task_skills=task_skills,
-        #     task_deadline=task_deadline,
-        #     task_description=task_description
-        # )
-        # task.save()
+        task = Task(
+            user = request.user,
+            task_name=task_name,
+            task_category=task_category,
+            task_state=task_state,
+            task_lga=task_lga,
+            task_min_pay=task_min_pay,
+            task_max_pay=task_max_pay,
+            task_type=task_type,
+            task_deadline=task_deadline,
+            task_description=task_description
+        )
+        task.save()
 
         # Save task images
-        # for image in task_images:
-        #     task.task_images.create(image=image)
+        for file in task_files:
+            TaskFile.objects.create(task=task, file=file)
 
+        return redirect("dashboard:employer_manage_task_view")
+    
+
+class DeleteTaskView(LoginRequiredMixin, EmployerRequiredMixin, View):
+    def get(self, request, TASK_ID, *args, **kwargs):
+        Task.objects.get(id=TASK_ID).delete()
         return redirect("dashboard:employer_manage_task_view")
     
 
 class EmployerManageTask(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        all_task = Task.objects.filter(user=request.user).order_by("-timestamp")
-        context = {
-            "all_task":all_task
-        }
+        tasks  = Task.objects.filter(user=request.user).order_by("-timestamp")
+
+        tasks_with_bids_info = []
+
+        for task in tasks:
+            remaining_time = task.task_deadline - timezone.now()
+
+            # Retrieve TaskBid objects related to the current task
+            task_bids = TaskBid.objects.filter(task=task)
+
+            # Count how many TaskBid objects (bids) are related to the current task
+            bids_count = task_bids.count()
+
+            # Calculate the average bidding price for the current task
+            average_bid_price = task_bids.aggregate(Avg('bid_amount'))['bid_amount__avg']
+
+            if remaining_time.days > 0:
+                remaining_time = f"{remaining_time.days} days, {remaining_time.seconds // 3600} hours left"
+            elif remaining_time.seconds >= 3600:
+                remaining_time = f"{remaining_time.seconds // 3600} hours left"
+            elif remaining_time.seconds > 0:
+                remaining_time = f"{remaining_time.seconds // 60} minutes left"
+            else:
+                remaining_time = "Expired"
+
+            # Append task with bids info to the list
+            tasks_with_bids_info.append({
+                'task': task,
+                "remaining_time":remaining_time,
+                'bids_count': bids_count,
+                'average_bid_price': average_bid_price or 0  # Handle case when there are no bids
+            })
+
+        # Pass the tasks with bids info to the template
+        context = {'all_task': tasks_with_bids_info}
         return render(request, "dashboard/employer-manage-task.html", context)
+    
+
+class EmployerManageBidder(LoginRequiredMixin, EmployerRequiredMixin, View):
+    def get(self, request, TASK_ID, *args, **kwargs):
+        task = Task.objects.get(id=TASK_ID)
+
+        # Retrieve all bidders for the task
+        bidders = TaskBid.objects.filter(task=task)
+        count = bidders.count()
+
+        context = {
+            'task': task,
+            'bidders': bidders,
+            "count":count
+        }
+        return render(request, "dashboard/employer-manage-bidders.html", context)
+    
+
+class EmployerRemoveBidder(LoginRequiredMixin, EmployerRequiredMixin, View):
+    def get(self, request, BID_ID, *args, **kwargs):
+        bid = TaskBid.objects.get(id=BID_ID)
+        task_id = bid.task.id
+        bid.delete()
+        return redirect("dashboard:employer_manage_bidder_view", TASK_ID=task_id)
     
 
 class EmployerBookmark(LoginRequiredMixin, EmployerRequiredMixin, View):
@@ -164,6 +227,16 @@ class FreelancerBookmark(LoginRequiredMixin, FreelancerRequiredMixin, View):
         return JsonResponse({"message":"success"})
     
 
+class FreelancerActiveBids(LoginRequiredMixin, FreelancerRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        bids = TaskBid.objects.filter(freelancer=freelancer)
+        context = {
+            "bids":bids
+        }
+        return render(request, "dashboard/freelancer-active-bids.html", context)
+    
+
 class FreelancerReview(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, "dashboard/freelancer-review.html")
@@ -171,6 +244,12 @@ class FreelancerReview(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         # to add review and edit it
         return JsonResponse({"message":"success"})
+    
+
+class DeleteBidView(LoginRequiredMixin, FreelancerRequiredMixin, View):
+    def get(self, request, BID_ID, *args, **kwargs):
+        TaskBid.objects.get(id=BID_ID).delete()
+        return redirect("dashboard:freelancer_active_bids_view")
     
     
 class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):

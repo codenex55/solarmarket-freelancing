@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/colors/blue.css' %}">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body class="gray">
@@ -61,7 +61,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>

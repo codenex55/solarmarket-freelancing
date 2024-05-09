@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 
 <!doctype html>
 <html lang="en">
@@ -10,7 +11,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- CSS
 ================================================== -->
@@ -61,7 +62,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -385,12 +386,12 @@
 											<!-- Details -->
 											<div class="job-listing-description">
 												<!-- <h3 class="job-listing-title"><a href="#">{{ task.task_name }}</a> <span class="dashboard-status-button yellow">Expiring</span></h3> -->
-												<h3 class="job-listing-title"><a href="#">{{ task.task_name }}</a></h3>
+												<h3 class="job-listing-title"><a href="{% url 'home:single_task_view' ID=task.task.id %}">{{ task.task.task_name }}</a></h3>
 
 												<!-- Job Listing Footer -->
 												<div class="job-listing-footer">
 													<ul>
-														<li><i class="icon-material-outline-access-time"></i> 23 hours left</li>
+														<li><i class="fa fa-clock-o"></i> {{ task.remaining_time }}</li>
 													</ul>
 												</div>
 											</div>
@@ -399,16 +400,16 @@
 									
 									<!-- Task Details -->
 									<ul class="dashboard-task-info">
-										<li><strong>3</strong><span>Bids</span></li>
-										<li><strong>$22</strong><span>Avg. Bid</span></li>
-										<li><strong>$15 - $30</strong><span>Hourly Rate</span></li>
+										<li><strong>{{ task.bids_count }}</strong><span>Bids</span></li>
+										<li><strong>&#8358;{{ task.average_bid_price|intcomma }}</strong><span>Avg. Bid</span></li>
+										<li><strong>&#8358;{{ task.task.task_min_pay|intcomma }} - &#8358;{{ task.task.task_max_pay|intcomma }}</strong><span>Budget</span></li>
 									</ul>
 
 									<!-- Buttons -->
 									<div class="buttons-to-right always-visible">
-										<a href="dashboard-manage-bidders.html" class="button ripple-effect"><i class="icon-material-outline-supervisor-account"></i> Manage Bidders <span class="button-info">3</span></a>
-										<a href="#" class="button gray ripple-effect ico" title="Edit" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-										<a href="#" class="button gray ripple-effect ico" title="Remove" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
+										<a href="{% url 'dashboard:employer_manage_bidder_view' TASK_ID=task.task.id %}" class="button ripple-effect"><i class="fa fa-user-plus"></i> Manage Bidders <span class="button-info">{{ task.bids_count }}</span></a>
+										<a href="#" class="button gray ripple-effect ico" title="Edit" data-tippy-placement="top"><i class="fa fa-pencil"></i></a>
+										<a href="{% url 'dashboard:delete_task_view' TASK_ID=task.task.id %}" class="button gray ripple-effect ico" title="Remove" data-tippy-placement="top"><i class="fa fa-trash"></i></a>
 									</div>
 								</li>
                                 {% endfor %}

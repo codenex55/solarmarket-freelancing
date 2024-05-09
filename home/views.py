@@ -1,11 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from dashboard.models import Task
 from django.contrib.auth.models import User
-from dashboard.models import Task
+from dashboard.models import Task, TaskBid
 from accounts.models import UserAdditionalInformation, Freelancer, Employer
 import requests
 from django.http import JsonResponse
+from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
 
 
 # Create your views here.
@@ -15,9 +18,19 @@ class HomeView(View):
         # print(User.objects.all().count())
         tasks = Task.objects.all().order_by("-timestamp")[:5]
         all_states = requests.get("https://nga-states-lga.onrender.com/fetch").json()
+
+        solar_installation_count = Task.objects.filter(task_category='Solar Installation').count()
+        solar_maintenance_count = Task.objects.filter(task_category='Solar Maintenance').count()
+        ctvv_installation_count = Task.objects.filter(task_category='CCTV Installation').count()
+        ctvv_maintenance_count = Task.objects.filter(task_category='CCTV Maintenance').count()
+
         context = {
             "tasks":tasks,
-            "all_states":all_states
+            "all_states":all_states,
+            "solar_installation_count":solar_installation_count,
+            "solar_maintenance_count":solar_maintenance_count,
+            "ctvv_installation_count":ctvv_installation_count,
+            "ctvv_maintenance_count":ctvv_maintenance_count,
         }
         return render(request, "home/index-2.html", context)
     
@@ -35,20 +48,109 @@ class GetLGAView(View):
 class SingleTaskView(View):
     def get(self, request, ID, *args, **kwargs):
         context = {}
+
         try:
             task = Task.objects.get(id=ID)
+            bidders = TaskBid.objects.filter(task=task).order_by("-timestamp")
+            remaining_time = task.task_deadline - timezone.now()
             context["task"] = task
-        except:
+            context["bidders"] = bidders
+            if remaining_time.days > 0:
+                context["remaining_time"] = f"{remaining_time.days} days, {remaining_time.seconds // 3600} hours left"
+            elif remaining_time.seconds >= 3600:
+                context["remaining_time"] = f"{remaining_time.seconds // 3600} hours left"
+            elif remaining_time.seconds > 0:
+                context["remaining_time"] = f"{remaining_time.seconds // 60} minutes left"
+            else:
+                context["remaining_time"] = "Expired"
+        except Task.DoesNotExist:
             return render(request, "home/404.html")
+        
         return render(request, "home/single-task.html", context)
 
 class AllTaskView(View):
     def get(self, request, *args, **kwargs):
         all_tasks = Task.objects.all().order_by("-timestamp")
+        all_states = requests.get("https://nga-states-lga.onrender.com/fetch").json()
         context = {
-            "all_tasks":all_tasks
+            "all_tasks":all_tasks,
+            "all_states":all_states
         }
         return render(request, "home/all-task.html", context)
+    
+
+class TaskSearchView(View):
+    def get(self, request, *args, **kwargs):
+        results = Task.objects.all()
+
+        all_states = requests.get("https://nga-states-lga.onrender.com/fetch").json()
+
+        popular_category = request.GET.get("popular_category")
+
+        filters = {
+        }
+
+        if popular_category:
+            filters['task_category'] = popular_category
+
+        results = results.filter(**filters)
+
+        print(results)
+
+        context = {
+            'results': results,
+            "all_states": all_states,
+        }
+
+        return render(request, 'home/task_search_results.html', context)
+
+
+    def post(self, request, *args, **kwargs):
+        results = Task.objects.all()
+
+        all_states = requests.get("https://nga-states-lga.onrender.com/fetch").json()
+
+        lga = request.POST.get('lga')
+        state = request.POST.get('state')
+        category = request.POST.get('category')
+        maximum_pay = request.POST.get("maximum_pay")
+        task_type = request.POST.get("task_type")
+
+        filters = {
+        }
+
+        print(lga, state, category)
+
+        if lga:
+            filters['task_lga'] = lga
+        if state:
+            filters['task_state'] = state
+        if category:
+            filters['task_category'] = category
+        if maximum_pay:
+            filters['task_min_pay__lte'] = float(maximum_pay)
+        if task_type:
+            filters['task_type'] = task_type
+
+        results = results.filter(**filters)
+
+        print(results)
+
+        context = {
+            'results': results,
+            "all_states": all_states,
+            "state":state,
+            "lga":lga,
+            "category":category,
+            "maximum_pay":maximum_pay
+        }
+
+        if state:
+            all_lgas = requests.get(f"https://nga-states-lga.onrender.com/?state={state}").json()
+            context["all_lgas"] = all_lgas
+
+        return render(request, 'home/task_search_results.html', context)
+
     
 
 class FreelancerProfileView(View):
@@ -115,10 +217,85 @@ class FreelancerSearchView(View):
         return render(request, 'home/freelancer_search_results.html', context)
 
 
-# nationality = models.CharField(max_length=100, default="Nigeria")
-#     speciality = models.CharField(max_length=100, choices=SPECIALITY, null=True, blank=True)
-#     state = models.CharField(max_length=100, null=True, blank=True)
-#     lga = models.CharField(max_length=100, null=True, blank=True)
-#     tagline = models.CharField(max_length=250, null=True, blank=True)
-#     self_introduction = models.TextField(null=True, blank=True)
-#     minimum_pay = models.FloatField(null=True, blank=True)
+
+class BookmarkFreelancerView(View):
+    def post(self, request, *args, **kwargs):
+        freelancer_id = int(request.POST.get("freelancer_id"))
+        freelancer = Freelancer.objects.get(id=freelancer_id)
+        user_info = UserAdditionalInformation.objects.get(user=request.user)
+
+        data = {}
+
+        if request.user.useradditionalinformation.user_type == "freelancer":
+            print("here")
+            freelancer = Freelancer.objects.get(user_additional_info=user_info)
+            if freelancer.bookmark_freelancer.filter(id=freelancer_id).exists():
+                freelancer.bookmark_freelancer.remove(freelancer)
+                data["message"] = "removed"
+            else:
+                freelancer.bookmark_freelancer.add(freelancer)
+                data["message"] = "added"
+        elif request.user.useradditionalinformation.user_type == "employer":
+            print("here")
+            employer = Employer.objects.get(user_additional_info=user_info)
+            if employer.bookmark_freelancer.filter(id=freelancer_id).exists():
+                employer.bookmark_freelancer.remove(freelancer)
+                data["message"] = "removed"
+            else:
+                employer.bookmark_freelancer.add(freelancer)
+                data["message"] = "added"
+        return JsonResponse(data)
+    
+
+class BookmarkTaskView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        task_id = int(request.POST.get("task_id"))
+        task = Task.objects.get(id=task_id)
+        user_info = UserAdditionalInformation.objects.get(user=request.user)
+
+        data = {}
+
+        if request.user.useradditionalinformation.user_type == "freelancer":
+            print("here")
+            freelancer = Freelancer.objects.get(user_additional_info=user_info)
+            if freelancer.bookmark_task.filter(id=task_id).exists():
+                freelancer.bookmark_task.remove(task)
+                data["message"] = "removed"
+            else:
+                freelancer.bookmark_task.add(task)
+                data["message"] = "added"
+        elif request.user.useradditionalinformation.user_type == "employer":
+            print("here")
+            employer = Employer.objects.get(user_additional_info=user_info)
+            if employer.bookmark_task.filter(id=task_id).exists():
+                employer.bookmark_task.remove(task)
+                data["message"] = "removed"
+            else:
+                employer.bookmark_task.add(task)
+                data["message"] = "added"
+
+        return JsonResponse(data)
+    
+
+class BidTaskView(LoginRequiredMixin, View):
+    def post(self, request, TASK_ID, *args, **kwargs):
+        task = Task.objects.get(id=TASK_ID)
+        user_info = UserAdditionalInformation.objects.get(user=request.user)
+        freelancer = Freelancer.objects.get(user_additional_info=user_info)
+        bid_amount = float(request.POST.get("bid_amount"))
+        qtyInput = int(request.POST.get("qtyInput"))
+        delivery_time = request.POST.get("delivery_time")
+
+        if request.user.useradditionalinformation.user_type == "freelancer":
+            if TaskBid.objects.filter(freelancer=freelancer, task=task).exists():
+                bid = TaskBid.objects.get(freelancer=freelancer, task=task)
+                bid.bid_amount = bid_amount
+                bid.expected_delivery_time = qtyInput
+                bid.expected_delivery_time_measurement = delivery_time
+                bid.save()
+                return redirect("dashboard:freelancer_active_bids_view")
+            else:
+                TaskBid.objects.create(freelancer=freelancer, task=task, bid_amount=bid_amount, expected_delivery_time=qtyInput, expected_delivery_time_measurement=delivery_time)
+                return redirect("home:single_task_view", ID=TASK_ID)
+
+

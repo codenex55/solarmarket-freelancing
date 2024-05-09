@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
+from dashboard.models import Task
 
 # Create your models here.
 
@@ -40,10 +41,13 @@ class Freelancer(models.Model):
     tagline = models.CharField(max_length=250, null=True, blank=True)
     self_introduction = models.TextField(null=True, blank=True)
     minimum_pay = models.FloatField(null=True, blank=True)
+    bookmark_freelancer = models.ManyToManyField("Freelancer", blank=True)
+    bookmark_task = models.ManyToManyField(Task, blank=True)
 
 class Employer(models.Model):
     user_additional_info = models.OneToOneField(UserAdditionalInformation, on_delete=models.CASCADE, related_name='employer_profile')
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     # Add any other fields specific to employers
-    bookmarked_freelancers = models.ManyToManyField(Freelancer, related_name='bookmarkers', blank=True)
+    bookmark_freelancer = models.ManyToManyField(Freelancer, blank=True)
+    bookmark_task = models.ManyToManyField(Task, blank=True)

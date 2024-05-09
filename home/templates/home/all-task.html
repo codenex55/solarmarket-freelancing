@@ -61,7 +61,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -206,7 +206,7 @@
 								</div>
 							</div>
 
-							<a href="dashboard-messages.html" class="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i class="icon-material-outline-arrow-right-alt"></i></a>
+							<a href="dashboard-messages.html" class="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
 
@@ -258,7 +258,7 @@
 							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
 							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
 							{% endif %}
-							<li><a href="index-logged-out.html"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
 						</ul>
 
 						</div>
@@ -317,116 +317,93 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xl-3 col-lg-4">
+			<form action="{% url 'home:task_search_view' %}" method="post">
+				{% csrf_token %}
 			<div class="sidebar-container">
 				
-				<!-- Location -->
+				<!-- State -->
 				<div class="sidebar-widget">
-					<h3>Location</h3>
-					<div class="input-with-icon">
-						<div id="autocomplete-container">
-							<input id="autocomplete-input" type="text" placeholder="Location">
-						</div>
-						<i class="icon-material-outline-location-on"></i>
-					</div>
+					<h3>State</h3>
+					<select name="state" onchange="selectLGAFunction()" id="state" class="selectpicker default" data-selected-text-format="count" data-size="7" title="All State" >
+						<option value="">--Select State--</option>
+                        {% for states in all_states %}
+                        <option value="{{ states }}" {% if state == states %}selected{% endif %}>{{ states }}</option>
+                        {% endfor %}
+                    </select>
+				</div>
+
+                <!-- LGA -->
+				<div class="sidebar-widget">
+					<h3>LGA</h3>
+					<select name="lga" id="trial" data-selected-text-format="count" data-size="7" title="All LGA">
+                        {% for lgas in all_lgas %}
+                            <option value="{{ lgas }}" {% if lga == lgas %}selected{% endif %}>{{ lgas }}</option>
+                        {% endfor %}
+                    </select>
 				</div>
 
 				<!-- Category -->
 				<div class="sidebar-widget">
 					<h3>Category</h3>
-					<select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
-						<option>Admin Support</option>
-						<option>Customer Service</option>
-						<option>Data Analytics</option>
-						<option>Design & Creative</option>
-						<option>Legal</option>
-						<option>Software Developing</option>
-						<option>IT & Networking</option>
-						<option>Writing</option>
-						<option>Translation</option>
-						<option>Sales & Marketing</option>
+					<select name="category" class="selectpicker default" data-selected-text-format="count" data-size="7" title="All Categories" >
+						{% if category == "Solar Installation" %}
+                        <option value="Solar Installation" selected>Solar Installation</option>
+                        {% else %}
+                        <option value="Solar Installation">Solar Installation</option>
+                        {% endif %}
+                        {% if category == "Solar Maintenance" %}
+                        <option value="Solar Maintenance" selected>Solar Maintenance</option>
+                        {% else %}
+                        <option value="Solar Maintenance">Solar Maintenance</option>
+                        {% endif %}
+                        {% if category == "CCTV Installation" %}
+                        <option value="CCTV Installation" selected>CCTV Installation</option>
+                        {% else%}
+                        <option value="CCTV Installation">CCTV Installation</option>
+                        {% endif %}
+                        {% if category == "CCTV Maintenance" %}
+                        <option value="CCTV Maintenance" selected>CCTV Maintenance</option>
+                        {% else %}
+                        <option value="CCTV Maintenance">CCTV Maintenance</option>
+                        {% endif %}
 					</select>
 				</div>
 
-				<!-- Keywords -->
 				<div class="sidebar-widget">
-					<h3>Keywords</h3>
-					<div class="keywords-container">
-						<div class="keyword-input-container">
-							<input type="text" class="keyword-input" placeholder="e.g. task title"/>
-							<button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
-						</div>
-						<div class="keywords-list"><!-- keywords go here --></div>
-						<div class="clearfix"></div>
+					<h3>Task Type</h3>
+					<div class="radio">
+						<input id="radio-1" name="task_type" type="radio">
+						<label for="radio-1"><span class="radio-label"></span> Fixed Price</label>
+					</div>
+		
+					<br>
+		
+					<div class="radio">
+						<input id="radio-2" name="task_type" type="radio">
+						<label for="radio-2"><span class="radio-label"></span> Hourly Rate</label>
 					</div>
 				</div>
 
 				<!-- Budget -->
 				<div class="sidebar-widget">
-					<h3>Fixed Price</h3>
+					<h3>Maximum Pay</h3>
 					<div class="margin-top-55"></div>
 
 					<!-- Range Slider -->
-					<input class="range-slider" type="text" value="" data-slider-currency="&#8358;" data-slider-min="10" data-slider-max="2500" data-slider-step="25" data-slider-value="[10,2500]"/>
+					<input name="maximum_pay" class="range-slider" type="text" value="" data-slider-currency="&#8358;" data-slider-min="10" data-slider-max="2500" data-slider-step="25" data-slider-value="[10,2500]"/>
 				</div>
 
-				<!-- Hourly Rate -->
+
+				<!-- Search Button -->
 				<div class="sidebar-widget">
-					<h3>Hourly Rate</h3>
-					<div class="margin-top-55"></div>
-
-					<!-- Range Slider -->
-					<input class="range-slider" type="text" value="" data-slider-currency="&#8358;" data-slider-min="10" data-slider-max="150" data-slider-step="5" data-slider-value="[10,200]"/>
+					<button class="button ripple-effect" style="width: 100%;" type="submit">Search</button>
 				</div>
-
-				<!-- Tags -->
-				<div class="sidebar-widget">
-					<h3>Skills</h3>
-
-					<div class="tags-container">
-						<div class="tag">
-							<input type="checkbox" id="tag1"/>
-							<label for="tag1">front-end dev</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag2"/>
-							<label for="tag2">angular</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag3"/>
-							<label for="tag3">react</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag4"/>
-							<label for="tag4">vue js</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag5"/>
-							<label for="tag5">web apps</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag6"/>
-							<label for="tag6">design</label>
-						</div>
-						<div class="tag">
-							<input type="checkbox" id="tag7"/>
-							<label for="tag7">wordpress</label>
-						</div>
-					</div>
-					<div class="clearfix"></div>
-
-					<!-- More Skills -->
-					<div class="keywords-container margin-top-20">
-						<div class="keyword-input-container">
-							<input type="text" class="keyword-input" placeholder="add more skills"/>
-							<button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
-						</div>
-						<div class="keywords-list"><!-- keywords go here --></div>
-						<div class="clearfix"></div>
-					</div>
-				</div>
+				<!-- Search Button / End-->
+			
 				<div class="clearfix"></div>
 
 			</div>
+			</form>
 		</div>
 		<div class="col-xl-9 col-lg-8 content-left-offset">
 
@@ -463,17 +440,14 @@
 						<div class="task-listing-description">
 							<h3 class="task-listing-title">{{ task.task_name }}</h3>
 							<ul class="task-icons">
-								<li><i class="icon-material-outline-location-on"></i> {{ task.task_location }}</li>
-								<li><i class="icon-material-outline-access-time"></i> {{ task.timestamp|timesince }}</li>
+								<li><i class="fa fa-map-marker"></i> {{ task.task_state }}</li>
+								<li><i class="fa fa-clock-o"></i> {{ task.timestamp|timesince }}</li>
 							</ul>
 							<p class="task-listing-text">
                                 {{ task.task_description }}
                             </p>
 							<div class="task-tags">
-								<span>iOS</span>
-								<span>Android</span>
-								<span>mobile apps</span>
-								<span>design</span>
+								<span>{{ task.task_category }}</span>
 							</div>
 						</div>
 
@@ -487,12 +461,12 @@
 							</div>
 							{% if user.is_authenticated %}
                             {% if request.user.useradditionalinformation.user_type == "freelancer" %}
-                            <span class="button button-sliding-icon ripple-effect">Bid Now <i class="icon-material-outline-arrow-right-alt"></i></span>
+                            <span class="button button-sliding-icon ripple-effect">Bid Now <i class="fa fa-arrow-circle-right"></i></span>
                             {% else %}
-                            <span class="button button-sliding-icon ripple-effect">View Task <i class="icon-material-outline-arrow-right-alt"></i></span>
+                            <span class="button button-sliding-icon ripple-effect">View Task <i class="fa fa-arrow-circle-right"></i></span>
                             {% endif %}
                             {% else %}
-                            <span class="button button-sliding-icon ripple-effect">View Task <i class="icon-material-outline-arrow-right-alt"></i></span>
+                            <span class="button button-sliding-icon ripple-effect">View Task <i class="fa fa-arrow-circle-right"></i></span>
                             {% endif %}
 						</div>
 					</div>
@@ -733,7 +707,7 @@
 				</form>
 				
 				<!-- Button -->
-				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="login-form">Log In <i class="icon-material-outline-arrow-right-alt"></i></button>
+				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="login-form">Log In <i class="fa fa-arrow-circle-right"></i></button>
 				
 				<!-- Social Login -->
 				<!-- <div class="social-login-separator"><span>or</span></div>
@@ -807,7 +781,7 @@
 				</form>
 				
 				<!-- Button -->
-				<button class="margin-top-10 button full-width button-sliding-icon ripple-effect" type="submit" form="register-account-form">Register <i class="icon-material-outline-arrow-right-alt"></i></button>
+				<button class="margin-top-10 button full-width button-sliding-icon ripple-effect" type="submit" form="register-account-form">Register <i class="fa fa-arrow-circle-right"></i></button>
 				
 				<!-- Social Login -->
 				<!-- <div class="social-login-separator"><span>or</span></div>
@@ -879,6 +853,42 @@ $('#snackbar-user-status label').click(function() {
 		} else {
 			document.getElementById("userType").value = "employer";
 		}
+	}
+</script>
+
+<script>
+	function selectLGAFunction() {
+		var state = document.getElementById("state").value;
+		$.ajax({
+            url: "{% url 'home:get_lga_view' %}",
+            method: "POST",
+            data: { 
+              'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+              state: state 
+            },
+            success: function (data) {
+                populateLGADropdown(data.all_lga);
+				
+            }
+        });
+	}
+
+	function populateLGADropdown(lgas) {
+        var lgaDropdown = document.getElementById("trial");
+        lgaDropdown.innerHTML = ""; // Clear existing options
+
+		var initialOption = document.createElement("option");
+		initialOption.text = "-- Select LGA --";
+		initialOption.value = "";
+		lgaDropdown.add(option);
+
+        lgas.forEach(function(lga) {
+            var option = document.createElement("option");
+            option.text = lga;
+            lgaDropdown.add(option);
+        });
+
+		console.log(lgaDropdown)
 	}
 </script>
 

@@ -24,6 +24,10 @@ urlpatterns = [
     path('', include("home.urls")),
     path('accounts/', include("accounts.urls")),
     path('dashboard/', include("dashboard.urls")),
+    path('forum/', include("forum.urls")),
+
+    # ckeditor
+    path("ckeditor5/", include('django_ckeditor_5.urls'), name="ck_editor_5_upload_file"),
 ]
 
 if settings.DEBUG:

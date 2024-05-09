@@ -61,7 +61,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -420,7 +420,7 @@
 							<!-- Avatar -->
 							<div class="freelancer-avatar">
 								<div class="verified-badge"></div>
-								<a href="#"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></a>
+								<a href="{% url 'home:freelancer_profile_view' ID=freelancer.id %}"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></a>
 							</div>
 
 							<!-- Name -->

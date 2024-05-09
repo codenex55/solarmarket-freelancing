@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- CSS
 ================================================== -->
@@ -61,7 +61,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -301,7 +301,7 @@
 					<div class="dashboard-nav-inner">
 
 						<ul data-submenu-title="Start">
-							<li class="active"><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
+							<li class="active"><a href="{% url 'dashboard:freelancer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
 							<li><a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=0 %}"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
 							<li><a href="{% url 'dashboard:freelancer_bookmarks_view' %}"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
 							<li><a href="{% url 'dashboard:freelancer_reviews_view' %}"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
@@ -310,7 +310,7 @@
 						<ul data-submenu-title="Organize and Manage">
 							<li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
 								<ul>
-									<li><a href="#">My Active Bids <span class="nav-tag">4</span></a></li>
+									<li><a href="{% url 'dashboard:freelancer_active_bids_view' %}">My Active Bids <span class="nav-tag">4</span></a></li>
 								</ul>	
 							</li>
 						</ul>

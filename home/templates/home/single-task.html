@@ -1,4 +1,6 @@
 {% load static %}
+{% load humanize %}
+{% csrf_token %}
 
 <!doctype html>
 <html lang="en">
@@ -64,7 +66,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -255,13 +257,13 @@
 						
 						<ul class="user-menu-small-nav">
 							{% if request.user.useradditionalinformation.user_type == "freelancer" %}
-							<li><a href="dashboard.html"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="dashboard-settings.html"><i class="icon-material-outline-settings"></i> Settings</a></li>
+							<li><a href="{% url 'dashboard:freelancer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
+							<li><a href="{% url 'dashboard:freelancer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
 							{% else %}
 							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
 							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
 							{% endif %}
-							<li><a href="index-logged-out.html"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
 						</ul>
 
 						</div>
@@ -321,14 +323,14 @@
 			<div class="col-md-12">
 				<div class="single-page-header-inner">
 					<div class="left-side">
-						<div class="header-image"><a href="#"><img src="images/browse-companies-02.png" alt=""></a></div>
+						<div class="header-image"><a href="#"><img src="{{ task.user.useradditionalinformation.profile_picture.url }}" alt=""></a></div>
 						<div class="header-details">
 							<h3>{{ task.task_name }}</h3>
 							<h5>About the Employer</h5>
 							<ul>
-								<li><a href="#"><i class="icon-material-outline-business"></i> Acue</a></li>
+								<li><a href="#"><i class="fa fa-user"></i> {{ task.user.first_name }} {{ task.user.last_name }}</a></li>
 								<li><div class="star-rating" data-rating="5.0"></div></li>
-								<li><img class="flag" src="images/flags/de.svg" alt=""> Nationality</li>
+								<li><img class="flag" src="{% static 'images/flags/ngn.png' %}" alt=""> Nigeria</li>
 								<li><div class="verified-badge-with-title">Verified</div></li>
 							</ul>
 						</div>
@@ -336,7 +338,7 @@
 					<div class="right-side">
 						<div class="salary-box">
 							<div class="salary-type">Task Budget</div>
-							<div class="salary-amount">${{ task.task_min_pay }} - ${{ task.task_max_pay }}</div>
+							<div class="salary-amount">&#x20A6;{{ task.task_min_pay|intcomma }} - &#x20A6;{{ task.task_max_pay|intcomma }}</div>
 						</div>
 					</div>
 				</div>
@@ -370,12 +372,9 @@
 
 			<!-- Skills -->
 			<div class="single-page-section">
-				<h3>Skills Required</h3>
+				<h3>Task Category</h3>
 				<div class="task-tags">
-					<span>iOS</span>
-					<span>Android</span>
-					<span>mobile apps</span>
-					<span>design</span>
+					<span>{{ task.task_category }}</span>
 				</div>
 			</div>
 			<div class="clearfix"></div>
@@ -383,16 +382,17 @@
 			<!-- Freelancers Bidding -->
 			<div class="boxed-list margin-bottom-60">
 				<div class="boxed-list-headline">
-					<h3><i class="icon-material-outline-group"></i> Freelancers Bidding</h3>
+					<h3><i class="fa fa-users"></i> Freelancers Bidding</h3>
 				</div>
 				<ul class="boxed-list-ul">
+					{% for bid in bidders %}
 					<li>
 						<div class="bid">
 							<!-- Avatar -->
 							<div class="bids-avatar">
 								<div class="freelancer-avatar">
 									<div class="verified-badge"></div>
-									<a href="single-freelancer-profile.html"><img src="images/user-avatar-big-01.jpg" alt=""></a>
+									<a href="{% url 'home:freelancer_profile_view' ID=bid.freelancer.id %}"><img src="{{ bid.freelancer.user_additional_info.profile_picture.url }}" alt="" height="80" width="80"></a>
 								</div>
 							</div>
 							
@@ -400,7 +400,7 @@
 							<div class="bids-content">
 								<!-- Name -->
 								<div class="freelancer-name">
-									<h4><a href="single-freelancer-profile.html">Tom Smith <img class="flag" src="images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"></a></h4>
+									<h4><a href="{% url 'home:freelancer_profile_view' ID=bid.freelancer.id %}">{{ bid.freelancer.user_additional_info.user.first_name }} {{ bid.freelancer.user_additional_info.user.last_name }} <img class="flag" src="{% static 'images/flags/ngn.png' %}" alt="" title="United Kingdom" data-tippy-placement="top"></a></h4>
 									<div class="star-rating" data-rating="4.9"></div>
 								</div>
 							</div>
@@ -408,95 +408,13 @@
 							<!-- Bid -->
 							<div class="bids-bid">
 								<div class="bid-rate">
-									<div class="rate">$4,400</div>
-									<span>in 7 days</span>
+									<div class="rate">&#x20A6;{{ bid.bid_amount|intcomma }}</div>
+									<span>in {{ bid.expected_delivery_time }} {{ bid.expected_delivery_time_measurement }}</span>
 								</div>
 							</div>
 						</div>
 					</li>
-					<li>
-						<div class="bid">
-							<!-- Avatar -->
-							<div class="bids-avatar">
-								<div class="freelancer-avatar">
-									<div class="verified-badge"></div>
-									<a href="single-freelancer-profile.html"><img src="images/user-avatar-big-02.jpg" alt=""></a>
-								</div>
-							</div>
-							
-							<!-- Content -->
-							<div class="bids-content">
-								<!-- Name -->
-								<div class="freelancer-name">
-									<h4><a href="single-freelancer-profile.html">David Peterson <img class="flag" src="images/flags/de.svg" alt="" title="Germany" data-tippy-placement="top"></a></h4>
-									<div class="star-rating" data-rating="4.2"></div>
-								</div>
-							</div>
-							
-							<!-- Bid -->
-							<div class="bids-bid">
-								<div class="bid-rate">
-									<div class="rate">$2,200</div>
-									<span>in 14 days</span>
-								</div>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="bid">
-							<!-- Avatar -->
-							<div class="bids-avatar">
-								<div class="freelancer-avatar">
-									<a href="single-freelancer-profile.html"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></a>
-								</div>
-							</div>
-							
-							<!-- Content -->
-							<div class="bids-content">
-								<!-- Name -->
-								<div class="freelancer-name">
-									<h4><a href="single-freelancer-profile.html">Marcin Kowalski <img class="flag" src="images/flags/pl.svg" alt="" title="Poland" data-tippy-placement="top"></a></h4>
-									<span class="not-rated">Minimum of 3 votes required</span>
-
-								</div>
-							</div>
-							
-							<!-- Bid -->
-							<div class="bids-bid">
-								<div class="bid-rate">
-									<div class="rate">$3,800</div>
-									<span>In 20 days</span>
-								</div>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="bid">
-							<!-- Avatar -->
-							<div class="bids-avatar">
-								<div class="freelancer-avatar">
-									<a href="single-freelancer-profile.html"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></a>
-								</div>
-							</div>
-							
-							<!-- Content -->
-							<div class="bids-content">
-								<!-- Name -->
-								<div class="freelancer-name">
-									<h4><a href="single-freelancer-profile.html">Sebastiano Piccio <img class="flag" src="images/flags/it.svg" alt="" title="Italy" data-tippy-placement="top"></a></h4>
-									<div class="star-rating" data-rating="4.5"></div>
-								</div>
-							</div>
-							
-							<!-- Bid -->
-							<div class="bids-bid">
-								<div class="bid-rate">
-									<div class="rate">$3,400</div>
-									<span>In 10 days</span>
-								</div>
-							</div>
-						</div>
-					</li>
+					{% endfor %}
 				</ul>
 			</div>
 
@@ -507,11 +425,15 @@
 		<div class="col-xl-4 col-lg-4">
 			<div class="sidebar-container">
 
-				<div class="countdown green margin-bottom-35">6 days, 23 hours left</div>
+				<div class="countdown green margin-bottom-35">
+					{{ remaining_time }}
+				</div>
 
 				<div class="sidebar-widget">
 					<div class="bidding-widget">
 						<div class="bidding-headline"><h3>Bid on this job!</h3></div>
+						<form action="{% url 'home:bid_task_view' TASK_ID=task.id %}" method="post">
+							{% csrf_token %}
 						<div class="bidding-inner">
 
 							<!-- Headline -->
@@ -519,7 +441,7 @@
 
 							<!-- Price Slider -->
 							<div class="bidding-value">	&#8358;<span id="biddingVal"></span></div>
-							<input class="bidding-slider" type="text" value="" data-slider-handle="custom" data-slider-currency="&#8358;" data-slider-min="{{ task.task_min_pay }}" data-slider-max="{{ task.task_max_pay }}" data-slider-value="auto" data-slider-step="50" data-slider-tooltip="hide" />
+							<input name="bid_amount" class="bidding-slider" type="text" value="{{ task.task_min_pay }}" data-slider-handle="custom" data-slider-currency="&#8358;" data-slider-min="{{ task.task_min_pay }}" data-slider-max="{{ task.task_max_pay }}" data-slider-value="auto" data-slider-step="50" data-slider-tooltip="hide" />
 							
 							<!-- Headline -->
 							<span class="bidding-detail margin-top-30">Set your <strong>delivery time</strong></span>
@@ -535,18 +457,27 @@
 									</div>
 								</div>
 								<div class="bidding-field">
-									<select class="selectpicker default">
-										<option selected>Days</option>
-										<option>Hours</option>
+									<select class="selectpicker default" name="delivery_time">
+										<option selected value="Days">Days</option>
+										<option value="Hours">Hours</option>
 									</select>
 								</div>
 							</div>
 
 							<!-- Button -->
+							{% if user.is_authenticated %}
+							{% if request.user.useradditionalinformation.user_type == "freelancer" %}
 							<button id="snackbar-place-bid" class="button ripple-effect move-on-hover full-width margin-top-30"><span>Place a Bid</span></button>
+							{% endif %}
+							{% else %}
+							<button id="snackbar-place-bid" class="button ripple-effect move-on-hover full-width margin-top-30" disabled><span>Place a Bid</span></button>
+							{% endif %}
 
 						</div>
+						</form>
+						{% if not user.is_authenticated %}
 						<div class="bidding-signup">Don't have an account? <a href="#sign-in-dialog" class="register-tab sign-in popup-with-zoom-anim">Sign Up</a></div>
+						{% endif %}
 					</div>
 				</div>
 
@@ -555,11 +486,19 @@
 					<h3>Bookmark or Share</h3>
 
 					<!-- Bookmark Button -->
-					<button class="bookmark-button margin-bottom-25">
+					{% if user.is_authenticated %}
+					<button class="bookmark-button margin-bottom-25" onclick="bookmarkTaskFunction()" id="taskBookmarkBtn">
 						<span class="bookmark-icon"></span>
 						<span class="bookmark-text">Bookmark</span>
 						<span class="bookmarked-text">Bookmarked</span>
 					</button>
+					{% else %}
+					<button class="bookmark-button margin-bottom-25" disabled>
+						<span class="bookmark-icon"></span>
+						<span class="bookmark-text">Bookmark</span>
+						<span class="bookmarked-text">Bookmarked</span>
+					</button>
+					{% endif %}
 
 					<!-- Copy URL -->
 					<div class="copy-url">
@@ -939,6 +878,28 @@ $('.copy-url-button').click(function() {
 		} else {
 			document.getElementById("userType").value = "employer";
 		}
+	}
+</script>
+
+<script>
+	function bookmarkTaskFunction() {
+		task_id = "{{ task.id }}"
+		$.ajax({
+			url: "{% url 'home:bookmark_task_view' %}",
+			method: "POST",
+			data: { 
+              'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+              "task_id": Number(task_id)
+            },
+			success: function (data) {
+				var taskBookmarkBtn = document.getElementById("taskBookmarkBtn");
+				if (data.message == "added") {
+					taskBookmarkBtn.classList.add("bookmarked");
+				} else {
+					taskBookmarkBtn.classList.remove("bookmarked");
+				}
+			}
+		});
 	}
 </script>
 

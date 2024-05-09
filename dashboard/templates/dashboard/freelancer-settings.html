@@ -65,7 +65,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -314,7 +314,7 @@
 						<ul data-submenu-title="Organize and Manage">
 							<li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
 								<ul>
-									<li><a href="#">My Active Bids <span class="nav-tag">4</span></a></li>
+									<li><a href="{% url 'dashboard:freelancer_active_bids_view' %}">My Active Bids <span class="nav-tag">4</span></a></li>
 								</ul>	
 							</li>
 						</ul>

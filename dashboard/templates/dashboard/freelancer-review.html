@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- CSS
 ================================================== -->
@@ -61,7 +61,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -84,7 +84,7 @@
 
 						<!-- Trigger -->
 						<div class="header-notifications-trigger">
-							<a href="dashboard-reviews.html#"><i class="icon-feather-bell"></i><span>4</span></a>
+							<a href="#"><i class="icon-feather-bell"></i><span>4</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -150,7 +150,7 @@
 					<!-- Messages -->
 					<div class="header-notifications">
 						<div class="header-notifications-trigger">
-							<a href="dashboard-reviews.html#"><i class="icon-feather-mail"></i><span>3</span></a>
+							<a href="#"><i class="icon-feather-mail"></i><span>3</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -218,7 +218,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="dashboard-reviews.html#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
+							<a href="#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -287,7 +287,7 @@
 			<div class="dashboard-nav-container">
 
 				<!-- Responsive Navigation Trigger -->
-				<a href="dashboard-reviews.html#" class="dashboard-responsive-nav-trigger">
+				<a href="#" class="dashboard-responsive-nav-trigger">
 					<span class="hamburger hamburger--collapse" >
 						<span class="hamburger-box">
 							<span class="hamburger-inner"></span>
@@ -308,9 +308,9 @@
 						</ul>
 						
 						<ul data-submenu-title="Organize and Manage">
-							<li><a href="dashboard-reviews.html#"><i class="icon-material-outline-assignment"></i> Tasks</a>
+							<li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
 								<ul>
-									<li><a href="#">My Active Bids <span class="nav-tag">4</span></a></li>
+									<li><a href="{% url 'dashboard:freelancer_active_bids_view' %}">My Active Bids <span class="nav-tag">4</span></a></li>
 								</ul>	
 							</li>
 						</ul>
@@ -342,8 +342,8 @@
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
-						<li><a href="dashboard-reviews.html#">Home</a></li>
-						<li><a href="dashboard-reviews.html#">Dashboard</a></li>
+						<li><a href="#">Home</a></li>
+						<li><a href="#">Dashboard</a></li>
 						<li>Reviews</li>
 					</ul>
 				</nav>
@@ -407,22 +407,22 @@
 				</div>
 				<ul class="footer-social-links">
 					<li>
-						<a href="dashboard-reviews.html#" title="Facebook" data-tippy-placement="top">
+						<a href="#" title="Facebook" data-tippy-placement="top">
 							<i class="icon-brand-facebook-f"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-reviews.html#" title="Twitter" data-tippy-placement="top">
+						<a href="#" title="Twitter" data-tippy-placement="top">
 							<i class="icon-brand-twitter"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-reviews.html#" title="Google Plus" data-tippy-placement="top">
+						<a href="#" title="Google Plus" data-tippy-placement="top">
 							<i class="icon-brand-google-plus-g"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-reviews.html#" title="LinkedIn" data-tippy-placement="top">
+						<a href="#" title="LinkedIn" data-tippy-placement="top">
 							<i class="icon-brand-linkedin-in"></i>
 						</a>
 					</li>
@@ -461,7 +461,7 @@
 				<!-- Welcome Text -->
 				<div class="welcome-text">
 					<h3>Change Review</h3>
-					<span>Rate <a href="dashboard-reviews.html#">Herman Ewout</a> for the project <a href="dashboard-reviews.html#">WordPress Theme Installation</a> </span>
+					<span>Rate <a href="#">Herman Ewout</a> for the project <a href="#">WordPress Theme Installation</a> </span>
 				</div>
 					
 				<!-- Form -->
@@ -542,7 +542,7 @@
 				<!-- Welcome Text -->
 				<div class="welcome-text">
 					<h3>Leave a Review</h3>
-					<span>Rate <a href="dashboard-reviews.html#">Peter Valentín</a> for the project <a href="dashboard-reviews.html#">Simple Chrome Extension</a> </span>
+					<span>Rate <a href="#">Peter Valentín</a> for the project <a href="#">Simple Chrome Extension</a> </span>
 				</div>
 					
 				<!-- Form -->

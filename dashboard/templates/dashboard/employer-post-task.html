@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-xr5fFPFgzb5LxC4e1znsq9Nj/DJv1IjVaS56NaeuNo6J+gY3lBOusvPg+J9a9t9W" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- CSS
 ================================================== -->
@@ -61,7 +61,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -370,7 +370,7 @@
 
 						<!-- Headline -->
 						<div class="headline">
-							<h3><i class="icon-feather-folder-plus"></i> Task Submission Form</h3>
+							<h3><i class="fa fa-folder-plus"></i> Task Submission Form</h3>
 						</div>
 
                         
@@ -381,7 +381,7 @@
 								<div class="col-xl-4">
 									<div class="submit-field">
 										<h5>Project Name</h5>
-										<input type="text" class="with-border" placeholder="e.g. build me a website" required name="task_name">
+										<input type="text" class="with-border" placeholder="e.g. install a solar system" required name="task_name">
 									</div>
 								</div>
 
@@ -389,26 +389,22 @@
 									<div class="submit-field">
 										<h5>Category</h5>
 										<select class="selectpicker with-border" data-size="7" title="Select Category" required name="task_category">
-                                            {% for category in all_categories %}
-											<option>{{ category.category }}</option>
-                                            {% endfor %}
+                                            <option>Solar Installation</option>
+											<option>Solar Maintenance</option>
+											<option>CCTV Installation</option>
+											<option>CCTV Maintenance</option>
 										</select>
 									</div>
 								</div>
 
 								<div class="col-xl-4">
 									<div class="submit-field">
-										<h5>Location  <i class="help-icon" data-tippy-placement="right" title="Leave blank if it's an online job"></i></h5>
-										<div class="input-with-icon">
-											<div id="autocomplete-container">
-												<input id="autocomplete-input" class="with-border" type="text" placeholder="Anywhere" required name="task_location">
-											</div>
-											<i class="icon-material-outline-location-on"></i>
-										</div>
-									</div>
+                                        <h5>Task Deadline</h5>
+										<input type="datetime-local" required name="task_deadline">
+                                    </div>
 								</div>
 
-								<div class="col-xl-6">
+								<div class="col-xl-12">
 									<div class="submit-field">
 										<h5>What is your estimated budget?</h5>
 										<div class="row">
@@ -427,38 +423,35 @@
 										</div>
 										<div class="feedback-yes-no margin-top-0">
 											<div class="radio">
-												<input id="radio-1" name="task_type" type="radio" checked>
+												<input id="radio-1" name="task_type" type="radio" checked value="Fixed Price">
 												<label for="radio-1"><span class="radio-label"></span> Fixed Price Project</label>
 											</div>
 
 											<div class="radio">
-												<input id="radio-2" name="task_type" type="radio">
+												<input id="radio-2" name="task_type" type="radio" value="Hourly Rate">
 												<label for="radio-2"><span class="radio-label"></span> Hourly Project</label>
 											</div>
 										</div>
 									</div>
 								</div>
 
-								<div class="col-xl-6">
-									<div class="submit-field">
-										<h5>What skills are required? <i class="help-icon" data-tippy-placement="right" title="Up to 5 skills that best describe your project"></i></h5>
-										<div class="keywords-container">
-											<div class="keyword-input-container">
-												<input type="text" class="keyword-input with-border" placeholder="Add Skills" required name="task_skills"/>
-												<button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
-											</div>
-											<div class="keywords-list"><!-- keywords go here --></div>
-											<div class="clearfix"></div>
-										</div>
-
-									</div>
-								</div>
-
                                 <div class="col-xl-6">
                                     <div class="submit-field">
-                                        <h5>Task Deadline</h5>
-										<input type="datetime-local" required name="task_deadline">
-                                    </div>
+										<h5>State</h5>
+										<select name="state" onchange="selectLGAFunction()" id="state" class="selectpicker default" data-selected-text-format="count" data-size="7" title="All State" >
+											{% for state in all_states %}
+											<option>{{ state }}</option>
+											{% endfor %}
+										</select>
+									</div>
+                                </div>
+
+								<div class="col-xl-6">
+                                    <div class="submit-field">
+										<h5>LGA</h5>
+										<select name="lga" id="trial" data-selected-text-format="count" data-size="7" title="All LGA">
+										</select>
+									</div>
                                 </div>
 
 								<div class="col-xl-12">
@@ -466,8 +459,8 @@
 										<h5>Describe Your Project</h5>
 										<textarea cols="30" rows="5" class="with-border" required name="task_description"></textarea>
 										<div class="uploadButton margin-top-30">
-											<input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload" multiple name="task_images"/>
-											<label class="uploadButton-button ripple-effect" for="upload">Upload Files</label>
+											<input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload" multiple name="task_files"/>
+											<label class="uploadButton-button ripple-effect" for="upload">Upload Files (optional)</label>
 											<span class="uploadButton-file-name">Images or documents that might be helpful in describing your project</span>
 										</div>
 									</div>
@@ -663,6 +656,37 @@ $('#snackbar-user-status label').click(function() {
 <!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaoOT9ioUE4SA8h-anaFyU4K63a7H-7bc&libraries=places"></script>
 
+
+<script>
+	function selectLGAFunction() {
+		var state = document.getElementById("state").value;
+		$.ajax({
+            url: "{% url 'home:get_lga_view' %}",
+            method: "POST",
+            data: { 
+              'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+              state: state 
+            },
+            success: function (data) {
+                populateLGADropdown(data.all_lga);
+				
+            }
+        });
+	}
+
+	function populateLGADropdown(lgas) {
+        var lgaDropdown = document.getElementById("trial");
+        lgaDropdown.innerHTML = ""; // Clear existing options
+
+        lgas.forEach(function(lga) {
+            var option = document.createElement("option");
+            option.text = lga;
+            lgaDropdown.add(option);
+        });
+
+		console.log(lgaDropdown)
+	}
+</script>
 
 </body>
 </html>

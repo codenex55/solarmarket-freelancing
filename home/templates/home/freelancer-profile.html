@@ -59,7 +59,7 @@
 						</li>
 
 						<li>
-							<a href="#">Forum</a>
+							<a href="{% url 'forum:forum_home_view' %}">Forum</a>
 						</li>
 
 					</ul>
@@ -321,7 +321,7 @@
 							<h3>{{ freelancer.user_additional_info.user.first_name }} {{ freelancer.user_additional_info.user.last_name }} <span>{{ freelancer.tagline }}</span></h3>
 							<ul>
 								<li><div class="star-rating" data-rating="5.0"></div></li>
-								<li><img class="flag" src="{% static 'images/flags/ngn' %}" alt=""> {{ freelancer.lga }}, {{ freelancer.state }}</li>
+								<li><img class="flag" src="{% static 'images/flags/ngn.png' %}" alt=""> {{ freelancer.lga }}, {{ freelancer.state }}</li>
 								<li><div class="verified-badge-with-title">Verified</div></li>
 							</ul>
 						</div>
