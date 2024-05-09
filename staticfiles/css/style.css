@@ -10188,6 +10188,7 @@ button.mfp-close {
 #small-dialog-3 .mfp-close,
 #small-dialog-4 .mfp-close,
 #sign-in-dialog, .mfp-close,
+#sign-in-dialog-forum, .mfp-close,
 .mfp-close:hover {
 	color: #fff;
 }
@@ -10195,6 +10196,7 @@ button.mfp-close {
 
 /* Popup close button*/
 #sign-in-dialog .mfp-close,
+#sign-in-dialog-forum .mfp-close,
 #small-dialog-1 .mfp-close,
 #small-dialog-2 .mfp-close,
 #small-dialog-3 .mfp-close,
@@ -10210,6 +10212,7 @@ button.mfp-close {
 }
 
 #sign-in-dialog .mfp-close:hover,
+#sign-in-dialog-forum .mfp-close:hover,
 #small-dialog-1 .mfp-close:hover,
 #small-dialog-2 .mfp-close:hover,
 #small-dialog-3 .mfp-close:hover,
@@ -10336,6 +10339,7 @@ button.mfp-close {
 
 /* Popup */
 #sign-in-dialog,
+#sign-in-dialog-forum,
 #small-dialog-1,
 #small-dialog-2,
 #small-dialog-3,
@@ -10359,6 +10363,7 @@ button.mfp-close {
 #sign-in-dialog-3 span.line,
 #sign-in-dialog-4 span.line,
 #sign-in-dialog span.line,
+#sign-in-dialog-forum span.line,
 #small-dialog span.line {padding-top: 0;}
 
 .my-mfp-zoom-in .zoom-anim-dialog {
@@ -10727,6 +10732,7 @@ img.mfp-img {
 .popup-tab-content p:last-child { margin-bottom: 0; }
 
 .dialog-with-tabs#sign-in-dialog,
+.dialog-with-tabs#sign-in-dialog-forum,
 .dialog-with-tabs#small-dialog-1,
 .dialog-with-tabs#small-dialog-2,
 .dialog-with-tabs#small-dialog-3,
@@ -10740,6 +10746,7 @@ img.mfp-img {
 
 /* Close Button Adjustments*/
 #sign-in-dialog.dialog-with-tabs .mfp-close,
+#sign-in-dialog-forum.dialog-with-tabs .mfp-close,
 #small-dialog.dialog-with-tabs .mfp-close,
 #small-dialog-1.dialog-with-tabs .mfp-close,
 #small-dialog-2.dialog-with-tabs .mfp-close,
@@ -10756,6 +10763,7 @@ img.mfp-img {
 }
 
 #sign-in-dialog.dialog-with-tabs .mfp-close:hover,
+#sign-in-dialog-forum.dialog-with-tabs .mfp-close:hover,
 #small-dialog-1.dialog-with-tabs .mfp-close:hover,
 #small-dialog-2.dialog-with-tabs .mfp-close:hover,
 #small-dialog-3.dialog-with-tabs .mfp-close:hover,
@@ -11036,6 +11044,7 @@ img.mfp-img {
 	}
 
 	#sign-in-dialog.dialog-with-tabs .mfp-close,
+	#sign-in-dialog-forum.dialog-with-tabs .mfp-close,
 	#small-dialog.dialog-with-tabs .mfp-close,
 	#small-dialog-1.dialog-with-tabs .mfp-close,
 	#small-dialog-2.dialog-with-tabs .mfp-close,

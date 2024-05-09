@@ -92,7 +92,7 @@
 .icon-brand-avianex:before {
   content: "\e916";
 }
-.icon-brand-aviato:before {
+.fa-plane:before {
   content: "\e917";
 }
 .icon-brand-aws:before {
@@ -1209,7 +1209,7 @@
 .icon-feather-arrow-up-left:before {
   content: "\e916";
 }
-.icon-feather-arrow-up-right:before {
+.fa-arrow-up:before {
   content: "\e917";
 }
 .icon-feather-at-sign:before {
@@ -2054,7 +2054,7 @@
 .icon-material-outline-arrow-left:before {
   content: "\e916";
 }
-.icon-material-outline-arrow-right:before {
+.fa-arrow-right:before {
   content: "\e917";
 }
 .icon-material-outline-assessment:before {
