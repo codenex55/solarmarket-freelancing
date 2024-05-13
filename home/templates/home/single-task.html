@@ -51,17 +51,15 @@
 
 						<li><a href="#">Find Work</a>
 							<ul class="dropdown-nav">
-								<li><a href="browse-companies.html">Browse Companies</a></li>
-								<li><a href="single-job-page.html">Browse Jobs</a></li>
-								<li><a href="">Browse Tasks</a></li>
+								<li><a href="#">Browse Jobs</a></li>
+								<li><a href="{% url 'home:all_tasks_view' %}">Browse Tasks</a></li>
 							</ul>
 						</li>
 
 						<li><a href="#">For Employers</a>
 							<ul class="dropdown-nav">
-								<li><a href="single-freelancer-profile.html">Freelancer Profile</a></li>
-								<li><a href="dashboard-post-a-job.html">Post a Job</a></li>
-								<li><a href="dashboard-post-a-task.html">Post a Task</a></li>
+								<li><a href="{% url 'home:all_freelancers_view' %}">Find a Freelancer</a></li>
+								<li><a href="{% url 'dashboard:employer_post_task_view' %}">Post a Task</a></li>
 							</ul>
 						</li>
 
@@ -615,12 +613,10 @@
 				<!-- Links -->
 				<div class="col-xl-2 col-lg-2 col-md-3">
 					<div class="footer-links">
-						<h3>For Candidates</h3>
+						<h3>For Freelancers</h3>
 						<ul>
-							<li><a href="#"><span>Browse Jobs</span></a></li>
-							<li><a href="#"><span>Add Resume</span></a></li>
-							<li><a href="#"><span>Job Alerts</span></a></li>
-							<li><a href="#"><span>My Bookmarks</span></a></li>
+							<li><a href="{% url 'home:all_tasks_view' %}"><span>Browse Tasks</span></a></li>
+							<li><a href="{% url 'dashboard:freelancer_bookmarks_view' %}"><span>My Bookmarks</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -630,10 +626,8 @@
 					<div class="footer-links">
 						<h3>For Employers</h3>
 						<ul>
-							<li><a href="#"><span>Browse Candidates</span></a></li>
-							<li><a href="#"><span>Post a Job</span></a></li>
-							<li><a href="#"><span>Post a Task</span></a></li>
-							<li><a href="#"><span>Plans & Pricing</span></a></li>
+							<li><a href="{% url 'home:all_freelancers_view' %}"><span>Find a Freelancer</span></a></li>
+							<li><a href="{% url 'dashboard:employer_post_task_view' %}"><span>Post a Task</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -655,8 +649,8 @@
 					<div class="footer-links">
 						<h3>Account</h3>
 						<ul>
-							<li><a href="#"><span>Log In</span></a></li>
-							<li><a href="#"><span>My Account</span></a></li>
+							<li><a href="{% url 'accounts:login_view' %}"><span>Log In</span></a></li>
+							<li><a href="{% url 'accounts:signup_view' %}"><span>Signup</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -665,7 +659,8 @@
 				<div class="col-xl-4 col-lg-4 col-md-12">
 					<h3><i class="icon-feather-mail"></i> Sign Up For a Newsletter</h3>
 					<p>Weekly breaking news, analysis and cutting edge advices on job searching.</p>
-					<form action="#" method="get" class="newsletter">
+					<form action="#" method="post" class="newsletter">
+						{% csrf_token %}
 						<input type="text" name="fname" placeholder="Enter your email address">
 						<button type="submit"><i class="icon-feather-arrow-right"></i></button>
 					</form>

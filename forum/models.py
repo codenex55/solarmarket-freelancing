@@ -22,6 +22,16 @@ class PostComment(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True)
+
+
+class PostCommentReply(models.Model):
+    comment = models.ForeignKey(PostComment, on_delete=models.CASCADE, related_name='post_replies')
+    content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Reply by {self.author} on {self.comment.post.title}'
     
 
 class Question(models.Model):
@@ -36,3 +46,13 @@ class QuestionComment(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     date_posted = models.DateTimeField(auto_now_add=True)
+
+
+class QuestionCommentReply(models.Model):
+    comment = models.ForeignKey(QuestionComment, on_delete=models.CASCADE, related_name='question_replies')
+    content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Reply by {self.author} on {self.comment.question}'

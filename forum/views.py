@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Value, CharField, Count
 from django.views import View
 from .forms import PostForm
-from .models import Question, Post, PostComment, QuestionComment
+from .models import Question, Post, PostComment, QuestionComment, PostCommentReply, QuestionCommentReply
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
@@ -64,19 +64,19 @@ class createQuestionView(View):
 
 class PostDetailView(View):
     def get(self, request, ID, *args, **kwargs):
-        # Get the current question
+        # Get the current post
         post = get_object_or_404(Post, id=ID)
 
-        # Get the question before the current question
+        # Get the post before the current post
         previous_post = Post.objects.filter(id__lt=ID).order_by('-id').first()
 
-        # Get the question after the current question
+        # Get the post after the current post
         next_post = Post.objects.filter(id__gt=ID).order_by('id').first()
 
-        # Get comments for the current question
+        # Get comments for the current post
         post_comments = PostComment.objects.filter(post=post)
 
-        # Count the total number of comments for the current question
+        # Count the total number of comments for the current post
         total_comments_count = post_comments.count()
 
         context = {
@@ -87,6 +87,24 @@ class PostDetailView(View):
             "total_comments_count": total_comments_count
         }
         return render(request, "forum/post-detail.html", context)
+    
+    def post(self, request, ID, *args, **kwargs):
+        comment_content = request.POST.get('comment_content')
+        # Get the current post
+        post = get_object_or_404(Post, id=ID)
+        if comment_content:
+            new_comment = PostComment.objects.create(post=post, content=comment_content, author=request.user)
+        return redirect('forum:detail_post_view', ID=post.id)
+    
+
+class PostReplyCommentView(View):
+    def post(self, request, ID, POST_ID, *args, **kwargs):
+        content = request.POST.get("comment_content")
+        post_comment = get_object_or_404(PostComment, id=ID)
+
+        PostCommentReply.objects.create(comment=post_comment, content=content, author=request.user)
+
+        return redirect('forum:detail_post_view', ID=POST_ID)
     
 
 class QuestionDetailView(View):
@@ -114,3 +132,21 @@ class QuestionDetailView(View):
             "total_comments_count": total_comments_count
         }
         return render(request, "forum/question-detail.html", context)
+    
+    def post(self, request, ID, *args, **kwargs):
+        comment_content = request.POST.get('comment_content')
+        # Get the current question
+        question = get_object_or_404(Question, id=ID)
+        if comment_content:
+            new_comment = QuestionComment.objects.create(question=question, content=comment_content, author=request.user)
+        return redirect('forum:detail_question_view', ID=question.id)
+    
+
+class QuestionReplyCommentView(View):
+    def post(self, request, ID, QUESTION_ID, *args, **kwargs):
+        content = request.POST.get("comment_content")
+        question_comment = get_object_or_404(QuestionComment, id=ID)
+
+        QuestionCommentReply.objects.create(comment=question_comment, content=content, author=request.user)
+
+        return redirect('forum:detail_post_view', ID=QUESTION_ID)

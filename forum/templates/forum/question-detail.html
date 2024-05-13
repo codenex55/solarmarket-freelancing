@@ -1,4 +1,5 @@
 {% load static %}
+{% load filters %}
 
 <!doctype html>
 <html lang="en">
@@ -9,6 +10,8 @@
 <title>SolarMarketHub - {{ question.content }}</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- CSS
 ================================================== -->
@@ -55,6 +58,7 @@
 						<li><a href="#">For Employers</a>
 							<ul class="dropdown-nav">
 								<li><a href="{% url 'home:all_freelancers_view' %}">Find a Freelancer</a></li>
+                                <li><a href="{% url 'dashboard:employer_post_task_view' %}">Post a Task</a></li>
 							</ul>
 						</li>
 
@@ -204,7 +208,7 @@
 								</div>
 							</div>
 
-							<a href="dashboard-messages.html" class="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i class="icon-material-outline-arrow-right-alt"></i></a>
+							<a href="dashboard-messages.html" class="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i class="fa fa-arrow-alt-right"></i></a>
 						</div>
 					</div>
 
@@ -450,62 +454,71 @@
 						<h3 class="margin-top-45 margin-bottom-0">Comments <span class="comments-amount">({{ total_comments_count }})</span></h3>
 
 						<ul>
+                            {% for comment in question_comments %}
 							<li>
-								<div class="avatar"><img src="images/user-avatar-placeholder.png" alt=""></div>
+								<div class="avatar"><img src="{{ comment.author.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div>
 								<div class="comment-content"><div class="arrow-comment"></div>
-									<div class="comment-by">Kathy Brown<span class="date">12th, June 2019</span>
-										<a href="#" class="reply"><i class="fa fa-reply"></i> Reply</a>
+									<div class="comment-by">{{ comment.author.first_name }} {{ comment.author.last_name }}<span class="date">{{ comment.date_posted|custom_date_format }}</span>
+										<a href="#" class="reply" onclick="toggleElement_{{ comment.id }}(event)"><i class="fa fa-reply"></i> Reply</a>
 									</div>
-									<p>Morbi velit eros, sagittis in facilisis non, rhoncus et erat. Nam posuere tristique sem, eu ultricies tortor imperdiet vitae. Curabitur lacinia neque non metus</p>
+									<p>{{ comment.content }}</p>
 								</div>
 
+                                <!-- Reply a Comment -->
+                                <div class="row comment-content" id="elementToToggle-{{ comment.id }}" style="display: none;">
+                                    <div class="col-xl-12">
+                                        
+                                        <h3 class="margin-top-35 margin-bottom-30">Reply Comment</h3>
+
+                                        <!-- Form -->
+                                        <form method="post" action="{% url 'forum:question_comment_reply_view' ID=comment.id QUESTION_ID=question.id %}">
+                                            {% csrf_token %}
+
+                                            {% if user.is_authenticated %}
+                                            <div class="row">
+                                                <div class="col-xl-6">
+                                                    <div class="input-with-icon-left no-border">
+                                                        <i class="fa fa-user-circle"></i>
+                                                        <input type="text" class="input-text" name="commentname" id="namecomment" placeholder="Name" required value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-6">
+                                                    <div class="input-with-icon-left no-border">
+                                                        <i class="fa fa-envelope"></i>
+                                                        <input type="text" class="input-text" name="emailaddress" id="emailaddress" placeholder="Email Address" required readonly value="{{ request.user.email }}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+                                            <textarea  name="comment_content" cols="30" rows="5" placeholder="Comment" required></textarea>
+                                        </form>
+                                        
+                                        <!-- Button -->
+                                        {% if user.is_authenticated %}
+                                        <button class="button ripple-effect margin-bottom-40" type="submit" form="add-comment">Reply Comment <i class="fa fa-arrow-alt-right"></i></button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <!-- Leava a Comment / End -->
+
 								<ul>
+                                    {% for reply in comment.question_replies.all %}
 									<li>
-										<div class="avatar"><img src="images/user-avatar-placeholder.png" alt=""></div>
+										<div class="avatar"><img src="{{ reply.author.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div>
 										<div class="comment-content"><div class="arrow-comment"></div>
-											<div class="comment-by">Tom Smith<span class="date">12th, June 2019</span>
-												<a href="#" class="reply"><i class="fa fa-reply"></i> Reply</a>
+											<div class="comment-by">{{ reply.author.first_name }} {{ reply.author.last_name }}<span class="date">{{ reply.date_posted|custom_date_format  }}</span>
+												<!-- <a href="#" class="reply"><i class="fa fa-reply"></i> Reply</a> -->
 											</div>
-											<p>Rrhoncus et erat. Nam posuere tristique sem, eu ultricies tortor imperdiet vitae. Curabitur lacinia neque.</p>
+											<p>{{ reply.content }}</p>
 										</div>
 									</li>
-									<li>
-										<div class="avatar"><img src="images/user-avatar-placeholder.png" alt=""></div>
-										<div class="comment-content"><div class="arrow-comment"></div>
-											<div class="comment-by">Kathy Brown<span class="date">12th, June 2019</span>
-												<a href="#" class="reply"><i class="fa fa-reply"></i> Reply</a>
-											</div>
-											<p>Nam posuere tristique sem, eu ultricies tortor.</p>
-										</div>
-
-										<ul>
-											<li>
-												<div class="avatar"><img src="images/user-avatar-placeholder.png" alt=""></div>
-												<div class="comment-content"><div class="arrow-comment"></div>
-													<div class="comment-by">John Doe<span class="date">12th, June 2019</span>
-														<a href="#" class="reply"><i class="fa fa-reply"></i> Reply</a>
-													</div>
-													<p>Great template!</p>
-												</div>
-											</li>
-										</ul>
-
-									</li>
+                                    {% endfor %}
 								</ul>
 
 							</li>
-
-							<li>
-								<div class="avatar"><img src="images/user-avatar-placeholder.png" alt=""> </div>
-								<div class="comment-content"><div class="arrow-comment"></div>
-									<div class="comment-by">John Doe<span class="date">15th, May 2015</span>
-										<a href="#" class="reply"><i class="fa fa-reply"></i> Reply</a>
-									</div>
-									<p>Commodo est luctus eget. Proin in nunc laoreet justo volutpat blandit enim. Sem felis, ullamcorper vel aliquam non, varius eget justo. Duis quis nunc tellus sollicitudin mauris.</p>
-								</div>
-
-							</li>
-						 </ul>
+                            {% endfor %}
+						</ul>
 
 					</section>
 				</div>
@@ -521,28 +534,32 @@
 
 					<!-- Form -->
 					<form method="post" id="add-comment">
+						{% csrf_token %}
 
+                        {% if user.is_authenticated %}
 						<div class="row">
 							<div class="col-xl-6">
 								<div class="input-with-icon-left no-border">
-									<i class="icon-material-outline-account-circle"></i>
-									<input type="text" class="input-text" name="commentname" id="namecomment" placeholder="Name" required/>
+									<i class="fa fa-user-circle"></i>
+									<input type="text" class="input-text" name="commentname" id="namecomment" placeholder="Name" required value="{{ request.user.first_name }} {{ request.user.last_name }}" readonly/>
 								</div>
 							</div>
 							<div class="col-xl-6">
 								<div class="input-with-icon-left no-border">
-									<i class="icon-material-baseline-mail-outline"></i>
-									<input type="text" class="input-text" name="emailaddress" id="emailaddress" placeholder="Email Address" required/>
+									<i class="fa fa-envelope"></i>
+									<input type="text" class="input-text" name="emailaddress" id="emailaddress" placeholder="Email Address" required readonly value="{{ request.user.email }}"/>
 								</div>
 							</div>
 						</div>
+                        {% endif %}
 
-						<textarea  name="comment-content" cols="30" rows="5" placeholder="Comment"></textarea>
+						<textarea  name="comment_content" cols="30" rows="5" placeholder="Comment" required></textarea>
 					</form>
 					
 					<!-- Button -->
-					<button class="button button-sliding-icon ripple-effect margin-bottom-40" type="submit" form="add-comment">Add Comment <i class="icon-material-outline-arrow-right-alt"></i></button>
-					
+                    {% if user.is_authenticated %}
+					<button class="button button-sliding-icon ripple-effect margin-bottom-40" type="submit" form="add-comment">Add Comment <i class="fa fa-arrow-alt-right"></i></button>
+					{% endif %}
 				</div>
 			</div>
 			<!-- Leava a Comment / End -->
@@ -808,6 +825,21 @@ $('#snackbar-user-status label').click(function() {
 		backgroundColor: '#383838'
 	}); 
 }); 
+</script>
+
+<script>
+    {% for comment in question_comments %}
+    function toggleElement_{{ comment.id }}(event) {
+        event.preventDefault(); // Prevent the default action of the link
+
+        var element_{{ comment.id }} = document.getElementById("elementToToggle-{{ comment.id }}");
+        if (element_{{ comment.id }}.style.display === "none") {
+            element_{{ comment.id }}.style.display = "block";
+        } else {
+            element_{{ comment.id }}.style.display = "none";
+        }
+    }
+    {% endfor %}
 </script>
 
 </body>
