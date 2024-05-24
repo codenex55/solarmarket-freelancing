@@ -22,6 +22,7 @@ class Task(models.Model):
     task_type = models.CharField(max_length=20, choices=[("Fixed Price", "Fixed Price Project"), ("Hourly Rate", "Hourly Project")])
     task_description = models.TextField()
     task_deadline = models.DateTimeField()
+    accepted_bid = models.OneToOneField('TaskBid', related_name='accepted_for_task', null=True, blank=True, on_delete=models.SET_NULL)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

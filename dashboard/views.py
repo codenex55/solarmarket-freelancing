@@ -11,6 +11,7 @@ from .models import PrivateChat, PrivateMessage
 from django.db.models import Q
 from django.db.models import Count, Avg
 from django.utils import timezone
+from django.conf import settings
 
 # Create your views here.
 
@@ -134,11 +135,15 @@ class EmployerManageBidder(LoginRequiredMixin, EmployerRequiredMixin, View):
         bidders = TaskBid.objects.filter(task=task)
         count = bidders.count()
 
+        paystack_public_key = settings.PAYSTACK_PUBLIC_KEY
+
         context = {
             'task': task,
             'bidders': bidders,
-            "count":count
+            "count":count,
+            "paystack_public_key":paystack_public_key
         }
+        print(context)
         return render(request, "dashboard/employer-manage-bidders.html", context)
     
 
@@ -192,6 +197,9 @@ class EmployerSettings(LoginRequiredMixin, EmployerRequiredMixin, View):
         return redirect("dashboard:employer_settings_view")
     
 
+class EmployerPaymentSuccess(LoginRequiredMixin, EmployerRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        return render(request, "dashboard/employer-payment-success.html")
 
 
 
@@ -413,3 +421,44 @@ class SendMessage(LoginRequiredMixin, View):
             return redirect('dashboard:freelancer_messages_view', CHAT_ID=CHAT_ID)
         else:
             return redirect('dashboard:employer_messages_view', CHAT_ID=CHAT_ID)
+
+
+
+# PAYMENT VERIFICATION
+
+class VerifyPaymentView(View):
+    def post(self, request, *args, **kwargs):
+        ref = request.POST.get("ref")
+        bidder_id = int(request.POST.get("bidder_id"))
+        task_id = int(request.POST.get("task_id"))
+
+        print(bidder_id)
+        print(type(bidder_id))
+        print(task_id)
+        print(type(task_id))
+
+        url = f"https://api.paystack.co/transaction/verify/{ref}"
+        headers = {
+            "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",
+            "Content-Type": "application/json"
+        }
+
+        response = requests.get(url, headers=headers)
+        response_data = response.json()
+
+        if response_data['status']:
+            transaction_data = response_data['data']
+            if transaction_data['status'] == 'success':
+                # Do something with the transaction data
+                task = Task.objects.get(id=task_id)
+                task_bid = TaskBid.objects.get(id=bidder_id)
+                if task.accepted_bid != None:
+                    task.accepted_bid = task_bid
+                    task.save()
+                return JsonResponse({'status': 'success', 'message': 'Transaction verified'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Transaction failed'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Verification failed'})
+        
+

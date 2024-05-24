@@ -1,5 +1,6 @@
 {% load static %}
 {% load humanize %}
+{% csrf_token %}
 
 <!doctype html>
 <html lang="en">
@@ -383,7 +384,7 @@
 
 						<div class="content">
 							<ul class="dashboard-box-list">
-                                {% for biddder in bidders %}
+                                {% for bidder in bidders %}
 								<li>
 									<!-- Overview -->
 									<div class="freelancer-overview manage-candidates">
@@ -392,16 +393,16 @@
 											<!-- Avatar -->
 											<div class="freelancer-avatar">
 												<div class="verified-badge"></div>
-												<a href="{% url 'home:freelancer_profile_view' ID=biddder.freelancer.id %}"><img src="{{ biddder.freelancer.user_additional_info.profile_picture.url }}" alt="" height="80" width="80"></a>
+												<a href="{% url 'home:freelancer_profile_view' ID=bidder.freelancer.id %}"><img src="{{ bidder.freelancer.user_additional_info.profile_picture.url }}" alt="" height="80" width="80"></a>
 											</div>
 
 											<!-- Name -->
 											<div class="freelancer-name">
-												<h4><a href="{% url 'home:freelancer_profile_view' ID=biddder.freelancer.id %}">{{ biddder.freelancer.user_additional_info.user.first_name }} {{ biddder.freelancer.user_additional_info.user.last_name }} <img class="flag" src="{% static 'images/flags/ngn.png' %}" alt="" title="Germany" data-tippy-placement="top"></a></h4>
+												<h4><a href="{% url 'home:freelancer_profile_view' ID=bidder.freelancer.id %}">{{ bidder.freelancer.user_additional_info.user.first_name }} {{ bidder.freelancer.user_additional_info.user.last_name }} <img class="flag" src="{% static 'images/flags/ngn.png' %}" alt="" title="Germany" data-tippy-placement="top"></a></h4>
 
 												<!-- Details -->
-												<span class="freelancer-detail-item"><a href="#"><i class="icon-feather-mail"></i> {{ biddder.freelancer.user_additional_info.user.email }}</a></span>
-                                                <span class="freelancer-detail-item"><i class="icon-feather-phone"></i> (+234) 123-456-789</span>
+												<span class="freelancer-detail-item"><a href="{% url 'home:freelancer_profile_view' ID=bidder.freelancer.id %}"><i class="fa fa-envelope"></i> {{ bidder.freelancer.user_additional_info.user.email }}</a></span>
+                                                <span class="freelancer-detail-item"><i class="fa fa-phone"></i> (+234) 123-456-789</span>
 
 												<!-- Rating -->
 												<div class="freelancer-rating">
@@ -410,15 +411,15 @@
 
 												<!-- Bid Details -->
 												<ul class="dashboard-task-info bid-info">
-													<li><strong>&#8358;{{ biddder.bid_amount|intcomma }}</strong><span>{{ task.task_type }}</span></li>
-													<li><strong>{{ biddder.expected_delivery_time }} {{ biddder.expected_delivery_time_measurement }}</strong><span>Delivery Time</span></li>
+													<li><strong>&#8358;{{ bidder.bid_amount|intcomma }}</strong><span>Bid Amount</span></li>
+													<li><strong>{{ bidder.expected_delivery_time }} {{ bidder.expected_delivery_time_measurement }}</strong><span>Delivery Time</span></li>
 												</ul>
 
 												<!-- Buttons -->
 												<div class="buttons-to-right always-visible margin-top-25 margin-bottom-0">
-													<a href="#small-dialog-{{ biddder.id }}"  class="popup-with-zoom-anim button ripple-effect"><i class="fa fa-check"></i> Accept Offer</a>
-													<a href="{% url 'dashboard:initiate_chat_view' RECIPIENT_ID=biddder.freelancer.user_additional_info.user.id %}" class="button dark ripple-effect"><i class="fa fa-envelope"></i> Send Message</a>
-													<a href="{% url 'dashboard:employer_remove_bidder_view' BID_ID=biddder.id %}" class="button gray ripple-effect ico" title="Remove Bid" data-tippy-placement="top"><i class="fa fa-trash-o"></i></a>
+													<a href="#small-dialog-{{ bidder.id }}"  class="popup-with-zoom-anim button ripple-effect"><i class="fa fa-check"></i> Accept Offer</a>
+													<a href="{% url 'dashboard:initiate_chat_view' RECIPIENT_ID=bidder.freelancer.user_additional_info.user.id %}" class="button dark ripple-effect"><i class="fa fa-envelope"></i> Send Message</a>
+													<a href="{% url 'dashboard:employer_remove_bidder_view' BID_ID=bidder.id %}" class="button gray ripple-effect"><i class="fa fa-trash-o"></i> Remove Bidder</a>
 												</div>
 											</div>
 										</div>
@@ -475,8 +476,8 @@
 </div>
 <!-- Wrapper / End -->
 
-{% for biddder in bidders %}
-<div id="small-dialog-{{ biddder.id }}" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
+{% for bidder in bidders %}
+<div id="small-dialog-{{ bidder.id }}" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
 
 	<!--Tabs -->
 	<div class="sign-in-form">
@@ -492,22 +493,22 @@
 				
 				<!-- Welcome Text -->
 				<div class="welcome-text">
-					<h3>Accept Offer From {{ biddder.freelancer.user_additional_info.user.first_name }} {{ biddder.freelancer.user_additional_info.user.last_name }}</h3>
+					<h3>Accept Offer From {{ bidder.freelancer.user_additional_info.user.first_name }} {{ bidder.freelancer.user_additional_info.user.last_name }}</h3>
 					<div class="bid-acceptance margin-top-15">
-						&#8358;{{ biddder.bid_amount|intcomma }}
+						&#8358;{{ bidder.bid_amount|intcomma }}
 					</div>
 
 				</div>
 
-				<form id="terms">
+				<div id="terms">
 					<div class="radio">
-						<input id="radio-1" name="radio" type="radio" required>
-						<label for="radio-1"><span class="radio-label"></span>  I have read and agree to the Terms and Conditions</label>
+						<input id="radio-1" name="radio" type="radio" required checked readonly>
+						<label for="radio-1"><span class="radio-label"></span>  I understand that once a bid is accepted, it cannot be undone.</label>
 					</div>
-				</form>
+				</div>
 
 				<!-- Button -->
-				<button class="margin-top-15 button full-width button-sliding-icon ripple-effect" type="submit" form="terms" style="width: 30px;">Accept <i class="fa fa-arrow-circle-right"></i></button>
+				<button onclick="payWithPaystack_{{ bidder.id }}()" class="margin-top-15 button full-width button-sliding-icon ripple-effect" type="button" form="terms" style="width: 30px;">Accept <i class="fa fa-arrow-circle-right"></i></button>
 
 			</div>
 
@@ -593,6 +594,49 @@ $('#snackbar-user-status label').click(function() {
 		backgroundColor: '#383838'
 	}); 
 }); 
+</script>
+
+
+<script>
+	{% for bidder in bidders %}
+
+	function payWithPaystack_{{ bidder.id }}() {
+		console.log(Number("{{ bidder.bid_amount }}")) 
+		let handler = PaystackPop.setup({
+			//key: 'pk_test_40de9d9615387f1807f23c0c77a2db7203e78fee', // Replace with your public key
+			key: '{{ paystack_public_key }}', // Replace with your public key
+			email: "{{ request.user.email }}",
+			amount: Number("{{ bidder.bid_amount }}") * 100,
+			ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+			// label: "Optional string that replaces customer email"
+			onClose: function(){
+				alert('Window closed.');
+			},
+			callback: function(response){
+				$.ajax({
+					url: "{% url 'dashboard:verify_payment_view' %}",
+					method: "POST",
+					data: { 
+					'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+					"ref":response.reference,
+					"bidder_id": Number("{{ bidder.id }}"),
+					"task_id": Number("{{ task.id }}"),
+					},
+					success: function (data) {
+						if (data.status == "success") {
+							window.location.replace("{% url 'dashboard:employer_payment_success_view' %}");
+						} else {
+							
+						}
+					}
+				});
+			}
+		});
+
+		handler.openIframe();
+	}
+	{% endfor %}
+
 </script>
 
 </body>

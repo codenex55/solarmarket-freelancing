@@ -14,6 +14,7 @@ urlpatterns = [
     path("employer-reviews/", views.EmployerReview.as_view(), name="employer_reviews_view"),
     path("employer-settings/", views.EmployerSettings.as_view(), name="employer_settings_view"),
     path("delete-task/<int:TASK_ID>/", views.DeleteTaskView.as_view(), name="delete_task_view"),
+    path("employer-payment-successful/", views.EmployerPaymentSuccess.as_view(), name="employer_payment_success_view"),
 
 
     # FREELANCER DASHBOARD
@@ -30,5 +31,9 @@ urlpatterns = [
     path("employer-messages/<int:CHAT_ID>", views.EmployerMessages.as_view(), name="employer_messages_view"),
     path("initiate-chat/<int:RECIPIENT_ID>/", views.InitiateChatView.as_view(), name="initiate_chat_view"),
     path("send-message/<int:CHAT_ID>/", views.SendMessage.as_view(), name="send_message_view"),
+
+
+    # VERIFY PAYMENT
+    path("verify-payment/", views.VerifyPaymentView.as_view(), name="verify_payment_view"),
 ]
 

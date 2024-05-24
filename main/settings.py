@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-nd^q3n#23aecj3%i!5o-13l31mvkd#*qrzgkp4u^p4ukl-pzc2'
 
 # SECURITY WARNING: don't run with debug turned on in production! 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "solarmarket-freelancing.onrender.com"]
 
@@ -169,6 +169,13 @@ EMAIL_HOST = 'smtp.elasticemail.com'
 EMAIL_PORT = 2525
 EMAIL_HOST_USER = 'noreply@solarmarkethub.com'
 EMAIL_HOST_PASSWORD = '936350768C38A057971035F436A3326AA13B'
+
+if DEBUG:
+    PAYSTACK_PUBLIC_KEY = config('TEST_PAYSTACK_PUBLIC_KEY')
+    PAYSTACK_SECRET_KEY = config('TEST_PAYSTACK_SECRET_KEY')
+else:
+    PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
+    PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
 
 
 import cloudinary

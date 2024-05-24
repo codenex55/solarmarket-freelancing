@@ -473,12 +473,10 @@
 				<!-- Links -->
 				<div class="col-xl-2 col-lg-2 col-md-3">
 					<div class="footer-links">
-						<h3>For Candidates</h3>
+						<h3>For Freelancers</h3>
 						<ul>
-							<li><a href="pages-login.html#"><span>Browse Jobs</span></a></li>
-							<li><a href="pages-login.html#"><span>Add Resume</span></a></li>
-							<li><a href="pages-login.html#"><span>Job Alerts</span></a></li>
-							<li><a href="pages-login.html#"><span>My Bookmarks</span></a></li>
+							<li><a href="{% url 'home:all_tasks_view' %}"><span>Browse Tasks</span></a></li>
+							<li><a href="{% url 'dashboard:freelancer_bookmarks_view' %}"><span>My Bookmarks</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -488,10 +486,8 @@
 					<div class="footer-links">
 						<h3>For Employers</h3>
 						<ul>
-							<li><a href="pages-login.html#"><span>Browse Candidates</span></a></li>
-							<li><a href="pages-login.html#"><span>Post a Job</span></a></li>
-							<li><a href="pages-login.html#"><span>Post a Task</span></a></li>
-							<li><a href="pages-login.html#"><span>Plans & Pricing</span></a></li>
+							<li><a href="{% url 'home:all_freelancers_view' %}"><span>Find a Freelancer</span></a></li>
+							<li><a href="{% url 'dashboard:employer_post_task_view' %}"><span>Post a Task</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -501,9 +497,9 @@
 					<div class="footer-links">
 						<h3>Helpful Links</h3>
 						<ul>
-							<li><a href="pages-login.html#"><span>Contact</span></a></li>
-							<li><a href="pages-login.html#"><span>Privacy Policy</span></a></li>
-							<li><a href="pages-login.html#"><span>Terms of Use</span></a></li>
+							<li><a href="#"><span>Contact</span></a></li>
+							<li><a href="#"><span>Privacy Policy</span></a></li>
+							<li><a href="#"><span>Terms of Use</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -513,8 +509,8 @@
 					<div class="footer-links">
 						<h3>Account</h3>
 						<ul>
-							<li><a href="pages-login.html#"><span>Log In</span></a></li>
-							<li><a href="pages-login.html#"><span>My Account</span></a></li>
+							<li><a href="{% url 'accounts:login_view' %}"><span>Log In</span></a></li>
+							<li><a href="{% url 'accounts:signup_view' %}"><span>Signup</span></a></li>
 						</ul>
 					</div>
 				</div>
@@ -523,7 +519,8 @@
 				<div class="col-xl-4 col-lg-4 col-md-12">
 					<h3><i class="icon-feather-mail"></i> Sign Up For a Newsletter</h3>
 					<p>Weekly breaking news, analysis and cutting edge advices on job searching.</p>
-					<form action="pages-login.html#" method="get" class="newsletter">
+					<form action="#" method="post" class="newsletter">
+						{% csrf_token %}
 						<input type="text" name="fname" placeholder="Enter your email address">
 						<button type="submit"><i class="icon-feather-arrow-right"></i></button>
 					</form>
