@@ -29,9 +29,9 @@ SECRET_KEY = 'django-insecure-nd^q3n#23aecj3%i!5o-13l31mvkd#*qrzgkp4u^p4ukl-pzc2
 # SECURITY WARNING: don't run with debug turned on in production! 
 DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "solarmarket-freelancing.onrender.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "solarmarket-freelancing.onrender.com", "www.solarmarkethub.com", "freelancing.solarmarkethub.com"]
 
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "https://solarmarket-freelancing.onrender.com"]
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "https://solarmarket-freelancing.onrender.com", "https://www.solarmarkethub.com", "https://freelancing.solarmarkethub.com"]
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
