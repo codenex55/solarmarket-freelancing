@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 # Create your models here.
 
@@ -46,10 +47,14 @@ class PrivateMessage(models.Model):
     chat = models.ForeignKey(PrivateChat, on_delete=models.CASCADE)
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
+    read = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.sender.username}: {self.content}"
+    
+    def content_snippet(self):
+        return f"{self.content}"[:57] + "..."
 
 
 class TaskBid(models.Model):
@@ -66,6 +71,7 @@ FREELANCER_NOTIFICATION_CAT = (
     ("review","review"),
     ("hired","hired"),
     ("due date","due date"),
+    ("message","message"),
 )
 class FreelancerNotification(models.Model):
     freelancer = models.ForeignKey("accounts.Freelancer", on_delete=models.CASCADE)
@@ -73,6 +79,7 @@ class FreelancerNotification(models.Model):
     read = models.BooleanField(default=False)
     task = models.ForeignKey(Task, null=True, blank=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    message = models.ForeignKey(PrivateMessage, null=True, blank=True, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 # {% url 'home:single_task_view' ID=notification.task.id %}
@@ -80,6 +87,7 @@ EMPLOYER_NOTIFICATION_CAT = (
     ("review","review"),
     ("bid","bid"),
     ("task expiring","task expiring"),
+    ("message","message"),
 )
 class EmployerNotification(models.Model):
     employer = models.ForeignKey("accounts.Employer", on_delete=models.CASCADE)
@@ -87,6 +95,7 @@ class EmployerNotification(models.Model):
     read = models.BooleanField(default=False)
     task = models.ForeignKey(Task, null=True, blank=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    message = models.ForeignKey(PrivateMessage, null=True, blank=True, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
@@ -122,4 +131,12 @@ class TaskPayment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='payments')
     employer = models.ForeignKey("accounts.Employer", on_delete=models.CASCADE)
     payment_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    order_id = models.CharField(max_length=7, blank=True, null=True,unique=True)
+    release_payment = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        # Generate a unique order ID with the specified format
+        if not self.order_id:
+            self.order_id = "#" + str(uuid.uuid4())[:5].upper()  # Generate UUID and take the first 5 characters
+        super().save(*args, **kwargs)

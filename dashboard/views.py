@@ -13,7 +13,7 @@ from django.db.models import Q
 from django.db.models import Count, Avg
 from django.utils import timezone
 from django.conf import settings
-from django.db.models import Sum, Count
+from django.db.models import Sum, OuterRef, Subquery, DateTimeField, CharField
 
 # Create your views here.
 
@@ -54,6 +54,12 @@ class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
         # notification count
         notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
 
+        # All Message Notification
+        all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         # All Notes
         all_notes = EmployerNote.objects.all().order_by("-timestamp")
 
@@ -67,7 +73,9 @@ class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
             "all_notification":all_notification,
             "all_notes":all_notes,
             "notification_count":notification_count,
-            "all_payment":all_payment
+            "all_payment":all_payment,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
         }
         return render(request, "dashboard/employer-dashboard-home.html", context)
     
@@ -82,9 +90,25 @@ class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
 
 class EmployerPostTask(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
+        # All Notification
+        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Message Notification
+        all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         all_states = requests.get("https://nga-states-lga.onrender.com/fetch").json()
         context = {
-            "all_states":all_states
+            "all_states":all_states,
+            "all_notification":all_notification,
+            "notification_count":notification_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
         }
         return render(request, "dashboard/employer-post-task.html", context)
     
@@ -131,6 +155,18 @@ class DeleteTaskView(LoginRequiredMixin, EmployerRequiredMixin, View):
 
 class EmployerManageTask(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
+        # All Notification
+        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Message Notification
+        all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         tasks  = Task.objects.filter(user=request.user).order_by("-timestamp")
 
         tasks_with_bids_info = []
@@ -161,7 +197,11 @@ class EmployerManageTask(LoginRequiredMixin, EmployerRequiredMixin, View):
                 'task': task,
                 "remaining_time":remaining_time,
                 'bids_count': bids_count,
-                'average_bid_price': average_bid_price or 0  # Handle case when there are no bids
+                'average_bid_price': average_bid_price or 0,  # Handle case when there are no bids
+                "all_notification":all_notification,
+                "notification_count":notification_count,
+                "all_message_notification":all_message_notification,
+                "message_notification_count":message_notification_count,
             })
 
         # Pass the tasks with bids info to the template
@@ -171,6 +211,18 @@ class EmployerManageTask(LoginRequiredMixin, EmployerRequiredMixin, View):
 
 class EmployerManageBidder(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, TASK_ID, *args, **kwargs):
+        # All Notification
+        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Message Notification
+        all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         task = Task.objects.get(id=TASK_ID)
 
         # Retrieve all bidders for the task
@@ -183,9 +235,13 @@ class EmployerManageBidder(LoginRequiredMixin, EmployerRequiredMixin, View):
             'task': task,
             'bidders': bidders,
             "count":count,
-            "paystack_public_key":paystack_public_key
+            "paystack_public_key":paystack_public_key,
+            "all_notification":all_notification,
+            "notification_count":notification_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
         }
-        print(context)
+
         return render(request, "dashboard/employer-manage-bidders.html", context)
     
 
@@ -208,7 +264,25 @@ class EmployerBookmark(LoginRequiredMixin, EmployerRequiredMixin, View):
 
 class EmployerReviewView(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "dashboard/employer-review.html")
+        # All Notification
+        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Message Notification
+        all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
+        context = {
+            "all_notification":all_notification,
+            "notification_count":notification_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
+        }
+        return render(request, "dashboard/employer-review.html",  context)
     
     def post(self, request, *args, **kwargs):
         # to add review and edit it
@@ -217,7 +291,25 @@ class EmployerReviewView(LoginRequiredMixin, EmployerRequiredMixin, View):
     
 class EmployerSettings(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "dashboard/employer-settings.html")
+        # All Notification
+        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Message Notification
+        all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
+        context = {
+            "all_notification":all_notification,
+            "notification_count":notification_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
+        }
+        return render(request, "dashboard/employer-settings.html", context)
     
     def post(self, request, *args, **kwargs):
         # to save changes
@@ -241,7 +333,24 @@ class EmployerSettings(LoginRequiredMixin, EmployerRequiredMixin, View):
 
 class EmployerPaymentSuccess(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "dashboard/employer-payment-success.html")
+        # All Notification
+        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Message Notification
+        all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+        context = {
+            "all_notification":all_notification,
+            "notification_count":notification_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
+        }
+        return render(request, "dashboard/employer-payment-success.html", context)
 
 
 
@@ -291,6 +400,13 @@ class FreelancerDashBoardHome(LoginRequiredMixin, FreelancerRequiredMixin, View)
 
         # Task Payment
         task_payments = TaskPayment.objects.filter(task__bids__freelancer=freelancer)
+
+        # All Message Notification
+        all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         context = {
             'tasks_won_count': tasks_won_count,
             'amount_made': amount_made,
@@ -299,7 +415,9 @@ class FreelancerDashBoardHome(LoginRequiredMixin, FreelancerRequiredMixin, View)
             "all_notes":all_notes,
             "notification_count":notification_count,
             "bid_count":bid_count,
-            "task_payments":task_payments
+            "task_payments":task_payments,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
         }
         return render(request, "dashboard/freelancer-dashboard-home.html", context)
     
@@ -320,13 +438,21 @@ class FreelancerBookmark(LoginRequiredMixin, FreelancerRequiredMixin, View):
         # notification count
         notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
 
+        # All Message Notification
+        all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         # Bid Count
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
         bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
         context = {
             "all_notification":all_notification,
             "notification_count":notification_count,
-            "bid_count":bid_count
+            "bid_count":bid_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
         }
         return render(request, "dashboard/freelancer-bookmark.html", context)
     
@@ -348,11 +474,20 @@ class FreelancerActiveBids(LoginRequiredMixin, FreelancerRequiredMixin, View):
 
         # notification count
         notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Message Notification
+        all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         context = {
             "bids":bids,
             "bid_count":bid_count,
             "all_notification":all_notification,
-            "notification_count":notification_count
+            "notification_count":notification_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
         }
         return render(request, "dashboard/freelancer-active-bids.html", context)
     
@@ -365,6 +500,12 @@ class FreelancerReviewView(LoginRequiredMixin, FreelancerRequiredMixin, View):
         # notification count
         notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
 
+        # All Message Notification
+        all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         # Bid Count
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
         bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
@@ -372,7 +513,9 @@ class FreelancerReviewView(LoginRequiredMixin, FreelancerRequiredMixin, View):
         context = {
             "all_notification":all_notification,
             "notification_count":notification_count,
-            "bid_count":bid_count
+            "bid_count":bid_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
         }
         return render(request, "dashboard/freelancer-review.html", context)
     
@@ -398,6 +541,12 @@ class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
         # notification count
         notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
 
+        # All Message Notification
+        all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         # Bid Count
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
         bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
@@ -407,7 +556,9 @@ class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
             "freelancer":freelancer,
             "all_notification":all_notification,
             "notification_count":notification_count,
-            "bid_count":bid_count
+            "bid_count":bid_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
         }
         if freelancer.state:
             all_lgas = requests.get(f"https://nga-states-lga.onrender.com/?state={freelancer.state}").json()
@@ -467,11 +618,27 @@ class FreelancerMessages(LoginRequiredMixin, View):
         # notification count
         notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
 
+        # All Message Notification
+        all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         # Bid Count
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
         bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
 
-        all_chats = PrivateChat.objects.filter(Q(user1=request.user) | Q(user2=request.user))
+        # Subquery to get the last message content for each chat
+        last_message_subquery = PrivateMessage.objects.filter(
+            chat=OuterRef('pk')
+        ).order_by('-timestamp').values('content')[:1]
+
+        # Annotate each chat with its latest message content
+        all_chats = PrivateChat.objects.filter(
+            Q(user1=request.user) | Q(user2=request.user)
+        ).annotate(
+            last_message=Subquery(last_message_subquery, output_field=CharField())
+        ).order_by('-last_message')
 
         if CHAT_ID == 0:
             context = {
@@ -479,7 +646,9 @@ class FreelancerMessages(LoginRequiredMixin, View):
                 "chat_id":CHAT_ID,
                 "all_notification":all_notification,
                 "notification_count":notification_count,
-                "bid_count":bid_count
+                "bid_count":bid_count,
+                "all_message_notification":all_message_notification,
+                "message_notification_count":message_notification_count,
             }
             return render(request, 'dashboard/freelancer-messages.html', context)
         else:
@@ -503,18 +672,47 @@ class FreelancerMessages(LoginRequiredMixin, View):
                 "chat_recipient":chat_recipient,
                 "all_notification":all_notification,
                 "notification_count":notification_count,
-                "bid_count":bid_count
+                "bid_count":bid_count,
+                "all_message_notification":all_message_notification,
+                "message_notification_count":message_notification_count,
             }
             return render(request, 'dashboard/freelancer-messages.html', context)
     
 
 class EmployerMessages(LoginRequiredMixin, View):
     def get(self, request, CHAT_ID, *args, **kwargs):
-        all_chats = PrivateChat.objects.filter(Q(user1=request.user) | Q(user2=request.user))
+        # All Notification
+        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Message Notification
+        all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
+        # Subquery to get the last message content for each chat
+        last_message_subquery = PrivateMessage.objects.filter(
+            chat=OuterRef('pk')
+        ).order_by('-timestamp').values('content')[:1]
+
+        # Annotate each chat with its latest message content
+        all_chats = PrivateChat.objects.filter(
+            Q(user1=request.user) | Q(user2=request.user)
+        ).annotate(
+            last_message=Subquery(last_message_subquery, output_field=CharField())
+        ).order_by('-last_message')
+
         if CHAT_ID == 0:
             context = {
                 "all_chats":all_chats,
-                "chat_id":CHAT_ID
+                "chat_id":CHAT_ID,
+                "all_notification":all_notification,
+                "notification_count":notification_count,
+                "all_message_notification":all_message_notification,
+                "message_notification_count":message_notification_count,
             }
             return render(request, 'dashboard/employer-messages.html', context)
         else:
@@ -535,7 +733,11 @@ class EmployerMessages(LoginRequiredMixin, View):
                 "chat_id":CHAT_ID,
                 "all_chats":all_chats,
                 'messages': messages,
-                "chat_recipient":chat_recipient
+                "chat_recipient":chat_recipient,
+                "all_notification":all_notification,
+                "notification_count":notification_count,
+                "all_message_notification":all_message_notification,
+                "message_notification_count":message_notification_count,
             }
             return render(request, 'dashboard/employer-messages.html', context)
 
@@ -568,11 +770,35 @@ class SendMessage(LoginRequiredMixin, View):
                 return redirect('dashboard:freelancer_messages_view', CHAT_ID=0)
             else:
                 return redirect('dashboard:employer_messages_view', CHAT_ID=0)
+            
+        # create notification
+         
         
         content = request.POST.get('content')
         sender = request.user
-        print(sender.first_name)
-        PrivateMessage.objects.create(chat=chat, sender=sender, content=content)
+
+        message = PrivateMessage.objects.create(chat=chat, sender=sender, content=content)
+
+        # Identify the recipient
+        recipient = chat.user2 if chat.user1 == request.user else chat.user1
+
+        # Create notification for the recipient
+        if recipient.useradditionalinformation.user_type == "freelancer":
+            freelancer_profile = Freelancer.objects.get(user_additional_info__user=recipient)
+            FreelancerNotification.objects.create(
+                freelancer=freelancer_profile,
+                notification_category="message",
+                user=sender,
+                message = message
+            )
+        elif recipient.useradditionalinformation.user_type == "employer":
+            employer_profile = Employer.objects.get(user_additional_info__user=recipient)
+            EmployerNotification.objects.create(
+                employer=employer_profile,
+                notification_category="message",
+                user=sender,
+                message = message
+            )
 
         if request.user.useradditionalinformation.user_type == "freelancer":
             return redirect('dashboard:freelancer_messages_view', CHAT_ID=CHAT_ID)
