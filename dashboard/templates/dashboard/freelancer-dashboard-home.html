@@ -85,7 +85,7 @@
 
 						<!-- Trigger -->
 						<div class="header-notifications-trigger">
-							<a href="dashboard.html#"><i class="icon-feather-bell"></i><span>4</span></a>
+							<a href="#"><i class="fa fa-bell"></i><span>{{ notification_count }}</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -94,7 +94,7 @@
 							<div class="header-notifications-headline">
 								<h4>Notifications</h4>
 								<button class="mark-as-read ripple-effect-dark" title="Mark all as read" data-tippy-placement="left">
-									<i class="icon-feather-check-square"></i>
+									<i class="fa fa-check-square-o"></i>
 								</button>
 							</div>
 
@@ -102,44 +102,31 @@
 								<div class="header-notifications-scroll" data-simplebar>
 									<ul>
 										<!-- Notification -->
+										{% for notification in all_notification %}
 										<li class="notifications-not-read">
-											<a href="dashboard-manage-candidates.html">
-												<span class="notification-icon"><i class="icon-material-outline-group"></i></span>
+											<a href="#">
+												{% if notification.notification_category == "review" %}
+												<span class="notification-icon"><i class="fa fa-pencil-square-o"></i></span>
 												<span class="notification-text">
-													<strong>Michael Shannah</strong> applied for a job <span class="color">Full Stack Software Engineer</span>
+													<strong>{{ notification.user.first_name }} {{ notification.user.last_name }}</strong> left you a <span class="star-rating no-stars" data-rating="5.0"></span> rating
 												</span>
-											</a>
-										</li>
 
-										<!-- Notification -->
-										<li>
-											<a href="dashboard-manage-bidders.html">
-												<span class="notification-icon"><i class=" icon-material-outline-gavel"></i></span>
+												{% elif notification.notification_category == "hired" %}
+												<span class="notification-icon"><i class=" fa fa-gavel"></i></span>
 												<span class="notification-text">
-													<strong>Gilbert Allanis</strong> placed a bid on your <span class="color">iOS App Development</span> project
+													<strong>{{ request.user.first_name }} {{ request.user.last_name }},</strong> you have been hired for the task <span class="color">{{ notification.task.task_name }}</span>
 												</span>
-											</a>
-										</li>
 
-										<!-- Notification -->
-										<li>
-											<a href="dashboard-manage-jobs.html">
-												<span class="notification-icon"><i class="icon-material-outline-autorenew"></i></span>
+												{% elif notification.notification_category == "due date" %}
+												<span class="notification-icon"><i class="fa fa-refresh"></i></span>
 												<span class="notification-text">
-													Your job listing <span class="color">Full Stack PHP Developer</span> is expiring.
+													Your task <span class="color">{{ notification.task.task_name }}</span> is almost due for delivery
 												</span>
-											</a>
-										</li>
 
-										<!-- Notification -->
-										<li>
-											<a href="dashboard-manage-candidates.html">
-												<span class="notification-icon"><i class="icon-material-outline-group"></i></span>
-												<span class="notification-text">
-													<strong>Sindy Forrest</strong> applied for a job <span class="color">Full Stack Software Engineer</span>
-												</span>
+												{% endif %}
 											</a>
 										</li>
+										{% endfor %}
 									</ul>
 								</div>
 							</div>
@@ -151,7 +138,7 @@
 					<!-- Messages -->
 					<div class="header-notifications">
 						<div class="header-notifications-trigger">
-							<a href="dashboard.html#"><i class="icon-feather-mail"></i><span>3</span></a>
+							<a href="#"><i class="icon-feather-mail"></i><span>3</span></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -219,7 +206,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="dashboard.html#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
+							<a href="#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -246,9 +233,9 @@
 						</div>
 						
 						<ul class="user-menu-small-nav">
-							<li><a href="{% url 'dashboard:freelancer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="{% url 'dashboard:freelancer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
-							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+							<li><a href="{% url 'dashboard:freelancer_dashboard_home_view' %}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+							<li><a href="{% url 'dashboard:freelancer_settings_view' %}"><i class="fa fa-cog"></i> Settings</a></li>
+							<li><a href="{% url 'accounts:logout_view' %}"><i class="fa fa-power-off"></i> Logout</a></li>
 						</ul>
 
 						</div>
@@ -288,7 +275,7 @@
 			<div class="dashboard-nav-container">
 
 				<!-- Responsive Navigation Trigger -->
-				<a href="dashboard.html#" class="dashboard-responsive-nav-trigger">
+				<a href="#" class="dashboard-responsive-nav-trigger">
 					<span class="hamburger hamburger--collapse" >
 						<span class="hamburger-box">
 							<span class="hamburger-inner"></span>
@@ -302,23 +289,23 @@
 					<div class="dashboard-nav-inner">
 
 						<ul data-submenu-title="Start">
-							<li class="active"><a href="{% url 'dashboard:freelancer_dashboard_home_view' %}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
-							<li><a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=0 %}"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
-							<li><a href="{% url 'dashboard:freelancer_bookmarks_view' %}"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
-							<li><a href="{% url 'dashboard:freelancer_reviews_view' %}"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
+							<li class="active"><a href="{% url 'dashboard:freelancer_dashboard_home_view' %}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+							<li><a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=0 %}"><i class="fa fa-comments-o"></i> Messages <span class="nav-tag">2</span></a></li>
+							<li><a href="{% url 'dashboard:freelancer_bookmarks_view' %}"><i class="fa fa-star-o"></i> Bookmarks</a></li>
+							<li><a href="{% url 'dashboard:freelancer_reviews_view' %}"><i class="fa fa-pencil-square-o"></i> Reviews</a></li>
 						</ul>
 						
 						<ul data-submenu-title="Organize and Manage">
-							<li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
+							<li><a href="#"><i class="fa fa-file-o"></i> Tasks</a>
 								<ul>
-									<li><a href="{% url 'dashboard:freelancer_active_bids_view' %}">My Active Bids <span class="nav-tag">4</span></a></li>
+									<li><a href="{% url 'dashboard:freelancer_active_bids_view' %}"><i class="fa fa-gavel"></i> My active bids <span class="nav-tag">{{ bid_count }}</span></a></li>
 								</ul>	
 							</li>
 						</ul>
 
 						<ul data-submenu-title="Account">
-							<li><a href="{% url 'dashboard:freelancer_settings_view' %}"><i class="icon-material-outline-settings"></i> Settings</a></li>
-							<li><a href="{% url 'accounts:logout_view' %}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
+							<li><a href="{% url 'dashboard:employer_settings_view' %}"><i class="fa fa-cog"></i> Settings</a></li>
+							<li><a href="{% url 'accounts:logout_view' %}"><i class="fa fa-power-off"></i> Logout</a></li>
 						</ul>
 						
 					</div>
@@ -344,7 +331,7 @@
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
-						<li><a href="dashboard.html#">Home</a></li>
+						<li><a href="#">Home</a></li>
 						<li>Dashboard</li>
 					</ul>
 				</nav>
@@ -355,23 +342,23 @@
 				<div class="fun-fact" data-fun-fact-color="#36bd78">
 					<div class="fun-fact-text">
 						<span>Task Bids Won</span>
-						<h4>0</h4>
+						<h4>{{ tasks_won_count }}</h4>
 					</div>
-					<div class="fun-fact-icon"><i class="icon-material-outline-gavel"></i></div>
+					<div class="fun-fact-icon"><i class="fa fa-trophy"></i></div>
 				</div>
 				<div class="fun-fact" data-fun-fact-color="#b81b7f">
 					<div class="fun-fact-text">
 						<span>Amount Made</span>
-						<h4>0.00</h4>
+						<h4>{{ amount_made }}</h4>
 					</div>
-					<div class="fun-fact-icon"><i class="icon-material-outline-business-center"></i></div>
+					<div class="fun-fact-icon"><i class="fa fa-money"></i></div>
 				</div>
 				<div class="fun-fact" data-fun-fact-color="#efa80f">
 					<div class="fun-fact-text">
 						<span>Reviews received</span>
-						<h4>0</h4>
+						<h4>{{ reviews_received_count }}</h4>
 					</div>
-					<div class="fun-fact-icon"><i class="icon-material-outline-rate-review"></i></div>
+					<div class="fun-fact-icon"><i class="fa fa-star"></i></div>
 				</div>
 
 				<!-- Last one has to be hidden below 1600px, sorry :( -->
@@ -380,7 +367,7 @@
 						<span>This Month Views</span>
 						<h4>987</h4>
 					</div>
-					<div class="fun-fact-icon"><i class="icon-feather-trending-up"></i></div>
+					<div class="fun-fact-icon"><i class="fa fa-line-chart"></i></div>
 				</div>
 			</div>
 			
@@ -391,7 +378,7 @@
 					<!-- Dashboard Box -->
 					<div class="dashboard-box main-box-in-row">
 						<div class="headline">
-							<h3><i class="icon-feather-bar-chart-2"></i> Your Profile Views</h3>
+							<h3><i class="fa fa-bar-chart"></i> Your Profile Views</h3>
 							<div class="sort-by">
 								<select class="selectpicker hide-tick">
 									<option>Last 6 Months</option>
@@ -417,46 +404,37 @@
 						 and 'child-box-in-row' to the higher box -->
 					<div class="dashboard-box child-box-in-row"> 
 						<div class="headline">
-							<h3><i class="icon-material-outline-note-add"></i> Notes</h3>
+							<h3><i class="fa fa-file-text-o"></i> Notes</h3>
 						</div>	
 
 						<div class="content with-padding">
 							<!-- Note -->
 							<div class="dashboard-note">
-								<p>Meeting with candidate at 3pm who applied for Bilingual Event Support Specialist</p>
+								{% if all_notes %}
+								{% for note in all_notes %}
+								<p>{{ note.note }}</p>
 								<div class="note-footer">
-									<span class="note-priority high">High Priority</span>
-									<div class="note-buttons">
-										<a href="dashboard.html#" title="Edit" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-										<a href="dashboard.html#" title="Remove" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
-									</div>
-								</div>
-							</div>
-							<!-- Note -->
-							<div class="dashboard-note">
-								<p>Extend premium plan for next month</p>
-								<div class="note-footer">
+									{% if note.priority == "Low Priority" %}
 									<span class="note-priority low">Low Priority</span>
-									<div class="note-buttons">
-										<a href="dashboard.html#" title="Edit" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-										<a href="dashboard.html#" title="Remove" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
-									</div>
-								</div>
-							</div>
-							<!-- Note -->
-							<div class="dashboard-note">
-								<p>Send payment to David Peterson</p>
-								<div class="note-footer">
+									{% elif note.priority == "Medium Priority" %}
 									<span class="note-priority medium">Medium Priority</span>
+									{% elif note.priority == "High Priority" %}
+									<span class="note-priority high">High Priority</span>
+									{% endif %}
 									<div class="note-buttons">
-										<a href="dashboard.html#" title="Edit" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-										<a href="dashboard.html#" title="Remove" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
+										<a href="#" title="Edit" data-tippy-placement="top"><i class="fa fa-pencil"></i></a>
+										<a href="#" title="Remove" data-tippy-placement="top"><i class="fa fa-trash-o"></i></a>
 									</div>
 								</div>
+								{% endfor %}
+								{% else %}
+								<p>You do not have any note</p>
+								{% endif %}
 							</div>
+							
 						</div>
 							<div class="add-note-button">
-								<a href="dashboard.html#small-dialog" class="popup-with-zoom-anim button full-width button-sliding-icon">Add Note <i class="icon-material-outline-arrow-right-alt"></i></a>
+								<a href="#small-dialog" class="popup-with-zoom-anim button full-width button-sliding-icon">Add Note <i class="fa fa-long-arrow-right"></i></a>
 							</div>
 					</div>
 					<!-- Dashboard Box / End -->
@@ -471,63 +449,48 @@
 				<div class="col-xl-6">
 					<div class="dashboard-box">
 						<div class="headline">
-							<h3><i class="icon-material-baseline-notifications-none"></i> Notifications</h3>
+							<h3><i class="fa fa-bell"></i> Notifications</h3>
 							<button class="mark-as-read ripple-effect-dark" data-tippy-placement="left" title="Mark all as read">
-									<i class="icon-feather-check-square"></i>
+								<i class="fa fa-check-square-o"></i>
 							</button>
 						</div>
 						<div class="content">
 							<ul class="dashboard-box-list">
+								{% for notification in all_notification %}
 								<li>
-									<span class="notification-icon"><i class="icon-material-outline-group"></i></span>
+									{% if notification.notification_category == "review" %}
+									<span class="notification-icon"><i class="fa fa-pencil-square-o"></i></span>
 									<span class="notification-text">
-										<strong>Michael Shannah</strong> applied for a job <a href="dashboard.html#">Full Stack Software Engineer</a>
+										<strong>{{ notification.user.first_name }} {{ notification.user.last_name }}</strong> left you a <span class="star-rating no-stars" data-rating="5.0"></span> rating
 									</span>
 									<!-- Buttons -->
 									<div class="buttons-to-right">
-										<a href="dashboard.html#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
+										<a href="#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="fa fa-check-square"></i></a>
 									</div>
-								</li>
-								<li>
-									<span class="notification-icon"><i class=" icon-material-outline-gavel"></i></span>
+
+									{% elif notification.notification_category == "hired" %}
+									<span class="notification-icon"><i class=" fa fa-gavel"></i></span>
 									<span class="notification-text">
-										<strong>Gilber Allanis</strong> placed a bid on your <a href="dashboard.html#">iOS App Development</a> project
+										<strong>{{ request.user.first_name }} {{ request.user.last_name }},</strong> you have been hired for the task <a href="{% url 'home:single_task_view' ID=notification.task.id %}">{{ notification.task.task_name }}</a>
 									</span>
 									<!-- Buttons -->
 									<div class="buttons-to-right">
-										<a href="dashboard.html#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
+										<a href="#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="fa fa-check-square"></i></a>
 									</div>
-								</li>
-								<li>
-									<span class="notification-icon"><i class="icon-material-outline-autorenew"></i></span>
+
+									{% elif notification.notification_category == "due date" %}
+									<span class="notification-icon"><i class="fa fa-refresh"></i></span>
 									<span class="notification-text">
-										Your job listing <a href="dashboard.html#">Full Stack Software Engineer</a> is expiring
+										Your task <a href="{% url 'home:single_task_view' ID=notification.task.id %}">{{ notification.task.task_name }}</a> is almost due for delivery
 									</span>
 									<!-- Buttons -->
 									<div class="buttons-to-right">
-										<a href="dashboard.html#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
+										<a href="#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="fa fa-check-square"></i></a>
 									</div>
+
+									{% endif %}
 								</li>
-								<li>
-									<span class="notification-icon"><i class="icon-material-outline-group"></i></span>
-									<span class="notification-text">
-										<strong>Sindy Forrest</strong> applied for a job <a href="dashboard.html#">Full Stack Software Engineer</a>
-									</span>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="dashboard.html#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
-									</div>
-								</li>
-								<li>
-									<span class="notification-icon"><i class="icon-material-outline-rate-review"></i></span>
-									<span class="notification-text">
-										<strong>David Peterson</strong> left you a <span class="star-rating no-stars" data-rating="5.0"></span> rating after finishing <a href="dashboard.html#">Logo Design</a> task
-									</span>
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="dashboard.html#" class="button ripple-effect ico" title="Mark as read" data-tippy-placement="left"><i class="icon-feather-check-square"></i></a>
-									</div>
-								</li>
+								{% endfor %}
 							</ul>
 						</div>
 					</div>
@@ -537,25 +500,27 @@
 				<div class="col-xl-6">
 					<div class="dashboard-box">
 						<div class="headline">
-							<h3><i class="icon-material-outline-assignment"></i> Orders</h3>
+							<h3><i class="fa fa-tasks"></i> Payments</h3>
 						</div>
 						<div class="content">
 							<ul class="dashboard-box-list">
+								{% for order in task_payments %}
 								<li>
 									<div class="invoice-list-item">
-									<strong>Professional Plan</strong>
+									<strong>{{ order.task.task_name }}</strong>
 										<ul>
-											<li><span class="unpaid">Unpaid</span></li>
+											<li><span class="unpaid" style="background-color: yellow; color: black;">Pending</span></li>
 											<li>Order: #326</li>
-											<li>Date: 12/08/2019</li>
+											<li>Date: {{ order.timestamp | date:"m/d/Y" }}</li>
 										</ul>
 									</div>
 									<!-- Buttons -->
 									<div class="buttons-to-right">
-										<a href="pages-checkout-page.html" class="button">Finish Payment</a>
+										<a href="#" class="button">View Invoice</a>
 									</div>
 								</li>
-								<li>
+								{% endfor %}
+								<!-- <li>
 									<div class="invoice-list-item">
 									<strong>Professional Plan</strong>
 										<ul>
@@ -564,7 +529,7 @@
 											<li>Date: 10/07/2019</li>
 										</ul>
 									</div>
-									<!-- Buttons -->
+								
 									<div class="buttons-to-right">
 										<a href="pages-invoice-template.html" class="button gray">View Invoice</a>
 									</div>
@@ -578,7 +543,7 @@
 											<li>Date: 12/06/2019</li>
 										</ul>
 									</div>
-									<!-- Buttons -->
+							
 									<div class="buttons-to-right">
 										<a href="pages-invoice-template.html" class="button gray">View Invoice</a>
 									</div>
@@ -592,11 +557,11 @@
 											<li>Date: 06/05/2019</li>
 										</ul>
 									</div>
-									<!-- Buttons -->
+								
 									<div class="buttons-to-right">
 										<a href="pages-invoice-template.html" class="button gray">View Invoice</a>
 									</div>
-								</li>
+								</li> -->
 							</ul>
 						</div>
 					</div>
@@ -613,22 +578,22 @@
 				</div>
 				<ul class="footer-social-links">
 					<li>
-						<a href="dashboard.html#" title="Facebook" data-tippy-placement="top">
+						<a href="#" title="Facebook" data-tippy-placement="top">
 							<i class="icon-brand-facebook-f"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard.html#" title="Twitter" data-tippy-placement="top">
+						<a href="#" title="Twitter" data-tippy-placement="top">
 							<i class="icon-brand-twitter"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard.html#" title="Google Plus" data-tippy-placement="top">
+						<a href="#" title="Google Plus" data-tippy-placement="top">
 							<i class="icon-brand-google-plus-g"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard.html#" title="LinkedIn" data-tippy-placement="top">
+						<a href="#" title="LinkedIn" data-tippy-placement="top">
 							<i class="icon-brand-linkedin-in"></i>
 						</a>
 					</li>
@@ -656,7 +621,7 @@
 	<div class="sign-in-form">
 
 		<ul class="popup-tabs-nav">
-			<li><a href="dashboard.html#tab">Add Note</a></li>
+			<li><a href="#tab">Add Note</a></li>
 		</ul>
 
 		<div class="popup-tabs-container">
@@ -671,19 +636,20 @@
 					
 				<!-- Form -->
 				<form method="post" id="add-note">
+					{% csrf_token %}
 
-					<select class="selectpicker with-border default margin-bottom-20" data-size="7" title="Priority">
-						<option>Low Priority</option>
-						<option>Medium Priority</option>
-						<option>High Priority</option>
+					<select class="selectpicker with-border default margin-bottom-20" data-size="7" title="Priority" name="priority" required>
+						<option value="Low Priority">Low Priority</option>
+						<option value="Medium Priority">Medium Priority</option>
+						<option value="High Priority">High Priority</option>
 					</select>
 
-					<textarea name="textarea" cols="10" placeholder="Note" class="with-border"></textarea>
+					<textarea name="note" required cols="10" placeholder="Note" class="with-border" maxlength="100"></textarea>
 
 				</form>
 				
 				<!-- Button -->
-				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="add-note">Add Note <i class="icon-material-outline-arrow-right-alt"></i></button>
+				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="add-note">Add Note <i class="fa fa-long-arrow-right"></i></button>
 
 			</div>
 

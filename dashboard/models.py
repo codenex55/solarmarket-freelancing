@@ -58,4 +58,68 @@ class TaskBid(models.Model):
     bid_amount = models.DecimalField(max_digits=10, decimal_places=2)
     expected_delivery_time = models.IntegerField()
     expected_delivery_time_measurement = models.CharField(max_length=50)
+    accepted = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+FREELANCER_NOTIFICATION_CAT = (
+    ("review","review"),
+    ("hired","hired"),
+    ("due date","due date"),
+)
+class FreelancerNotification(models.Model):
+    freelancer = models.ForeignKey("accounts.Freelancer", on_delete=models.CASCADE)
+    notification_category = models.CharField(max_length=50, choices=FREELANCER_NOTIFICATION_CAT)
+    read = models.BooleanField(default=False)
+    task = models.ForeignKey(Task, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+# {% url 'home:single_task_view' ID=notification.task.id %}
+EMPLOYER_NOTIFICATION_CAT = (
+    ("review","review"),
+    ("bid","bid"),
+    ("task expiring","task expiring"),
+)
+class EmployerNotification(models.Model):
+    employer = models.ForeignKey("accounts.Employer", on_delete=models.CASCADE)
+    notification_category = models.CharField(max_length=50, choices=EMPLOYER_NOTIFICATION_CAT)
+    read = models.BooleanField(default=False)
+    task = models.ForeignKey(Task, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class FreelancerReview(models.Model):
+    freelancer = models.ForeignKey("accounts.Freelancer", on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
+    review = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class EmployerReview(models.Model):
+    employer = models.ForeignKey("accounts.Employer", on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
+    review = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class FreelancerNote(models.Model):
+    freelancer = models.ForeignKey("accounts.Freelancer", on_delete=models.CASCADE)
+    priority = models.CharField(max_length=20)
+    note = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class EmployerNote(models.Model):
+    employer = models.ForeignKey("accounts.Employer", on_delete=models.CASCADE)
+    priority = models.CharField(max_length=20)
+    note = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class TaskPayment(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='payments')
+    employer = models.ForeignKey("accounts.Employer", on_delete=models.CASCADE)
+    payment_amount = models.DecimalField(max_digits=10, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)

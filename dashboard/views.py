@@ -1,17 +1,19 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Task, TaskFile, TaskBid
+from .models import (Task, TaskFile, TaskBid, PrivateChat, PrivateMessage, EmployerReview, FreelancerReview, 
+    FreelancerNotification, EmployerNotification, FreelancerNote,EmployerNote, TaskPayment
+)
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from accounts.models import Freelancer, Employer, UserAdditionalInformation
 from django.contrib import messages
 import requests
-from .models import PrivateChat, PrivateMessage
 from django.db.models import Q
 from django.db.models import Count, Avg
 from django.utils import timezone
 from django.conf import settings
+from django.db.models import Sum, Count
 
 # Create your views here.
 
@@ -35,7 +37,47 @@ class EmployerRequiredMixin:
 
 class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "dashboard/employer-dashboard-home.html")
+        employer = Employer.objects.get(user_additional_info=request.user.useradditionalinformation)
+
+        # Number of Task posted
+        tasks_posted_count = Task.objects.filter(user=request.user).count()
+
+        # freelnacers_hired
+        freelancers_hired = Task.objects.filter(user=request.user, accepted_bid__isnull=False).count()
+
+        # Reviews Received
+        reviews_received_count = EmployerReview.objects.filter(employer=employer).count()
+
+        # All Notification
+        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Notes
+        all_notes = EmployerNote.objects.all().order_by("-timestamp")
+
+        # all payment
+        all_payment = TaskPayment.objects.all().order_by("-timestamp")
+
+        context = {
+            'tasks_posted_count': tasks_posted_count,
+            'freelancers_hired': freelancers_hired,
+            'reviews_received_count': reviews_received_count,
+            "all_notification":all_notification,
+            "all_notes":all_notes,
+            "notification_count":notification_count,
+            "all_payment":all_payment
+        }
+        return render(request, "dashboard/employer-dashboard-home.html", context)
+    
+
+    def post(self, request, *args, **kwargs):
+        priority = request.POST.get("priority")
+        note = request.POST.get("note")
+        employer = Employer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        EmployerNote.objects.create(employer=employer, priority=priority, note=note)
+        return redirect("dashboard:employer_dashboard_home_view")
     
 
 class EmployerPostTask(LoginRequiredMixin, EmployerRequiredMixin, View):
@@ -164,7 +206,7 @@ class EmployerBookmark(LoginRequiredMixin, EmployerRequiredMixin, View):
         return JsonResponse({"message":"success"})
     
 
-class EmployerReview(LoginRequiredMixin, EmployerRequiredMixin, View):
+class EmployerReviewView(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, "dashboard/employer-review.html")
     
@@ -223,12 +265,70 @@ class FreelancerRequiredMixin:
 
 class FreelancerDashBoardHome(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "dashboard/freelancer-dashboard-home.html")
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+
+        # Number of Task Bids Won
+        tasks_won_count = TaskBid.objects.filter(freelancer=freelancer, accepted=True).count()
+
+        # Amount Made
+        amount_made = TaskBid.objects.filter(freelancer=freelancer, task__accepted_bid__freelancer=freelancer).aggregate(total_amount=Sum('bid_amount'))['total_amount'] or 0
+
+        # Reviews Received
+        reviews_received_count = FreelancerReview.objects.filter(freelancer=freelancer).count()
+
+        # All Notification
+        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # All Notes
+        all_notes = FreelancerNote.objects.all().order_by("-timestamp")
+
+        # Bid Count
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
+
+        # Task Payment
+        task_payments = TaskPayment.objects.filter(task__bids__freelancer=freelancer)
+        context = {
+            'tasks_won_count': tasks_won_count,
+            'amount_made': amount_made,
+            'reviews_received_count': reviews_received_count,
+            "all_notification":all_notification,
+            "all_notes":all_notes,
+            "notification_count":notification_count,
+            "bid_count":bid_count,
+            "task_payments":task_payments
+        }
+        return render(request, "dashboard/freelancer-dashboard-home.html", context)
+    
+    def post(self, request, *args, **kwargs):
+        priority = request.POST.get("priority")
+        note = request.POST.get("note")
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        FreelancerNote.objects.create(freelancer=freelancer, priority=priority, note=note)
+        return redirect("dashboard:freelancer_dashboard_home_view")
+
     
 
 class FreelancerBookmark(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "dashboard/freelancer-bookmark.html")
+        # All Notification
+        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # Bid Count
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
+        context = {
+            "all_notification":all_notification,
+            "notification_count":notification_count,
+            "bid_count":bid_count
+        }
+        return render(request, "dashboard/freelancer-bookmark.html", context)
     
     def post(self, request, *args, **kwargs):
         # to remove bookmarked task
@@ -239,15 +339,42 @@ class FreelancerActiveBids(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
         bids = TaskBid.objects.filter(freelancer=freelancer)
+
+        # Bid Count
+        bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
+
+        # All Notification
+        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
         context = {
-            "bids":bids
+            "bids":bids,
+            "bid_count":bid_count,
+            "all_notification":all_notification,
+            "notification_count":notification_count
         }
         return render(request, "dashboard/freelancer-active-bids.html", context)
     
 
-class FreelancerReview(LoginRequiredMixin, FreelancerRequiredMixin, View):
+class FreelancerReviewView(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "dashboard/freelancer-review.html")
+        # All Notification
+        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # Bid Count
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
+
+        context = {
+            "all_notification":all_notification,
+            "notification_count":notification_count,
+            "bid_count":bid_count
+        }
+        return render(request, "dashboard/freelancer-review.html", context)
     
     def post(self, request, *args, **kwargs):
         # to add review and edit it
@@ -264,9 +391,23 @@ class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         all_states = requests.get("https://nga-states-lga.onrender.com/fetch").json()
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+
+        # All Notification
+        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # Bid Count
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
+
         context = {
             "all_states":all_states,
-            "freelancer":freelancer
+            "freelancer":freelancer,
+            "all_notification":all_notification,
+            "notification_count":notification_count,
+            "bid_count":bid_count
         }
         if freelancer.state:
             all_lgas = requests.get(f"https://nga-states-lga.onrender.com/?state={freelancer.state}").json()
@@ -320,12 +461,25 @@ class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
 
 class FreelancerMessages(LoginRequiredMixin, View):
     def get(self, request, CHAT_ID, *args, **kwargs):
+        # All Notification
+        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+
+        # notification count
+        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+
+        # Bid Count
+        freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
+
         all_chats = PrivateChat.objects.filter(Q(user1=request.user) | Q(user2=request.user))
 
         if CHAT_ID == 0:
             context = {
                 "all_chats":all_chats,
-                "chat_id":CHAT_ID
+                "chat_id":CHAT_ID,
+                "all_notification":all_notification,
+                "notification_count":notification_count,
+                "bid_count":bid_count
             }
             return render(request, 'dashboard/freelancer-messages.html', context)
         else:
@@ -346,7 +500,10 @@ class FreelancerMessages(LoginRequiredMixin, View):
                 "chat_id":CHAT_ID,
                 "all_chats":all_chats,
                 'messages': messages,
-                "chat_recipient":chat_recipient
+                "chat_recipient":chat_recipient,
+                "all_notification":all_notification,
+                "notification_count":notification_count,
+                "bid_count":bid_count
             }
             return render(request, 'dashboard/freelancer-messages.html', context)
     
@@ -451,7 +608,14 @@ class VerifyPaymentView(View):
             if transaction_data['status'] == 'success':
                 # Do something with the transaction data
                 task = Task.objects.get(id=task_id)
+                employer = Employer.objects.get(user_additional_info=request.user.useradditionalinformation)
                 task_bid = TaskBid.objects.get(id=bidder_id)
+
+                TaskPayment.objects.create(employer=employer, task=task, payment_amount=task_bid.bid_amount)
+                FreelancerNotification.objects.create(freelancer=task_bid.freelancer, notification_category="hired", task=task)
+
+                task_bid.accepted = True
+                task_bid.save()
                 if task.accepted_bid != None:
                     task.accepted_bid = task_bid
                     task.save()

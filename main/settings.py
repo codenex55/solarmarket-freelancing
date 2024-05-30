@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-nd^q3n#23aecj3%i!5o-13l31mvkd#*qrzgkp4u^p4ukl-pzc2'
 
-# SECURITY WARNING: don't run with debug turned on in production! 
+# SECURITY WARNING: don't run with debug turned on in production!  https://www.solarmarkethub.com/
 DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1", "solarmarket-freelancing.onrender.com", "www.solarmarkethub.com", "freelancing.solarmarkethub.com"]

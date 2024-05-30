@@ -32,7 +32,7 @@ class HomeView(View):
             "ctvv_installation_count":ctvv_installation_count,
             "ctvv_maintenance_count":ctvv_maintenance_count,
         }
-        return render(request, "home/index-2.html", context)
+        return render(request, "home/index.html", context)
     
 
 class GetLGAView(View):
