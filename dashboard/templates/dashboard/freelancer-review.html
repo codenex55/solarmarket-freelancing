@@ -324,7 +324,7 @@
 
 						<!-- Headline -->
 						<div class="headline">
-							<h3><i class="icon-material-outline-face"></i> Reviews Recieved</h3>
+							<h3><i class="fa fa-user"></i> Reviews Recieved</h3>
 						</div>
 
 						<div class="content">
@@ -340,22 +340,24 @@
 
 									<a href="#small-dialog-2" class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"><i class="icon-material-outline-thumb-up"></i> Leave a Review</a>
 								</li> -->
+								{% for review in all_review %}
 								<li>
 									<div class="boxed-list-item">
 										<!-- Content -->
 										<div class="item-content">
-											<h4>Help Fix Laravel PHP issue</h4>
+											<!-- <h4>Help Fix Laravel PHP issue</h4> -->
 											<div class="item-details margin-top-10">
 												<div class="star-rating" data-rating="5.0"></div>
-												<div class="detail-item"><i class="icon-material-outline-date-range"></i> August 2019</div>
+												<div class="detail-item"><i class="fa fa-calendar"></i> {{ review.timestamp|date:"F Y" }}</div>
 											</div>
 											<div class="item-description">
-												<p>Excellent programmer - helped me fixing small issue.</p>
+												<p>{{ review.review }}</p>
 											</div>
 										</div>
 									</div>
 									<!-- <a href="#small-dialog-1" class="popup-with-zoom-anim button gray ripple-effect margin-top-5 margin-bottom-10"><i class="icon-feather-edit"></i> Edit Review</a> -->
 								</li>
+								{% endfor %}
 							</ul>
 						</div>
 					</div>

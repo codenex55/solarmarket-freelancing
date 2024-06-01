@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
-from dashboard.models import Task
+from dashboard.models import Task, FreelancerReview,TaskBid
+from django.db.models.functions import Coalesce
+from django.db.models import Count, Q, F
 
 # Create your models here.
 
@@ -43,6 +45,35 @@ class Freelancer(models.Model):
     minimum_pay = models.FloatField(null=True, blank=True)
     bookmark_freelancer = models.ManyToManyField("Freelancer", blank=True)
     bookmark_task = models.ManyToManyField(Task, blank=True)
+
+    def total_tasks_done(self):
+        return TaskBid.objects.filter(freelancer=self, accepted=True).count()
+
+    def rehired_times(self):
+        # Rehired times logic assumes that the freelancer is hired for the same task multiple times
+        tasks = TaskBid.objects.filter(freelancer=self, accepted=True).values_list('task', flat=True).distinct()
+        return tasks.count()
+
+    def job_success(self):
+        total_bids = TaskBid.objects.filter(freelancer=self).count()
+        successful_bids = TaskBid.objects.filter(freelancer=self, accepted=True).count()
+        return (successful_bids / total_bids * 100) if total_bids > 0 else 0
+
+    def recommendation_rate(self):
+        total_reviews = FreelancerReview.objects.filter(freelancer=self).count()
+        recommended_reviews = FreelancerReview.objects.filter(freelancer=self, review__icontains="recommend").count()
+        return (recommended_reviews / total_reviews * 100) if total_reviews > 0 else 0
+
+    def on_time_rate(self):
+        total_tasks = TaskBid.objects.filter(freelancer=self, accepted=True).count()
+        on_time_tasks = TaskBid.objects.filter(freelancer=self, accepted=True, completed_on_time=True).count()
+        return (on_time_tasks / total_tasks * 100) if total_tasks > 0 else 0
+
+    def on_budget_rate(self):
+        total_tasks = TaskBid.objects.filter(freelancer=self, accepted=True).count()
+        on_budget_tasks = TaskBid.objects.filter(freelancer=self, accepted=True, completed_within_budget=True).count()
+        return (on_budget_tasks / total_tasks * 100) if total_tasks > 0 else 0
+    
 
 class Employer(models.Model):
     user_additional_info = models.OneToOneField(UserAdditionalInformation, on_delete=models.CASCADE, related_name='employer_profile')

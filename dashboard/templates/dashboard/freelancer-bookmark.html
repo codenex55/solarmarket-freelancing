@@ -1,4 +1,6 @@
 {% load static %}
+{% csrf_token %}
+
 
 <!doctype html>
 <html lang="en">
@@ -157,7 +159,7 @@
 										<!-- Notification -->
 										{% for notification in all_message_notification %}
 										<li class="notifications-not-read">
-											<a href="{% url 'dashboard:freelnacer_messages_view' CHAT_ID=notification.message.chat.id %}">
+											<a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=notification.message.chat.id %}">
 												<span class="notification-avatar status-online"><img src="{{ notification.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></span>
 												<div class="notification-text">
 													<strong>{{ notification.user.first_name }} {{ notification.user.last_name }}</strong>
@@ -171,7 +173,7 @@
 								</div>
 							</div>
 
-							<a href="{% url 'dashboard:freelnacer_messages_view' CHAT_ID=0 %}" class="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i class="fa fa-long-arrow-right"></i></a>
+							<a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=0 %}" class="header-notifications-button ripple-effect button-sliding-icon">View All Messages<i class="fa fa-long-arrow-right"></i></a>
 						</div>
 					</div>
 
@@ -184,7 +186,7 @@
 					<!-- Messages -->
 					<div class="header-notifications user-menu">
 						<div class="header-notifications-trigger">
-							<a href="dashboard-bookmarks.html#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
+							<a href="#"><div class="user-avatar status-online"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt="" height="40" width="40"></div></a>
 						</div>
 
 						<!-- Dropdown -->
@@ -253,7 +255,7 @@
 			<div class="dashboard-nav-container">
 
 				<!-- Responsive Navigation Trigger -->
-				<a href="dashboard-bookmarks.html#" class="dashboard-responsive-nav-trigger">
+				<a href="#" class="dashboard-responsive-nav-trigger">
 					<span class="hamburger hamburger--collapse" >
 						<span class="hamburger-box">
 							<span class="hamburger-inner"></span>
@@ -308,8 +310,8 @@
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
-						<li><a href="dashboard-bookmarks.html#">Home</a></li>
-						<li><a href="dashboard-bookmarks.html#">Dashboard</a></li>
+						<li><a href="#">Home</a></li>
+						<li><a href="#">Dashboard</a></li>
 						<li>Bookmarks</li>
 					</ul>
 				</nav>
@@ -320,70 +322,51 @@
 
 				<!-- Dashboard Box -->
 				<div class="col-xl-12">
-					<div class="dashboard-box">
+					<div class="dashboard-box margin-top-0">
 
 						<!-- Headline -->
 						<div class="headline">
-							<h3><i class="icon-material-outline-face"></i> Bookmarked Tasks</h3>
+							<h3><i class="fa fa-building-o"></i> Bookmarked Jobs</h3>
 						</div>
 
 						<div class="content">
 							<ul class="dashboard-box-list">
+								{% for task in bookmarked_tasks %}
 								<li>
-									<!-- Overview -->
-									<div class="freelancer-overview">
-										<div class="freelancer-overview-inner">
+									<!-- Job Listing -->
+									<div class="job-listing">
 
-											<!-- Avatar -->
-											<div class="freelancer-avatar">
-												<div class="verified-badge"></div>
-												<a href="dashboard-bookmarks.html#"><img src="images/user-avatar-big-02.jpg" alt=""></a>
-											</div>
+										<!-- Job Listing Details -->
+										<div class="job-listing-details">
 
-											<!-- Name -->
-											<div class="freelancer-name">
-												<h4><a href="dashboard-bookmarks.html#">David Peterson <img class="flag" src="images/flags/de.svg" alt="" title="Germany" data-tippy-placement="top"></a></h4>
-												<span>iOS Expert + Node Dev</span>
-												<!-- Rating -->
-												<div class="freelancer-rating">
-													<div class="star-rating" data-rating="4.2"></div>
+											<!-- Logo -->
+											<a href="#" class="job-listing-company-logo">
+												<img src="{{ task.user.useradditionalinformation.profile_picture.url }}" alt="" style="height: 80x; width: 100px;">
+											</a>
+
+											<!-- Details -->
+											<div class="job-listing-description">
+												<h3 class="job-listing-title"><a href="#">{{ task.task_name }}</a></h3>
+
+												<!-- Job Listing Footer -->
+												<div class="job-listing-footer">
+													<ul>
+														<li><i class="fa fa-briefcase"></i> {{ task.task_category }}</li>
+														<li><i class="fa fa-map-marker"></i> {{ task.task_state }}</li>
+														<li><i class="fa fa-building-o"></i> {{ task.task_type }}</li>
+														<li><i class="fa fa-clock-o"></i> {{ task.timestamp|timesince }}</li>
+													</ul>
 												</div>
 											</div>
 										</div>
 									</div>
-
 									<!-- Buttons -->
 									<div class="buttons-to-right">
-										<a href="dashboard-bookmarks.html#" class="button red ripple-effect ico" title="Remove" data-tippy-placement="left"><i class="icon-feather-trash-2"></i></a>
+										<a onclick="bookmarkTaskFunction_{{ task.id }}()" href="#" class="button red ripple-effect ico" title="Remove" data-tippy-placement="left"><i class="fa fa-trash-o"></i></a>
 									</div>
 								</li>
-								<li>
-									<!-- Overview -->
-									<div class="freelancer-overview">
-										<div class="freelancer-overview-inner">
-											
-											<!-- Avatar -->
-											<div class="freelancer-avatar">
-												<a href="dashboard-bookmarks.html#"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></a>
-											</div>
+								{% endfor %}
 
-											<!-- Name -->
-											<div class="freelancer-name">
-												<h4><a href="dashboard-bookmarks.html#">Marcin Kowalski <img class="flag" src="images/flags/pl.svg" alt="" title="Poland" data-tippy-placement="top"></a></h4>
-												<span>Front-End Developer</span>
-												<!-- Rating -->
-												<div class="freelancer-rating">
-													<div class="star-rating" data-rating="4.7"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="dashboard-bookmarks.html#" class="button red ripple-effect ico" title="Remove" data-tippy-placement="left"><i class="icon-feather-trash-2"></i></a>
-									</div>
-								</li>
 							</ul>
 						</div>
 					</div>
@@ -400,22 +383,22 @@
 				</div>
 				<ul class="footer-social-links">
 					<li>
-						<a href="dashboard-bookmarks.html#" title="Facebook" data-tippy-placement="top">
+						<a href="#" title="Facebook" data-tippy-placement="top">
 							<i class="icon-brand-facebook-f"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-bookmarks.html#" title="Twitter" data-tippy-placement="top">
+						<a href="#" title="Twitter" data-tippy-placement="top">
 							<i class="icon-brand-twitter"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-bookmarks.html#" title="Google Plus" data-tippy-placement="top">
+						<a href="#" title="Google Plus" data-tippy-placement="top">
 							<i class="icon-brand-google-plus-g"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-bookmarks.html#" title="LinkedIn" data-tippy-placement="top">
+						<a href="#" title="LinkedIn" data-tippy-placement="top">
 							<i class="icon-brand-linkedin-in"></i>
 						</a>
 					</li>
@@ -443,7 +426,7 @@
 	<div class="sign-in-form">
 
 		<ul class="popup-tabs-nav">
-			<li><a href="dashboard-bookmarks.html#tab">Add Note</a></li>
+			<li><a href="#tab">Add Note</a></li>
 		</ul>
 
 		<div class="popup-tabs-container">
@@ -510,6 +493,31 @@ $('#snackbar-user-status label').click(function() {
 		backgroundColor: '#383838'
 	}); 
 }); 
+</script>
+
+
+<script>
+	{% for task in bookmarked_tasks %}
+	function bookmarkTaskFunction_{{ task.id }}() {
+		var task_id = "{{ task.id }}"
+		console.log(task_id)
+		$.ajax({
+			url: "{% url 'home:bookmark_task_view' %}",
+			method: "POST",
+			data: { 
+              'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+              "task_id": Number(task_id)
+            },
+			success: function (data) {
+				if (data.message == "added") {
+					window.location.reload();
+				} else {
+					window.location.reload();
+				}
+			}
+		});
+	}
+	{% endfor %}
 </script>
 
 </body>

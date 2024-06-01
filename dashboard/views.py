@@ -49,10 +49,10 @@ class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
         reviews_received_count = EmployerReview.objects.filter(employer=employer).count()
 
         # All Notification
-        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -91,10 +91,10 @@ class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
 class EmployerPostTask(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # All Notification
-        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -156,10 +156,10 @@ class DeleteTaskView(LoginRequiredMixin, EmployerRequiredMixin, View):
 class EmployerManageTask(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # All Notification
-        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -212,10 +212,10 @@ class EmployerManageTask(LoginRequiredMixin, EmployerRequiredMixin, View):
 class EmployerManageBidder(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, TASK_ID, *args, **kwargs):
         # All Notification
-        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -255,7 +255,15 @@ class EmployerRemoveBidder(LoginRequiredMixin, EmployerRequiredMixin, View):
 
 class EmployerBookmark(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(request, "dashboard/employer-bookmark.html")
+        employer = Employer.objects.get(user_additional_info=request.user.useradditionalinformation)
+        bookmarked_freelancers = employer.bookmark_freelancer.all()
+        bookmarked_tasks = employer.bookmark_task.all()
+        
+        context = {
+            "bookmarked_freelancers":bookmarked_freelancers,
+            "bookmarked_tasks":bookmarked_tasks
+        }
+        return render(request, "dashboard/employer-bookmark.html", context)
     
     def post(self, request, *args, **kwargs):
         # to remove bookmarked freelancer
@@ -264,11 +272,13 @@ class EmployerBookmark(LoginRequiredMixin, EmployerRequiredMixin, View):
 
 class EmployerReviewView(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
+        employer = Employer.objects.get(user_additional_info=request.user.useradditionalinformation)
+
         # All Notification
-        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -276,11 +286,18 @@ class EmployerReviewView(LoginRequiredMixin, EmployerRequiredMixin, View):
         # message notification count
         message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
 
+        # Filter TaskBids where the employer has accepted the bid
+        accepted_bids = TaskBid.objects.filter(task__user=request.user, accepted=True)
+        print(accepted_bids)
+        # Get the freelancers from these accepted bids
+        freelancers = Freelancer.objects.filter(taskbid__in=accepted_bids).distinct()
+
         context = {
             "all_notification":all_notification,
             "notification_count":notification_count,
             "all_message_notification":all_message_notification,
             "message_notification_count":message_notification_count,
+            "accepted_bids":accepted_bids
         }
         return render(request, "dashboard/employer-review.html",  context)
     
@@ -292,10 +309,10 @@ class EmployerReviewView(LoginRequiredMixin, EmployerRequiredMixin, View):
 class EmployerSettings(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # All Notification
-        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -334,10 +351,10 @@ class EmployerSettings(LoginRequiredMixin, EmployerRequiredMixin, View):
 class EmployerPaymentSuccess(LoginRequiredMixin, EmployerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # All Notification
-        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -386,10 +403,10 @@ class FreelancerDashBoardHome(LoginRequiredMixin, FreelancerRequiredMixin, View)
         reviews_received_count = FreelancerReview.objects.filter(freelancer=freelancer).count()
 
         # All Notification
-        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Notes
         all_notes = FreelancerNote.objects.all().order_by("-timestamp")
@@ -433,10 +450,10 @@ class FreelancerDashBoardHome(LoginRequiredMixin, FreelancerRequiredMixin, View)
 class FreelancerBookmark(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # All Notification
-        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -447,12 +464,18 @@ class FreelancerBookmark(LoginRequiredMixin, FreelancerRequiredMixin, View):
         # Bid Count
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
         bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
+
+        bookmarked_freelancers = freelancer.bookmark_freelancer.all()
+        bookmarked_tasks = freelancer.bookmark_task.all()
         context = {
             "all_notification":all_notification,
             "notification_count":notification_count,
             "bid_count":bid_count,
             "all_message_notification":all_message_notification,
             "message_notification_count":message_notification_count,
+            "bookmarked_freelancers":bookmarked_freelancers,
+            "bookmarked_tasks":bookmarked_tasks
+
         }
         return render(request, "dashboard/freelancer-bookmark.html", context)
     
@@ -470,10 +493,10 @@ class FreelancerActiveBids(LoginRequiredMixin, FreelancerRequiredMixin, View):
         bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
 
         # All Notification
-        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -495,10 +518,10 @@ class FreelancerActiveBids(LoginRequiredMixin, FreelancerRequiredMixin, View):
 class FreelancerReviewView(LoginRequiredMixin, FreelancerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         # All Notification
-        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -510,12 +533,15 @@ class FreelancerReviewView(LoginRequiredMixin, FreelancerRequiredMixin, View):
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
         bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
 
+        all_review = FreelancerReview.objects.filter(freelancer=freelancer).order_by("-timestamp")
+
         context = {
             "all_notification":all_notification,
             "notification_count":notification_count,
             "bid_count":bid_count,
             "all_message_notification":all_message_notification,
             "message_notification_count":message_notification_count,
+            "all_review":all_review
         }
         return render(request, "dashboard/freelancer-review.html", context)
     
@@ -536,10 +562,10 @@ class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
 
         # All Notification
-        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -613,10 +639,10 @@ class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
 class FreelancerMessages(LoginRequiredMixin, View):
     def get(self, request, CHAT_ID, *args, **kwargs):
         # All Notification
-        all_notification = FreelancerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = FreelancerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
@@ -682,10 +708,10 @@ class FreelancerMessages(LoginRequiredMixin, View):
 class EmployerMessages(LoginRequiredMixin, View):
     def get(self, request, CHAT_ID, *args, **kwargs):
         # All Notification
-        all_notification = EmployerNotification.objects.filter(read=False).order_by("-timestamp")
+        all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
         # notification count
-        notification_count = EmployerNotification.objects.filter(read=False).order_by("-timestamp").count()
+        notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
         # All Message Notification
         all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")

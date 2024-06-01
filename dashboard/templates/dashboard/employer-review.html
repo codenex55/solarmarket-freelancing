@@ -334,25 +334,27 @@
 
 						<!-- Headline -->
 						<div class="headline">
-							<h3><i class="icon-material-outline-face"></i> Rate Freelancers</h3>
+							<h3><i class="fa fa-user"></i> Rate Freelancers</h3>
 						</div>
 
 						<div class="content">
 							<ul class="dashboard-box-list">
+								{% for item in accepted_bids %}
 								<li>
 									<div class="boxed-list-item">
 										<!-- Content -->
 										<div class="item-content">
-											<h4>Simple Chrome Extension</h4>
+											<h4>{{ item.task.task_name }}</h4>
 											<span class="company-not-rated margin-bottom-5">Not Rated</span>
 										</div>
 									</div>
 
-									<a href="#small-dialog-2" class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"><i class="icon-material-outline-thumb-up"></i> Leave a Review</a>
+									<a href="#small-dialog-2" class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"><i class="fa fa-thumbs-o-up"></i> Leave a Review</a>
 								</li>
-								<li>
+								{% endfor %}
+								<!-- <li>
 									<div class="boxed-list-item">
-										<!-- Content -->
+										
 										<div class="item-content">
 											<h4>Help Fix Laravel PHP issue</h4>
 											<div class="item-details margin-top-10">
@@ -365,7 +367,7 @@
 										</div>
 									</div>
 									<a href="#small-dialog-1" class="popup-with-zoom-anim button gray ripple-effect margin-top-5 margin-bottom-10"><i class="icon-feather-edit"></i> Edit Review</a>
-								</li>
+								</li> -->
 							</ul>
 						</div>
 					</div>

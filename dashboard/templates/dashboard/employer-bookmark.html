@@ -1,4 +1,5 @@
 {% load static %}
+{% csrf_token %}
 
 <!doctype html>
 <html lang="en">
@@ -339,6 +340,7 @@
 
 						<div class="content">
 							<ul class="dashboard-box-list">
+								{% for freelancer in bookmarked_freelancers %}
 								<li>
 									<!-- Overview -->
 									<div class="freelancer-overview">
@@ -347,13 +349,13 @@
 											<!-- Avatar -->
 											<div class="freelancer-avatar">
 												<div class="verified-badge"></div>
-												<a href="#"><img src="images/user-avatar-big-02.jpg" alt=""></a>
+												<a href="#"><img src="{{ freelancer.user_additional_info.profile_picture.url }}" alt="" height="70" width="40"></a>
 											</div>
 
 											<!-- Name -->
 											<div class="freelancer-name">
-												<h4><a href="#">David Peterson <img class="flag" src="images/flags/de.svg" alt="" title="Germany" data-tippy-placement="top"></a></h4>
-												<span>iOS Expert + Node Dev</span>
+												<h4><a href="#">{{ freelancer.user_additional_info.user.first_name }} {{ freelancer.user_additional_info.user.last_name }} <img class="flag" src="{% static 'images/flags/ngn.png' %}" alt="" title="Nigeria" data-tippy-placement="top"></a></h4>
+												<span>{{ freelancer.tagline }}</span>
 												<!-- Rating -->
 												<div class="freelancer-rating">
 													<div class="star-rating" data-rating="4.2"></div>
@@ -364,36 +366,10 @@
 
 									<!-- Buttons -->
 									<div class="buttons-to-right">
-										<a href="#" class="button red ripple-effect ico" title="Remove" data-tippy-placement="left"><i class="icon-feather-trash-2"></i></a>
+										<a onclick="bookmarkFreelnacerFunction_{{ freelancer.id }}()" href="#" class="button red ripple-effect ico" title="Remove" data-tippy-placement="left"><i class="fa fa-trash-o"></i></a>
 									</div>
 								</li>
-								<li>
-									<!-- Overview -->
-									<div class="freelancer-overview">
-										<div class="freelancer-overview-inner">
-											
-											<!-- Avatar -->
-											<div class="freelancer-avatar">
-												<a href="#"><img src="{{ request.user.useradditionalinformation.profile_picture.url }}" alt=""></a>
-											</div>
-
-											<!-- Name -->
-											<div class="freelancer-name">
-												<h4><a href="#">Marcin Kowalski <img class="flag" src="images/flags/pl.svg" alt="" title="Poland" data-tippy-placement="top"></a></h4>
-												<span>Front-End Developer</span>
-												<!-- Rating -->
-												<div class="freelancer-rating">
-													<div class="star-rating" data-rating="4.7"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<!-- Buttons -->
-									<div class="buttons-to-right">
-										<a href="#" class="button red ripple-effect ico" title="Remove" data-tippy-placement="left"><i class="icon-feather-trash-2"></i></a>
-									</div>
-								</li>
+								{% endfor %}
 							</ul>
 						</div>
 					</div>
@@ -520,6 +496,31 @@ $('#snackbar-user-status label').click(function() {
 		backgroundColor: '#383838'
 	}); 
 }); 
+</script>
+
+
+<script>
+	{% for freelancer in bookmarked_freelancers %}
+	function bookmarkFreelnacerFunction_{{ freelancer.id }}() {
+		var freelancer_id = "{{ freelancer.id }}"
+
+		$.ajax({
+			url: "{% url 'home:bookmark_freelancer_view' %}",
+			method: "POST",
+			data: { 
+              'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+              "freelancer_id": Number(freelancer_id)
+            },
+			success: function (data) {
+				if (data.message == "added") {
+					window.location.reload();
+				} else {
+					window.location.reload();
+				}
+			}
+		});
+	}
+	{% endfor %}
 </script>
 
 </body>

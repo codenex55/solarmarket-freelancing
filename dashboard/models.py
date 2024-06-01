@@ -64,6 +64,8 @@ class TaskBid(models.Model):
     expected_delivery_time = models.IntegerField()
     expected_delivery_time_measurement = models.CharField(max_length=50)
     accepted = models.BooleanField(default=False)
+    completed_on_time = models.BooleanField(default=False)  # New field
+    completed_within_budget = models.BooleanField(default=False) 
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
@@ -101,6 +103,7 @@ class EmployerNotification(models.Model):
 
 class FreelancerReview(models.Model):
     freelancer = models.ForeignKey("accounts.Freelancer", on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
     review = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
