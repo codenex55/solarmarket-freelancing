@@ -268,7 +268,7 @@
 
 						<ul data-submenu-title="Start">
 							<li><a href="{% url 'dashboard:employer_dashboard_home_view' %}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-							<li><a href="{% url 'dashboard:employer_messages_view' CHAT_ID=0 %}"><i class="fa fa-comments-o"></i> Messages <span class="nav-tag">2</span></a></li>
+							<li><a href="{% url 'dashboard:employer_messages_view' CHAT_ID=0 %}"><i class="fa fa-comments-o"></i> Messages <span class="nav-tag">{{ unread_messages_count }}</span></a></li>
 							<li><a href="{% url 'dashboard:employer_bookmarks_view' %}"><i class="fa fa-star-o"></i> Bookmarks</a></li>
 							<li><a href="{% url 'dashboard:employer_reviews_view' %}"><i class="fa fa-star-half-o"></i> Reviews</a></li>
 						</ul>
@@ -470,22 +470,22 @@
 				<ul class="footer-social-links">
 					<li>
 						<a href="#" title="Facebook" data-tippy-placement="top">
-							<i class="icon-brand-facebook-f"></i>
+							<i class="fa fa-facebook"></i>
 						</a>
 					</li>
 					<li>
 						<a href="#" title="Twitter" data-tippy-placement="top">
-							<i class="icon-brand-twitter"></i>
+							<i class="fa fa-twitter"></i>
 						</a>
 					</li>
 					<li>
-						<a href="#" title="Google Plus" data-tippy-placement="top">
-							<i class="icon-brand-google-plus-g"></i>
+						<a href="#" title="Instagram" data-tippy-placement="top">
+							<i class="fa fa-instagram"></i>
 						</a>
 					</li>
 					<li>
 						<a href="#" title="LinkedIn" data-tippy-placement="top">
-							<i class="icon-brand-linkedin-in"></i>
+							<i class="fa fa-linkedin"></i>
 						</a>
 					</li>
 				</ul>

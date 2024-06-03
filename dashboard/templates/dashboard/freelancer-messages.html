@@ -1,4 +1,5 @@
 {% load static %}
+{% load time_filters %}
 
 <!doctype html>
 <html lang="en">
@@ -268,7 +269,7 @@
 
 						<ul data-submenu-title="Start">
 							<li><a href="{% url 'dashboard:freelancer_dashboard_home_view' %}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-							<li class="active"><a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=0 %}"><i class="fa fa-comments-o"></i> Messages <span class="nav-tag">2</span></a></li>
+							<li class="active"><a href="{% url 'dashboard:freelancer_messages_view' CHAT_ID=0 %}"><i class="fa fa-comments-o"></i> Messages <span class="nav-tag">{{ unread_messages_count }}</span></a></li>
 							<li><a href="{% url 'dashboard:freelancer_bookmarks_view' %}"><i class="fa fa-star-o"></i> Bookmarks</a></li>
 							<li><a href="{% url 'dashboard:freelancer_reviews_view' %}"><i class="fa fa-pencil-square-o"></i> Reviews</a></li>
 						</ul>
@@ -349,9 +350,9 @@
 												{% else %}
 													<h5>{{ chat.user1.first_name }} {{ chat.user1.last_name }}</h5>
 												{% endif %}
-												<span>4 hours ago</span>
+												<span>{{ chat.last_message_timestamp|humanize_timedelta }}</span>
 											</div>
-											<p>{{ chat.last_message|default:"No messages yet." }}</p>
+											<p>{{ chat.last_message_content|default:"No messages yet." }}</p>
 										</div>
 									</a>
 								</li>
@@ -379,9 +380,9 @@
 												{% else %}
 													<h5>{{ chat.user1.first_name }} {{ chat.user1.last_name }}</h5>
 												{% endif %}
-												<span>Yesterday</span>
+												<span>{{ chat.last_message_timestamp|humanize_timedelta }}</span>
 											</div>
-											<p>{{ chat.last_message|default:"No messages yet." }}</p>
+											<p>{{ chat.last_message_content|default:"No messages yet." }}</p>
 										</div>
 									</a>
 								</li>
@@ -404,9 +405,9 @@
 												{% else %}
 													<h5>{{ chat.user1.first_name }} {{ chat.user1.last_name }}</h5>
 												{% endif %}
-												<span>4 hours ago</span>
+												<span>{{ chat.last_message_timestamp|humanize_timedelta }}</span>
 											</div>
-											<p>{{ chat.last_message|default:"No messages yet." }}</p>
+											<p>{{ chat.last_message_content|default:"No messages yet." }}</p>
 										</div>
 									</a>
 								</li>
@@ -433,14 +434,14 @@
 							
 							<!-- Message Content Inner -->
 							<div class="message-content-inner">
-									
+									{% for date, message_list in messages_by_day.items %}
 									<!-- Time Sign -->
 									<div class="message-time-sign">
 										<!-- <span>28 June, 2019</span> -->
-										<span>Today</span>
+										<span>{{ date }}</span>
 									</div>
 
-									{% for message in messages %}
+									{% for message in message_list %}
 
 									{% if message.sender == request.user %}
 									<div class="message-bubble me">
@@ -459,6 +460,8 @@
 										<div class="clearfix"></div>
 									</div>
 									{% endif %}
+
+									{% endfor %}
 
 									{% endfor %}
 
@@ -508,22 +511,22 @@
 				<ul class="footer-social-links">
 					<li>
 						<a href="dashboard-messages.html#" title="Facebook" data-tippy-placement="top">
-							<i class="icon-brand-facebook-f"></i>
+							<i class="fa fa-facebook"></i>
 						</a>
 					</li>
 					<li>
 						<a href="dashboard-messages.html#" title="Twitter" data-tippy-placement="top">
-							<i class="icon-brand-twitter"></i>
+							<i class="fa fa-twitter"></i>
 						</a>
 					</li>
 					<li>
-						<a href="dashboard-messages.html#" title="Google Plus" data-tippy-placement="top">
-							<i class="icon-brand-google-plus-g"></i>
+						<a href="dashboard-messages.html#" title="Instagram" data-tippy-placement="top">
+							<i class="fa fa-instagram"></i>
 						</a>
 					</li>
 					<li>
 						<a href="dashboard-messages.html#" title="LinkedIn" data-tippy-placement="top">
-							<i class="icon-brand-linkedin-in"></i>
+							<i class="fa fa-linkedin"></i>
 						</a>
 					</li>
 				</ul>
