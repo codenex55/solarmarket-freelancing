@@ -33,35 +33,37 @@ class HomeView(View):
             "ctvv_maintenance_count":ctvv_maintenance_count,
         }
 
-        if request.user.useradditionalinformation.user_type == "employer":
-            # All Notification
-            all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+        if request.user.is_authenticated:
+            if request.user.useradditionalinformation.user_type == "employer":
+                # All Notification
+                all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
-            # notification count
-            notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+                # notification count
+                notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
-            # All Message Notification
-            all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+                # All Message Notification
+                all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
 
-            # message notification count
-            message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-        elif request.user.useradditionalinformation.user_type == "freelancer":
-            # All Notification
-            all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+                # message notification count
+                message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+            elif request.user.useradditionalinformation.user_type == "freelancer":
+                # All Notification
+                all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
-            # notification count
-            notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+                # notification count
+                notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
-            # All Message Notification
-            all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+                # All Message Notification
+                all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
 
-            # message notification count
-            message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+                # message notification count
+                message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
 
-        context["all_notification"] = all_notification
-        context["notification_count"] = notification_count
-        context["all_message_notification"] = all_message_notification
-        context["message_notification_count"] = message_notification_count
+            context["all_notification"] = all_notification
+            context["notification_count"] = notification_count
+            context["all_message_notification"] = all_message_notification
+            context["message_notification_count"] = message_notification_count
+
         return render(request, "home/index-2.html", context)
     
 
@@ -77,32 +79,39 @@ class GetLGAView(View):
 
 class SingleTaskView(View):
     def get(self, request, ID, *args, **kwargs):
-        if request.user.useradditionalinformation.user_type == "employer":
-            # All Notification
-            all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
-
-            # notification count
-            notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
-
-            # All Message Notification
-            all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
-
-            # message notification count
-            message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-        elif request.user.useradditionalinformation.user_type == "freelancer":
-            # All Notification
-            all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
-
-            # notification count
-            notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
-
-            # All Message Notification
-            all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
-
-            # message notification count
-            message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-
         context = {}
+
+        if request.user.is_authenticated:
+            if request.user.useradditionalinformation.user_type == "employer":
+                # All Notification
+                all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+
+                # notification count
+                notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+
+                # All Message Notification
+                all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+                # message notification count
+                message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+            elif request.user.useradditionalinformation.user_type == "freelancer":
+                # All Notification
+                all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+
+                # notification count
+                notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+
+                # All Message Notification
+                all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+                # message notification count
+                message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
+            context["all_notification"] = all_notification
+            context["notification_count"] = notification_count
+            context["all_message_notification"] = all_message_notification
+            context["message_notification_count"] = message_notification_count
+
 
         try:
             task = Task.objects.get(id=ID)
@@ -121,50 +130,48 @@ class SingleTaskView(View):
         except Task.DoesNotExist:
             return render(request, "home/404.html")
         
-        context["all_notification"] = all_notification
-        context["notification_count"] = notification_count
-        context["all_message_notification"] = all_message_notification
-        context["message_notification_count"] = message_notification_count
-
         return render(request, "home/single-task.html", context)
 
 class AllTaskView(View):
     def get(self, request, *args, **kwargs):
-        if request.user.useradditionalinformation.user_type == "employer":
-            # All Notification
-            all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
-
-            # notification count
-            notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
-
-            # All Message Notification
-            all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
-
-            # message notification count
-            message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-        elif request.user.useradditionalinformation.user_type == "freelancer":
-            # All Notification
-            all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
-
-            # notification count
-            notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
-
-            # All Message Notification
-            all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
-
-            # message notification count
-            message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-
         all_tasks = Task.objects.all().order_by("-timestamp")
         all_states = requests.get("https://nga-states-lga.onrender.com/fetch").json()
         context = {
             "all_tasks":all_tasks,
             "all_states":all_states,
-            "all_notification":all_notification,
-            "notification_count":notification_count,
-            "all_message_notification":all_message_notification,
-            "message_notification_count":message_notification_count,
         }
+
+        if request.user.is_authenticated:
+            if request.user.useradditionalinformation.user_type == "employer":
+                # All Notification
+                all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+
+                # notification count
+                notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+
+                # All Message Notification
+                all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+                # message notification count
+                message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+            elif request.user.useradditionalinformation.user_type == "freelancer":
+                # All Notification
+                all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+
+                # notification count
+                notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+
+                # All Message Notification
+                all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+                # message notification count
+                message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
+            context["all_notification"] = all_notification
+            context["notification_count"] = notification_count
+            context["all_message_notification"] = all_message_notification
+            context["message_notification_count"] = message_notification_count
+
         return render(request, "home/all-task.html", context)
     
 
@@ -184,39 +191,41 @@ class TaskSearchView(View):
 
         results = results.filter(**filters)
 
-        if request.user.useradditionalinformation.user_type == "employer":
-            # All Notification
-            all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
-
-            # notification count
-            notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
-
-            # All Message Notification
-            all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
-
-            # message notification count
-            message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-        elif request.user.useradditionalinformation.user_type == "freelancer":
-            # All Notification
-            all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
-
-            # notification count
-            notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
-
-            # All Message Notification
-            all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
-
-            # message notification count
-            message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-
         context = {
             'results': results,
             "all_states": all_states,
-            "all_notification":all_notification,
-            "notification_count":notification_count,
-            "all_message_notification":all_message_notification,
-            "message_notification_count":message_notification_count,
         }
+
+        if request.user.is_authenticated:
+            if request.user.useradditionalinformation.user_type == "employer":
+                # All Notification
+                all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+
+                # notification count
+                notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+
+                # All Message Notification
+                all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+                # message notification count
+                message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+            elif request.user.useradditionalinformation.user_type == "freelancer":
+                # All Notification
+                all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+
+                # notification count
+                notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+
+                # All Message Notification
+                all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+                # message notification count
+                message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+                
+            context["all_notification"] = all_notification
+            context["notification_count"] = notification_count
+            context["all_message_notification"] = all_message_notification
+            context["message_notification_count"] = message_notification_count
 
         return render(request, 'home/task_search_results.html', context)
 
@@ -271,31 +280,6 @@ class TaskSearchView(View):
 
 class FreelancerProfileView(View):
     def get(self, request, ID, *args, **kwargs):
-        if request.user.useradditionalinformation.user_type == "employer":
-            # All Notification
-            all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
-
-            # notification count
-            notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
-
-            # All Message Notification
-            all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
-
-            # message notification count
-            message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-        elif request.user.useradditionalinformation.user_type == "freelancer":
-            # All Notification
-            all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
-
-            # notification count
-            notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
-
-            # All Message Notification
-            all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
-
-            # message notification count
-            message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-
         context = {}
         try:
             freelancer = Freelancer.objects.get(id=ID)
@@ -319,40 +303,71 @@ class FreelancerProfileView(View):
         all_review = FreelancerReview.objects.filter(freelancer=freelancer).order_by("-timestamp")
         context["all_review"] = all_review
 
-        context["all_notification"] = all_notification
-        context["notification_count"] = notification_count
-        context["all_message_notification"] = all_message_notification
-        context["message_notification_count"] = message_notification_count
+        if request.user.is_authenticated:
+            if request.user.useradditionalinformation.user_type == "employer":
+                # All Notification
+                all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+
+                # notification count
+                notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+
+                # All Message Notification
+                all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+                # message notification count
+                message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+            elif request.user.useradditionalinformation.user_type == "freelancer":
+                # All Notification
+                all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+
+                # notification count
+                notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+
+                # All Message Notification
+                all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+                # message notification count
+                message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+                
+            context["all_notification"] = all_notification
+            context["notification_count"] = notification_count
+            context["all_message_notification"] = all_message_notification
+            context["message_notification_count"] = message_notification_count
 
         return render(request, "home/freelancer-profile.html", context)
     
 
 class AllFreelancersView(View):
     def get(self, request, *args, **kwargs):
-        if request.user.useradditionalinformation.user_type == "employer":
-            # All Notification
-            all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+        if request.user.is_authenticated:
+            if request.user.useradditionalinformation.user_type == "employer":
+                # All Notification
+                all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
-            # notification count
-            notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+                # notification count
+                notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
-            # All Message Notification
-            all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+                # All Message Notification
+                all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
 
-            # message notification count
-            message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
-        elif request.user.useradditionalinformation.user_type == "freelancer":
-            # All Notification
-            all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+                # message notification count
+                message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+            elif request.user.useradditionalinformation.user_type == "freelancer":
+                # All Notification
+                all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
-            # notification count
-            notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+                # notification count
+                notification_count = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
 
-            # All Message Notification
-            all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+                # All Message Notification
+                all_message_notification = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
 
-            # message notification count
-            message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+                # message notification count
+                message_notification_count = FreelancerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+        else:
+            notification_count = 0
+            all_message_notification = []
+            message_notification_count = 0
 
         all_freelancers = Freelancer.objects.all()
 
