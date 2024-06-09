@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import (Task, TaskFile, TaskBid, PrivateChat, PrivateMessage, EmployerReview, FreelancerReview, 
+from .models import (Task, TaskFile, TaskBid, PrivateChat, PrivateMessage, TaskReview, 
     FreelancerNotification, EmployerNotification, FreelancerNote,EmployerNote, TaskPayment
 )
 from django.http import JsonResponse
@@ -26,8 +26,8 @@ def count_unread_messages(user_email):
         chats = PrivateChat.objects.filter(user1=user) | PrivateChat.objects.filter(user2=user)
         
         # Count unread messages where the user is not the sender
-        unread_count = PrivateMessage.objects.filter(chat__in=chats, read=False).exclude(sender=user).count()
-        
+        unread_count = PrivateMessage.objects.filter(chat__in=chats,read=False).exclude(sender=user).count()
+
         return unread_count
     
     except User.DoesNotExist:
@@ -80,7 +80,7 @@ class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
         freelancers_hired = Task.objects.filter(user=request.user, accepted_bid__isnull=False).count()
 
         # Reviews Received
-        reviews_received_count = EmployerReview.objects.filter(employer=employer).count()
+        # reviews_received_count = EmployerReview.objects.filter(employer=employer).count()
 
         # All Notification
         all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
@@ -106,7 +106,7 @@ class EmployerDashBoardHome(LoginRequiredMixin, EmployerRequiredMixin, View):
             "unread_messages_count":unread_messages_count,
             'tasks_posted_count': tasks_posted_count,
             'freelancers_hired': freelancers_hired,
-            'reviews_received_count': reviews_received_count,
+            # 'reviews_received_count': reviews_received_count,
             "all_notification":all_notification,
             "all_notes":all_notes,
             "notification_count":notification_count,
@@ -208,6 +208,8 @@ class EmployerManageTask(LoginRequiredMixin, EmployerRequiredMixin, View):
         # message notification count
         message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
 
+        unread_messages_count  = count_unread_messages(request.user.email)
+
         tasks  = Task.objects.filter(user=request.user).order_by("-timestamp")
 
         tasks_with_bids_info = []
@@ -243,6 +245,7 @@ class EmployerManageTask(LoginRequiredMixin, EmployerRequiredMixin, View):
                 "notification_count":notification_count,
                 "all_message_notification":all_message_notification,
                 "message_notification_count":message_notification_count,
+                "unread_messages_count":unread_messages_count,
             })
 
         # Pass the tasks with bids info to the template
@@ -305,10 +308,26 @@ class EmployerBookmark(LoginRequiredMixin, EmployerRequiredMixin, View):
         
         unread_messages_count  = count_unread_messages(request.user.email)
 
+        # All Notification
+        all_notification = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
+
+        # notification count
+        notification_count = EmployerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp").count()
+
+        # All Message Notification
+        all_message_notification = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp")
+
+        # message notification count
+        message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
+
         context = {
             "unread_messages_count":unread_messages_count,
             "bookmarked_freelancers":bookmarked_freelancers,
-            "bookmarked_tasks":bookmarked_tasks
+            "bookmarked_tasks":bookmarked_tasks,
+            "all_notification":all_notification,
+            "notification_count":notification_count,
+            "all_message_notification":all_message_notification,
+            "message_notification_count":message_notification_count,
         }
         return render(request, "dashboard/employer-bookmark.html", context)
     
@@ -333,11 +352,7 @@ class EmployerReviewView(LoginRequiredMixin, EmployerRequiredMixin, View):
         # message notification count
         message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
 
-        # Filter TaskBids where the employer has accepted the bid
-        accepted_bids = TaskBid.objects.filter(task__user=request.user, accepted=True)
-        print(accepted_bids)
-        # Get the freelancers from these accepted bids
-        freelancers = Freelancer.objects.filter(taskbid__in=accepted_bids).distinct()
+        task_review = TaskReview.objects.all().order_by("-timestamp")
 
         unread_messages_count  = count_unread_messages(request.user.email)
 
@@ -347,7 +362,7 @@ class EmployerReviewView(LoginRequiredMixin, EmployerRequiredMixin, View):
             "notification_count":notification_count,
             "all_message_notification":all_message_notification,
             "message_notification_count":message_notification_count,
-            "accepted_bids":accepted_bids
+            "task_review":task_review
         }
         return render(request, "dashboard/employer-review.html",  context)
     
@@ -457,7 +472,7 @@ class FreelancerDashBoardHome(LoginRequiredMixin, FreelancerRequiredMixin, View)
         amount_made = TaskBid.objects.filter(freelancer=freelancer, task__accepted_bid__freelancer=freelancer).aggregate(total_amount=Sum('bid_amount'))['total_amount'] or 0
 
         # Reviews Received
-        reviews_received_count = FreelancerReview.objects.filter(freelancer=freelancer).count()
+        # reviews_received_count = FreelancerReview.objects.filter(freelancer=freelancer).count()
 
         # All Notification
         all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
@@ -487,7 +502,7 @@ class FreelancerDashBoardHome(LoginRequiredMixin, FreelancerRequiredMixin, View)
             "unread_messages_count":unread_messages_count,
             'tasks_won_count': tasks_won_count,
             'amount_made': amount_made,
-            'reviews_received_count': reviews_received_count,
+            # 'reviews_received_count': reviews_received_count,
             "all_notification":all_notification,
             "all_notes":all_notes,
             "notification_count":notification_count,
@@ -599,7 +614,7 @@ class FreelancerReviewView(LoginRequiredMixin, FreelancerRequiredMixin, View):
         freelancer = Freelancer.objects.get(user_additional_info=request.user.useradditionalinformation)
         bid_count = TaskBid.objects.filter(freelancer=freelancer).count()
 
-        all_review = FreelancerReview.objects.filter(freelancer=freelancer).order_by("-timestamp")
+        # all_review = FreelancerReview.objects.filter(freelancer=freelancer).order_by("-timestamp")
 
         unread_messages_count  = count_unread_messages(request.user.email)
 
@@ -610,7 +625,7 @@ class FreelancerReviewView(LoginRequiredMixin, FreelancerRequiredMixin, View):
             "bid_count":bid_count,
             "all_message_notification":all_message_notification,
             "message_notification_count":message_notification_count,
-            "all_review":all_review
+            # "all_review":all_review
         }
         return render(request, "dashboard/freelancer-review.html", context)
     
@@ -710,6 +725,10 @@ class FreelancerSettings(LoginRequiredMixin, FreelancerRequiredMixin, View):
 
 class FreelancerMessages(LoginRequiredMixin, View):
     def get(self, request, CHAT_ID, *args, **kwargs):
+        # FreelancerNotification.objects.all().delete()
+        # EmployerNotification.objects.all().delete()
+        # PrivateChat.objects.all().delete()
+        # PrivateMessage.objects.all().delete()
         # All Notification
         all_notification = FreelancerNotification.objects.filter(read=False).exclude(notification_category="message").order_by("-timestamp")
 
@@ -740,10 +759,11 @@ class FreelancerMessages(LoginRequiredMixin, View):
         ).order_by('-last_message_timestamp')
 
         # Count unread messages
-        unread_count = PrivateMessage.objects.filter(sender=request.user, read=True).count()
+        unread_messages_count  = count_unread_messages(request.user.email)
 
         if CHAT_ID == 0:
             context = {
+                "unread_messages_count":unread_messages_count,
                 "all_chats":all_chats,
                 "chat_id":CHAT_ID,
                 "all_notification":all_notification,
@@ -762,8 +782,17 @@ class FreelancerMessages(LoginRequiredMixin, View):
             
             messages = PrivateMessage.objects.filter(chat=chat).order_by('timestamp')
 
-            # Count unread messages
-            unread_count = messages.filter(read=False).count()
+            # Filter messages where the request.user is not the sender and the message is not already read
+            unread_messages = PrivateMessage.objects.filter(
+                Q(chat__user1=request.user) | Q(chat__user2=request.user),
+                ~Q(sender=request.user),
+                read=False
+            )
+            # Mark these messages as read
+            unread_messages.update(read=True)
+
+            free_not = FreelancerNotification.objects.filter(freelancer=freelancer, notification_category="message")
+            free_not.update(read=True)
 
             # Group messages by date
             messages_by_day = {}
@@ -784,7 +813,7 @@ class FreelancerMessages(LoginRequiredMixin, View):
 
             context = {
                 'messages_by_day': messages_by_day,
-                'unread_count': unread_count,
+                'unread_messages_count': unread_messages_count,
                 "today": today,
                 "chat_id":CHAT_ID,
                 "all_chats":all_chats,
@@ -813,6 +842,8 @@ class EmployerMessages(LoginRequiredMixin, View):
         # message notification count
         message_notification_count = EmployerNotification.objects.filter(read=False, notification_category="message").order_by("-timestamp").count()
 
+        employer = Employer.objects.get(user_additional_info=request.user.useradditionalinformation)
+
         # Subquery to get the last message content and timestamp for each chat
         last_message_subquery = PrivateMessage.objects.filter(
             chat=OuterRef('pk')
@@ -826,8 +857,11 @@ class EmployerMessages(LoginRequiredMixin, View):
             last_message_timestamp=Subquery(last_message_subquery.values('timestamp')[:1], output_field=DateTimeField())
         ).order_by('-last_message_timestamp')
 
+        unread_messages_count  = count_unread_messages(request.user.email)
+
         if CHAT_ID == 0:
             context = {
+                "unread_messages_count":unread_messages_count,
                 "all_chats":all_chats,
                 "chat_id":CHAT_ID,
                 "all_notification":all_notification,
@@ -845,8 +879,18 @@ class EmployerMessages(LoginRequiredMixin, View):
             
             messages = PrivateMessage.objects.filter(chat=chat).order_by('timestamp')
 
-            # Count unread messages
-            unread_count = messages.filter(read=False).count()
+            # Filter messages where the request.user is not the sender and the message is not already read
+            unread_messages = PrivateMessage.objects.filter(
+                Q(chat__user1=request.user) | Q(chat__user2=request.user),
+                ~Q(sender=request.user),
+                read=False
+            )
+
+            # Mark these messages as read
+            unread_messages.update(read=True)
+
+            emp_not = EmployerNotification.objects.filter(employer=employer, notification_category="message")
+            emp_not.update(read=True)
 
             # Group messages by date
             messages_by_day = {}
@@ -867,7 +911,7 @@ class EmployerMessages(LoginRequiredMixin, View):
 
             context = {
                 'messages_by_day': messages_by_day,
-                'unread_count': unread_count,
+                'unread_messages_count': unread_messages_count,
                 "today": today,
                 "chat_id":CHAT_ID,
                 "all_chats":all_chats,
@@ -888,9 +932,11 @@ class InitiateChatView(LoginRequiredMixin, View):
         # Check if a chat already exists between the current user and the recipient
         existing_chat = PrivateChat.objects.filter(user1=request.user, user2=recipient)
         if existing_chat.exists():
+            print("here")
             chat = existing_chat.first()
         else:
             # Create a new chat if one doesn't exist
+            print("here now")
             chat = PrivateChat.objects.create(user1=request.user, user2=recipient)
 
         if UserAdditionalInformation.objects.get(user=request.user).user_type == "freelancer":
@@ -901,6 +947,7 @@ class InitiateChatView(LoginRequiredMixin, View):
 
 class SendMessage(LoginRequiredMixin, View):
     def post(self, request, CHAT_ID, *args, **kwargs):
+        print(CHAT_ID)
         chat = PrivateChat.objects.get(id=CHAT_ID)
 
         # Ensure the current user is a participant in the chat
@@ -917,7 +964,6 @@ class SendMessage(LoginRequiredMixin, View):
         sender = request.user
 
         message = PrivateMessage.objects.create(chat=chat, sender=sender, content=content)
-        PrivateMessage.objects.filter(sender=sender).update(read=True)
 
         # Identify the recipient
         recipient = chat.user2 if chat.user1 == request.user else chat.user1
@@ -955,11 +1001,6 @@ class VerifyPaymentView(View):
         bidder_id = int(request.POST.get("bidder_id"))
         task_id = int(request.POST.get("task_id"))
 
-        print(bidder_id)
-        print(type(bidder_id))
-        print(task_id)
-        print(type(task_id))
-
         url = f"https://api.paystack.co/transaction/verify/{ref}"
         headers = {
             "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",
@@ -979,6 +1020,7 @@ class VerifyPaymentView(View):
 
                 TaskPayment.objects.create(employer=employer, task=task, payment_amount=task_bid.bid_amount)
                 FreelancerNotification.objects.create(freelancer=task_bid.freelancer, notification_category="hired", task=task)
+                TaskReview.objects.create(employer=employer, task=task)
 
                 task_bid.accepted = True
                 task_bid.save()

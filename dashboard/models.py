@@ -101,18 +101,12 @@ class EmployerNotification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
-class FreelancerReview(models.Model):
-    freelancer = models.ForeignKey("accounts.Freelancer", on_delete=models.CASCADE)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
-    review = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-
-class EmployerReview(models.Model):
+class TaskReview(models.Model):
     employer = models.ForeignKey("accounts.Employer", on_delete=models.CASCADE)
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
-    review = models.TextField()
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    star_rating = models.IntegerField(null=True, blank=True,)
+    review = models.TextField(null=True, blank=True,)
+    rated = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 

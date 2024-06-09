@@ -1,4 +1,5 @@
 {% load static %}
+{% load time_filters %}
 
 <!doctype html>
 <html lang="en">
@@ -162,7 +163,7 @@
 												<div class="notification-text">
 													<strong>{{ notification.user.first_name }} {{ notification.user.last_name }}</strong>
 													<p class="notification-msg-text">{{ notification.message.content_snippet }}</p>
-													<span class="color">4 hours ago</span>
+													<span class="color">{{ notification.timestamp|humanize_timedelta }}</span>
 												</div>
 											</a>
 										</li>
@@ -339,7 +340,8 @@
 
 						<div class="content">
 							<ul class="dashboard-box-list">
-								{% for item in accepted_bids %}
+								{% for item in task_review %}
+								{% if item.rated == False %}
 								<li>
 									<div class="boxed-list-item">
 										<!-- Content -->
@@ -351,23 +353,25 @@
 
 									<a href="#small-dialog-2" class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"><i class="fa fa-thumbs-o-up"></i> Leave a Review</a>
 								</li>
-								{% endfor %}
-								<!-- <li>
+								{% else %}
+								<li>
 									<div class="boxed-list-item">
 										
 										<div class="item-content">
-											<h4>Help Fix Laravel PHP issue</h4>
+											<h4>{{ item.task.task_name }}</h4>
 											<div class="item-details margin-top-10">
 												<div class="star-rating" data-rating="5.0"></div>
 												<div class="detail-item"><i class="icon-material-outline-date-range"></i> August 2019</div>
 											</div>
 											<div class="item-description">
-												<p>Excellent programmer - helped me fixing small issue.</p>
+												<p>{{ item.review }}</p>
 											</div>
 										</div>
 									</div>
 									<a href="#small-dialog-1" class="popup-with-zoom-anim button gray ripple-effect margin-top-5 margin-bottom-10"><i class="icon-feather-edit"></i> Edit Review</a>
-								</li> -->
+								</li>
+								{% endif %}
+								{% endfor %}
 							</ul>
 						</div>
 					</div>

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
-from dashboard.models import Task, FreelancerReview,TaskBid
+from dashboard.models import Task, TaskReview,TaskBid
 from django.db.models.functions import Coalesce
 from django.db.models import Count, Q, F
 
@@ -60,8 +60,8 @@ class Freelancer(models.Model):
         return (successful_bids / total_bids * 100) if total_bids > 0 else 0
 
     def recommendation_rate(self):
-        total_reviews = FreelancerReview.objects.filter(freelancer=self).count()
-        recommended_reviews = FreelancerReview.objects.filter(freelancer=self, review__icontains="recommend").count()
+        total_reviews = TaskReview.objects.filter(task__freelancer=self).count()
+        recommended_reviews = TaskReview.objects.filter(task__freelancer=self, review__icontains="recommend").count()
         return (recommended_reviews / total_reviews * 100) if total_reviews > 0 else 0
 
     def on_time_rate(self):

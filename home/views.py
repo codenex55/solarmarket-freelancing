@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from dashboard.models import Task
 from django.contrib.auth.models import User
-from dashboard.models import Task, TaskBid, FreelancerReview, EmployerNotification, FreelancerNotification
+from dashboard.models import Task, TaskBid, TaskReview, EmployerNotification, FreelancerNotification
 from accounts.models import UserAdditionalInformation, Freelancer, Employer
 import requests
 from django.http import JsonResponse
@@ -300,8 +300,8 @@ class FreelancerProfileView(View):
         on_budget_rate = freelancer.on_budget_rate()
         context["on_budget_rate"] = on_budget_rate
 
-        all_review = FreelancerReview.objects.filter(freelancer=freelancer).order_by("-timestamp")
-        context["all_review"] = all_review
+        # all_review = FreelancerReview.objects.filter(freelancer=freelancer).order_by("-timestamp")
+        # context["all_review"] = all_review
 
         if request.user.is_authenticated:
             if request.user.useradditionalinformation.user_type == "employer":

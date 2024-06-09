@@ -1,5 +1,6 @@
 {% load static %}
 {% load humanize %}
+{% load time_filters %}
 {% csrf_token %}
 
 <!doctype html>
@@ -166,7 +167,7 @@
 												<div class="notification-text">
 													<strong>{{ notification.user.first_name }} {{ notification.user.last_name }}</strong>
 													<p class="notification-msg-text">{{ notification.message.content_snippet }}</p>
-													<span class="color">4 hours ago</span>
+													<span class="color">{{ notification.timestamp|humanize_timedelta }}</span>
 												</div>
 											</a>
 										</li>
@@ -265,7 +266,7 @@
 												<div class="notification-text">
 													<strong>{{ notification.user.first_name }} {{ notification.user.last_name }}</strong>
 													<p class="notification-msg-text">{{ notification.message.content_snippet }}</p>
-													<span class="color">4 hours ago</span>
+													<span class="color">{{ notification.timestamp|humanize_timedelta }}</span>
 												</div>
 											</a>
 										</li>
